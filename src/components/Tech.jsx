@@ -13,9 +13,9 @@ const Tech = () => {
         <p className={styles.sectionSubText}>Some of the languages, libraries and frameworks I use</p>
         <h2 className={styles.sectionHeadText}>Technologies.</h2>
       </motion.div>
-      <div className="flex flex-row flex-wrap justify-center gap-10 mt-20">
+      <div className={'flex flex-row flex-wrap justify-center mt-20 gap-5 sm:gap-10'}>
         {technologies.map(technology => (
-          <div key={technology.name} className="w-28 h-28">
+          <div key={technology.name} className='w-14 sm:w-28 h-14 sm:h-28'>
             <BallCanvas icon={technology.icon} />
           </div>
         ))}
