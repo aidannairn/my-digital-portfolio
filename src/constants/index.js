@@ -3,27 +3,36 @@ import {
   backend,
   creator,
   web,
-  javascript,
-  typescript,
-  html,
-  css,
-  reactjs,
-  redux,
-  tailwind,
-  nodejs,
-  mongodb,
-  git,
-  figma,
-  docker,
-  meta,
-  starbucks,
-  tesla,
-  shopify,
   carrent,
   jobit,
-  tripguide,
-  threejs,
-} from "../assets";
+  tripguide
+} from "../assets"
+
+const mediaBucket = import.meta.env.VITE_MEDIA_BUCKET
+
+const technologies = `${mediaBucket}/technologies`
+const education = `${mediaBucket}/education`
+
+const css = `${technologies}/css.svg`
+const docker = `${technologies}/docker.svg`
+const git = `${technologies}/git.svg`
+const html = `${technologies}/html.svg`
+const javascript = `${technologies}/javascript.svg`
+const mongodb = `${technologies}/mongodb.svg`
+const nodejs = `${technologies}/nodejs.svg`
+const reactjs = `${technologies}/reactjs.svg`
+const tailwind = `${technologies}/tailwind.svg`
+const typescript = `${technologies}/typescript.svg`
+const threejs = `${technologies}/threejs.svg`
+const python = `${technologies}/python.svg`
+const graphql = `${technologies}/graphql.svg`
+const mysql = `${technologies}/mysql.svg`
+const aws = `${technologies}/aws.svg`
+const express = `${technologies}/express.svg`
+
+const harvard = `${education}/harvard.svg`
+const devAcademy = `${education}/dev-academy.png`
+const missionReady = `${education}/mission-ready.png`
 
 export const navLinks = [
   {
@@ -38,7 +47,7 @@ export const navLinks = [
     id: "contact",
     title: "Contact",
   },
-];
+]
 
 const services = [
   {
@@ -57,9 +66,9 @@ const services = [
     title: "Content Creator",
     icon: creator,
   },
-];
+]
 
-const technologies = [
+const tech = [
   {
     name: "HTML 5",
     icon: html,
@@ -81,8 +90,24 @@ const technologies = [
     icon: reactjs,
   },
   {
-    name: "Redux Toolkit",
-    icon: redux,
+    name: "Python",
+    icon: python,
+  },
+  {
+    name: "Graph QL",
+    icon: graphql,
+  },
+  {
+    name: "MySQL",
+    icon: mysql,
+  },
+  {
+    name: "Express",
+    icon: express,
+  },
+  {
+    name: "Amazon Web Services",
+    icon: aws,
   },
   {
     name: "Tailwind CSS",
@@ -96,29 +121,25 @@ const technologies = [
     name: "MongoDB",
     icon: mongodb,
   },
-  {
-    name: "Three JS",
-    icon: threejs,
-  },
-  {
-    name: "git",
-    icon: git,
-  },
-  {
-    name: "figma",
-    icon: figma,
-  },
-  {
-    name: "docker",
-    icon: docker,
-  },
-];
+  // {
+  //   name: "Three JS",
+  //   icon: threejs,
+  // },
+  // {
+  //   name: "git",
+  //   icon: git,
+  // },
+  // {
+  //   name: "docker",
+  //   icon: docker,
+  // },
+]
 
 const experiences = [
   {
-    title: "React.js Developer",
-    company_name: "Starbucks",
-    icon: starbucks,
+    title: "Computer Science",
+    company_name: "Harvard",
+    icon: harvard,
     iconBg: "#383E56",
     date: "March 2020 - April 2021",
     points: [
@@ -129,9 +150,9 @@ const experiences = [
     ],
   },
   {
-    title: "React Native Developer",
-    company_name: "Tesla",
-    icon: tesla,
+    title: "Mission Ready",
+    company_name: "Mission Ready",
+    icon: missionReady,
     iconBg: "#E6DEDD",
     date: "Jan 2021 - Feb 2022",
     points: [
@@ -142,9 +163,9 @@ const experiences = [
     ],
   },
   {
-    title: "Web Developer",
-    company_name: "Shopify",
-    icon: shopify,
+    title: "Dev Academy",
+    company_name: "Dev Academy",
+    icon: devAcademy,
     iconBg: "#383E56",
     date: "Jan 2022 - Jan 2023",
     points: [
@@ -154,20 +175,7 @@ const experiences = [
       "Participating in code reviews and providing constructive feedback to other developers.",
     ],
   },
-  {
-    title: "Full stack Developer",
-    company_name: "Meta",
-    icon: meta,
-    iconBg: "#E6DEDD",
-    date: "Jan 2023 - Present",
-    points: [
-      "Developing and maintaining web applications using React.js and other related technologies.",
-      "Collaborating with cross-functional teams including designers, product managers, and other developers to create high-quality products.",
-      "Implementing responsive design and ensuring cross-browser compatibility.",
-      "Participating in code reviews and providing constructive feedback to other developers.",
-    ],
-  },
-];
+]
 
 const testimonials = [
   {
@@ -194,7 +202,7 @@ const testimonials = [
     company: "456 Enterprises",
     image: "https://randomuser.me/api/portraits/women/6.jpg",
   },
-];
+]
 
 const projects = [
   {
@@ -260,6 +268,6 @@ const projects = [
     image: tripguide,
     source_code_link: "https://github.com/",
   },
-];
+]
 
-export { services, technologies, experiences, testimonials, projects };
+export { services, tech, experiences, testimonials, projects }

@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { textVariant } from '../utils/motion'
 import { BallCanvas } from "./canvas"
 import { SectionWrapper } from '../hoc'
-import { technologies } from "../constants"
+import { tech } from "../constants"
 import { styles } from '../styles'
 
 const Tech = () => {
@@ -14,7 +14,7 @@ const Tech = () => {
         <h2 className={styles.sectionHeadText}>Technologies.</h2>
       </motion.div>
       <div className={'flex flex-row flex-wrap justify-center mt-20 gap-5 sm:gap-10'}>
-        {technologies.map(technology => (
+        {tech.map(technology => (
           <div key={technology.name} className='w-14 sm:w-28 h-14 sm:h-28'>
             <BallCanvas icon={technology.icon} />
           </div>
