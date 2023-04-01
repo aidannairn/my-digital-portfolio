@@ -10,25 +10,25 @@ import {
 
 const mediaBucket = import.meta.env.VITE_MEDIA_BUCKET
 
-const technologies = `${mediaBucket}/technologies`
+const tech = `${mediaBucket}/technologies`
 const education = `${mediaBucket}/education`
 
-const css = `${technologies}/css.svg`
-const docker = `${technologies}/docker.svg`
-const git = `${technologies}/git.svg`
-const html = `${technologies}/html.svg`
-const javascript = `${technologies}/javascript.svg`
-const mongodb = `${technologies}/mongodb.svg`
-const nodejs = `${technologies}/nodejs.svg`
-const reactjs = `${technologies}/reactjs.svg`
-const tailwind = `${technologies}/tailwind.svg`
-const typescript = `${technologies}/typescript.svg`
-const threejs = `${technologies}/threejs.svg`
-const python = `${technologies}/python.svg`
-const graphql = `${technologies}/graphql.svg`
-const mysql = `${technologies}/mysql.svg`
-const aws = `${technologies}/aws.svg`
-const express = `${technologies}/express.svg`
+const css = `${tech}/css.svg`
+const docker = `${tech}/docker.svg`
+const git = `${tech}/git.svg`
+const html = `${tech}/html.svg`
+const javascript = `${tech}/javascript.svg`
+const mongodb = `${tech}/mongodb.svg`
+const nodejs = `${tech}/nodejs.svg`
+const reactjs = `${tech}/reactjs.svg`
+const tailwind = `${tech}/tailwind.svg`
+const typescript = `${tech}/typescript.svg`
+const threejs = `${tech}/threejs.svg`
+const python = `${tech}/python.svg`
+const graphql = `${tech}/graphql.svg`
+const mysql = `${tech}/mysql.svg`
+const aws = `${tech}/aws.svg`
+const express = `${tech}/express.svg`
 
 const harvard = `${education}/harvard.svg`
 const devAcademy = `${education}/dev-academy.png`
@@ -68,7 +68,7 @@ const services = [
   },
 ]
 
-const tech = [
+const technologies = [
   {
     name: "HTML 5",
     icon: html,
@@ -121,18 +121,18 @@ const tech = [
     name: "MongoDB",
     icon: mongodb,
   },
-  // {
-  //   name: "Three JS",
-  //   icon: threejs,
-  // },
-  // {
-  //   name: "git",
-  //   icon: git,
-  // },
-  // {
-  //   name: "docker",
-  //   icon: docker,
-  // },
+  {
+    name: "Three JS",
+    icon: threejs,
+  },
+  {
+    name: "git",
+    icon: git,
+  },
+  {
+    name: "docker",
+    icon: docker,
+  },
 ]
 
 const experiences = [
@@ -143,7 +143,7 @@ const experiences = [
     iconBg: "#383E56",
     date: "March 2020 - April 2021",
     points: [
-      "Developing and maintaining web applications using React.js and other related technologies.",
+      "Developing and maintaining web applications using React.js and other related nologiesnologies.",
       "Collaborating with cross-functional teams including designers, product managers, and other developers to create high-quality products.",
       "Implementing responsive design and ensuring cross-browser compatibility.",
       "Participating in code reviews and providing constructive feedback to other developers.",
@@ -270,4 +270,4 @@ const projects = [
   },
 ]
 
-export { services, tech, experiences, testimonials, projects }
+export { services, technologies, experiences, testimonials, projects }
