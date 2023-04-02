@@ -19,10 +19,10 @@ const Technologies = () => {
         style={{ height: '500px' }}
       >
         <Canvas>
-          <ambientLight intensity={0.25} />
+          {/* <ambientLight intensity={0.25} /> */}
           {/* <directionalLight position={[0, 0, 0.05]} /> */}
-          <spotLight  position={[10, 10, 10]} angle={0.15} penumbra={1} />
-          <pointLight position={[-10, -10, -10]} />
+          {/* <spotLight  position={[10, 10, 10]} angle={0.15} penumbra={1} />
+          <pointLight position={[-10, -10, -10]} /> */}
           {
             technologies.map((technology, i) => {
               return (
