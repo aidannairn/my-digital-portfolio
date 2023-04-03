@@ -8,34 +8,19 @@ const Ball = props => {
   
   return (
     <>
-      <Float speed={1.75} rotationIntensity={1} floatIntensity={0.5} >
-        {/* <ambientLight intensity={0.0025} /> */}
-        <directionalLight
-          position={[
-            props.position[0],
-            props.position[1],
-            1
-          ]}
-          intensity={0.075}
-        />
-        <spotLight
-          position={props.position}
-          angle={0.5}
-          penumbra={1}
-          intensity={0.2}
-        />
-        <pointLight
-          position={[
-            props.position[0],
-            props.position[1],
-            -10
-          ]}
-        />
+      <Float 
+        // speed={0}
+        speed={1.75}
+        rotationIntensity={1}
+        floatIntensity={0.5}
+        // floatingRange={[-0.025, 0.025]} 
+      >
         <mesh
           castShadow
           receiveShadow
-          scale={0.75}
+          scale={.8}
           {...props}
+          onClick={() => console.log(props.position)}
         >
           <icosahedronGeometry args={[1, 1]} />
           <meshStandardMaterial 
