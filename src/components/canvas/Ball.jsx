@@ -9,16 +9,16 @@ const Ball = props => {
   return (
     <>
       <Float 
-        // speed={0}
-        speed={1.75}
+        speed={0}
+        // speed={1.75}
         rotationIntensity={1}
         floatIntensity={0.5}
-        // floatingRange={[-0.025, 0.025]} 
+        floatingRange={[-0.025, 0.025]} 
       >
         <mesh
           castShadow
           receiveShadow
-          scale={.8}
+          // scale={1}
           {...props}
           onClick={() => console.log(props.position)}
         >
@@ -38,12 +38,12 @@ const Ball = props => {
           />
         </mesh>
       </Float>
-      <PerspectiveCamera
+      {/* <PerspectiveCamera
         makeDefault
         fov={5}
         position={[0, 0, 80]}
         rotation={[0, 0, 0]}
-      />
+      /> */}
     </>
   )
 }

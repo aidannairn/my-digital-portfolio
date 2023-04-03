@@ -1,6 +1,8 @@
 import { useEffect, useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { Canvas } from '@react-three/fiber'
+import { OrthographicCamera } from '@react-three/drei'
+import * as THREE from 'three'
 
 import { textVariant } from '../utils/motion'
 import { SectionWrapper } from '../hoc'
@@ -12,24 +14,34 @@ const Technologies = () => {
   const canvasWrapRef = useRef()
   const canvasRef = useRef()
 
-  const [canvasColumns, setCanvasColumns] = useState(6)
+  const [canvasColumns, setCanvasColumns] = useState(5)
   const [canvasRows, setCanvasRows] = useState(
     Math.ceil(technologies.length / canvasColumns)
   )
+  const [scale, setScale] = useState(0.5)
   const [technologyPositions, setTechnologyPositions] = useState([])
 
   useEffect(() => {
     const canvasWidth = canvasWrapRef.current.clientWidth
+    const canvasHeight = canvasWrapRef.current.clientHeight
     
-    let currentRow = 1
+    let currentRow = 0
     const techPos = technologies.map((tech, index) => {
-      if (index >= currentRow * canvasColumns) currentRow++
-      const x = -5.5 + (
-        currentRow === 1 
-          ? index * 2.2
-          : (index - (canvasColumns * (currentRow - 1))) * 2.2
+      if (index >= (currentRow + 1) * canvasColumns) currentRow++
+      const x = -((canvasWidth / 200)) + (
+        currentRow === 0 
+          ? index * ((canvasWidth / 100) / (canvasColumns - 1))
+          : (index - (canvasColumns * currentRow)) * ((canvasWidth / 100) / (canvasColumns - 1))
       )
-      const y = currentRow === 1 ? 2.5 : currentRow === 2 ? 0 : -2.5
+      
+      let y
+      if (currentRow === 0)
+        y = (canvasHeight - 50) / 200
+      else if (currentRow !== canvasRows - 1)
+        y = ((canvasHeight - 50) / 200) - (currentRow * (((canvasHeight - 50) / 100) / (canvasRows - 1)))
+      else
+        y = ((canvasHeight + 50) / 200) - (currentRow * ((canvasHeight / 100) / (canvasRows - 1)))
+
       const z = 0
       return [x, y, z]
     })
@@ -45,7 +57,7 @@ const Technologies = () => {
       <div 
         ref={canvasWrapRef}
         className={'mt-20 w-full h-full'}
-        style={{ height: `${canvasRows * 150}px` }}
+        style={{ height: `${canvasRows * 130}px` }}
       >
         {!!technologyPositions.length && 
           <Canvas
@@ -63,6 +75,19 @@ const Technologies = () => {
               intensity={0.25}
               position={[0, 0, 0]}
             />
+            <axesHelper args={[5]} />
+            {/* <gridHelper args={[6, 4, 0xffffff, 'white']}/> */}
+            <OrthographicCamera
+              makeDefault
+              zoom={90}
+              top={200}
+              bottom={-200}
+              left={200}
+              right={-200}
+              near={1}
+              far={2000}
+              position={[0, 0, 200]}
+            />
           {
             technologies.map((technology, i) => {
               return (
@@ -70,6 +95,7 @@ const Technologies = () => {
                   key={`ball-${i}`}
                   position={technologyPositions[i]}
                   icon={technology.icon}
+                  scale={scale}
                 />
 
               )
