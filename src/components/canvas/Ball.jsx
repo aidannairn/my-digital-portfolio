@@ -1,4 +1,4 @@
-import { Suspense } from 'react'
+import { useState, Suspense } from 'react'
 import { Decal, Float, Preload, useTexture, PerspectiveCamera } from '@react-three/drei'
 
 import CanvasLoader from '../Loader'
@@ -6,21 +6,24 @@ import CanvasLoader from '../Loader'
 const Ball = props => {
   const [ decal ] = useTexture([ props.icon ])
   
+  const [isHovered, setIsHovered] = useState(false)
+  
   return (
     <>
       <Float 
-        speed={0}
-        // speed={1.75}
+        // speed={0}
+        speed={(Math.random() * (1.8 - 1.7) + 1.7).toFixed(2)}
         rotationIntensity={1}
-        floatIntensity={0.5}
-        floatingRange={[-0.025, 0.025]} 
+        floatIntensity={1}
+        floatingRange={[-0.02, 0.02]} 
       >
         <mesh
           castShadow
           receiveShadow
-          // scale={1}
-          {...props}
-          onClick={() => console.log(props.position)}
+          position={props.position}
+          scale={isHovered ? 1.25 * props.scale : props.scale}
+          onPointerEnter={() => setIsHovered(true)}
+          onPointerLeave={() => setIsHovered(false)}
         >
           <icosahedronGeometry args={[1, 1]} />
           <meshStandardMaterial 
