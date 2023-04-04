@@ -8,8 +8,11 @@ import { SectionWrapper } from '../hoc'
 import { technologies } from "../constants"
 import { styles } from '../styles'
 import BallCanvas from './canvas/Ball'
+import useWindowWidth from '../utils/useWindowWidth'
 
 const Technologies = () => {
+  const windowWidth = useWindowWidth()
+
   const techContainerRef = useRef()
 
   const [canvasPixelDimensions, setCanvasPixelDimensions] = useState({ x: 0, y: 0 })
@@ -42,7 +45,7 @@ const Technologies = () => {
 
     setCanvasColumns(columns)
     setCanvasRows(Math.ceil(technologies.length / columns))
-  }, [])
+  }, [windowWidth])
   
   useEffect(() => {
     const canvasWidth = canvasPixelDimensions.x
