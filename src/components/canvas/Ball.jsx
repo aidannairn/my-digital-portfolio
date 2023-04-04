@@ -1,8 +1,7 @@
 import { useState, Suspense } from 'react'
-import { Decal, Float, Preload, useTexture, PerspectiveCamera } from '@react-three/drei'
+import { Decal, Float, Preload, useTexture } from '@react-three/drei'
 
 import CanvasLoader from '../Loader'
-
 
 const Ball = props => {
   const setFloatingRange = () => {
@@ -25,12 +24,11 @@ const Ball = props => {
   return (
     <>
       <Float 
-        // speed={1.75}
+        // speed={0} // default 1.75
         speed={(Math.random() * (1.8 - 1.7) + 1.7).toFixed(2)}
         rotationIntensity={1}
         floatIntensity={1}
-        // floatingRange={[-0.002, 0.002]} 
-        floatingRange={floatRange} 
+        floatingRange={floatRange} // default [-0.1, 0.1]
       >
         <mesh
           castShadow
@@ -56,12 +54,6 @@ const Ball = props => {
           />
         </mesh>
       </Float>
-      {/* <PerspectiveCamera
-        makeDefault
-        fov={5}
-        position={[0, 0, 80]}
-        rotation={[0, 0, 0]}
-      /> */}
     </>
   )
 }
