@@ -18,12 +18,18 @@ const Technologies = () => {
   const [canvasRows, setCanvasRows] = useState(
     Math.ceil(technologies.length / canvasColumns)
   )
+  const [canvasDimensions, setCanvasDimensions] = useState({ x: 0, y: 0 })
   const [scale, setScale] = useState(0.5)
   const [technologyPositions, setTechnologyPositions] = useState([])
 
   useEffect(() => {
     const canvasWidth = canvasWrapRef.current.clientWidth
     const canvasHeight = canvasWrapRef.current.clientHeight
+
+    setCanvasDimensions({
+      x: canvasWidth / 200,
+      y: canvasHeight / 200
+    })
     
     let currentRow = 0
     const techPos = technologies.map((tech, index) => {
@@ -93,6 +99,7 @@ const Technologies = () => {
               return (
                 <BallCanvas
                   key={`ball-${i}`}
+                  gridDimensions={canvasDimensions}
                   position={technologyPositions[i]}
                   icon={technology.icon}
                   scale={scale}

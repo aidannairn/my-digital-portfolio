@@ -3,19 +3,34 @@ import { Decal, Float, Preload, useTexture, PerspectiveCamera } from '@react-thr
 
 import CanvasLoader from '../Loader'
 
+
 const Ball = props => {
+  const setFloatingRange = () => {
+    const { position, gridDimensions: gd } = props
+    const max = Math.ceil(gd.x + gd.y)
+    
+    const absTotal = position.reduce((prev, curr) =>
+      prev + Math.abs(curr), 0)
+      
+    const rangeVal = (max - absTotal) * 0.02
+    const floatRange = [-rangeVal, rangeVal]
+    return floatRange
+  }
+
   const [ decal ] = useTexture([ props.icon ])
   
   const [isHovered, setIsHovered] = useState(false)
+  const [floatRange, setFloatRange] = useState(setFloatingRange)
   
   return (
     <>
       <Float 
-        // speed={0}
+        // speed={1.75}
         speed={(Math.random() * (1.8 - 1.7) + 1.7).toFixed(2)}
         rotationIntensity={1}
         floatIntensity={1}
-        floatingRange={[-0.02, 0.02]} 
+        // floatingRange={[-0.002, 0.002]} 
+        floatingRange={floatRange} 
       >
         <mesh
           castShadow
