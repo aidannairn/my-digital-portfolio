@@ -10,26 +10,44 @@ import { styles } from '../styles'
 import BallCanvas from './canvas/Ball'
 
 const Technologies = () => {
-  const canvasWrapRef = useRef()
+  const techContainerRef = useRef()
 
-  const [canvasColumns, setCanvasColumns] = useState(5)
-  const [canvasRows, setCanvasRows] = useState(
-    Math.ceil(technologies.length / canvasColumns)
-  )
-  const [canvasDimensions, setCanvasDimensions] = useState({ x: 0, y: 0 })
+  const [canvasPixelDimensions, setCanvasPixelDimensions] = useState({ x: 0, y: 0 })
+  const [canvasGridDimensions, setCanvasGridDimensions] = useState({ x: 0, y: 0 })
+  const [canvasColumns, setCanvasColumns] = useState(0)
+  const [canvasRows, setCanvasRows] = useState(0)
   const [scale, setScale] = useState(0.5)
   const [technologyPositions, setTechnologyPositions] = useState([])
 
   useEffect(() => {
-    // Get the dimensions of the canvas
-    const canvasWidth = canvasWrapRef.current.clientWidth
-    const canvasHeight = canvasWrapRef.current.clientHeight
+    // Get the width of the Technologies component.
+    const techContainerWidth = techContainerRef.current.clientWidth
 
-    setCanvasDimensions({
-      x: canvasWidth / 200,
+    // Determine the number of columns that can fit on the canvas where each column has a width of 150px.
+    const canvasInnerWidth = Math.floor(techContainerWidth / 150) * 150
+    const columns = Math.floor(canvasInnerWidth / 150)
+
+    // Calculate the height that the canvas needs to fit all tech items.
+    const canvasHeight = (technologies.length / columns) * 130
+
+    setCanvasPixelDimensions({
+      x: canvasInnerWidth,
+      y: canvasHeight
+    })
+
+    setCanvasGridDimensions({
+      x: canvasInnerWidth / 200,
       y: canvasHeight / 200
     })
-    
+
+    setCanvasColumns(columns)
+    setCanvasRows(Math.ceil(technologies.length / columns))
+  }, [])
+  
+  useEffect(() => {
+    const canvasWidth = canvasPixelDimensions.x
+    const canvasHeight = canvasPixelDimensions.y
+
     let currentRow = 0
     const techPos = technologies.map((tech, index) => {
       // Update the current row when the current item index exceeds the maximum amount of columns
@@ -67,20 +85,19 @@ const Technologies = () => {
     })
     // Update the technologyPositions state to include each of the new positions we declared above.
     setTechnologyPositions(techPos)
-  }, [canvasWrapRef])
+  }, [canvasRows])
 
   return (
-    <>
+    <div className='technologies-container' ref={techContainerRef} >
       <motion.div variants={textVariant()}>
         <p className={styles.sectionSubText}>Some of the languages, libraries and frameworks I use</p>
         <h2 className={styles.sectionHeadText}>Technologies.</h2>
       </motion.div>
       <div 
-        ref={canvasWrapRef}
         className={`mt-20 mx-auto`}
         style={{ 
-          height: `${canvasRows * 130}px`,
-          width: `${canvasColumns * 150}px`
+          height: `${canvasPixelDimensions.y}px`,
+          width: '100%'
         }}
       >
         {!!technologyPositions.length && 
@@ -111,7 +128,7 @@ const Technologies = () => {
               return (
                 <BallCanvas
                   key={`ball-${i}`}
-                  gridDimensions={canvasDimensions}
+                  gridDimensions={canvasGridDimensions}
                   position={technologyPositions[i]}
                   icon={technology.icon}
                   scale={scale}
@@ -122,7 +139,7 @@ const Technologies = () => {
           }
         </Canvas>}
       </div>
-    </>
+    </div>
   )
 }
 
