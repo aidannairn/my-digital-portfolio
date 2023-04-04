@@ -35,8 +35,8 @@ const Technologies = () => {
       // Update the current row when the current item index exceeds the maximum amount of columns
       if (index >= (currentRow + 1) * canvasColumns) currentRow++
       
-      // Use borderMargin to create some space around the outer items to account for changes in position when floating animation is active.
-      const borderMargin = 75
+      // Use canvasPadding to create some space around the outer items to account for changes in position when floating animation is active.
+      const canvasPadding = 75
       
       // Assign item to column.
       let gridXPosition
@@ -46,20 +46,20 @@ const Technologies = () => {
       // Position item x distance from the left of canvas - Space evenly.
       let x = -((canvasWidth / 200))
       if (gridXPosition === 0)
-        x += borderMargin * 0.01
+        x += canvasPadding * 0.01
       else if (gridXPosition === canvasColumns - 1)
-        x += gridXPosition * (((canvasWidth - borderMargin) / 100) / ((canvasColumns) - 1))
+        x += gridXPosition * (((canvasWidth - canvasPadding) / 100) / ((canvasColumns) - 1))
       else
-        x += (borderMargin * 0.01) + ((((canvasWidth - (borderMargin * 2)) / 100) / (canvasColumns - 1)) * gridXPosition)    
+        x += (canvasPadding * 0.01) + ((((canvasWidth - (canvasPadding * 2)) / 100) / (canvasColumns - 1)) * gridXPosition)    
       
       // Position item y distance from the top of canvas - Space evenly.
       let y
       if (currentRow === 0)
-        y = (canvasHeight - borderMargin) / 200
+        y = (canvasHeight - canvasPadding) / 200
       else if (currentRow !== canvasRows - 1)
-        y = ((canvasHeight - borderMargin) / 200) - (currentRow * (((canvasHeight - borderMargin) / 100) / (canvasRows - 1)))
+        y = ((canvasHeight - canvasPadding) / 200) - (currentRow * (((canvasHeight - canvasPadding) / 100) / (canvasRows - 1)))
       else
-        y = ((canvasHeight + borderMargin) / 200) - (currentRow * ((canvasHeight / 100) / (canvasRows - 1)))
+        y = ((canvasHeight + canvasPadding) / 200) - (currentRow * ((canvasHeight / 100) / (canvasRows - 1)))
 
       // Assign the z-index to a value of 0, as we do not intend to modify the item depth.
       const z = 0
