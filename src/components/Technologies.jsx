@@ -19,19 +19,31 @@ const Technologies = () => {
   const [canvasGridDimensions, setCanvasGridDimensions] = useState({ x: 0, y: 0 })
   const [canvasColumns, setCanvasColumns] = useState(0)
   const [canvasRows, setCanvasRows] = useState(0)
-  const [scale, setScale] = useState(0.5)
+  const [scale, setScale] = useState(1)
   const [technologyPositions, setTechnologyPositions] = useState([])
+  
+  useEffect(() => {
+    if (windowWidth <= 450) setScale(0.25)
+    else if (windowWidth <= 768) setScale(0.35)
+    else setScale(0.5)
+  }, [windowWidth])
 
   useEffect(() => {
     // Get the width of the Technologies component.
     const techContainerWidth = techContainerRef.current.clientWidth
 
+    // The default pixel width/height of each tech item - Multiplied by the scale.
+    const techItemDimensions = {
+      x: 300 * scale,
+      y: 300 * scale
+    }
+
     // Determine the number of columns that can fit on the canvas where each column has a width of 150px.
-    const canvasInnerWidth = Math.floor(techContainerWidth / 150) * 150
-    const columns = Math.floor(canvasInnerWidth / 150)
+    const canvasInnerWidth = Math.floor(techContainerWidth / techItemDimensions.x) * techItemDimensions.x
+    const columns = Math.floor(canvasInnerWidth / techItemDimensions.x)
 
     // Calculate the height that the canvas needs to fit all tech items.
-    const canvasHeight = (technologies.length / columns) * 130
+    const canvasHeight = (technologies.length / columns) * techItemDimensions.y
 
     setCanvasPixelDimensions({
       x: canvasInnerWidth,
@@ -45,7 +57,7 @@ const Technologies = () => {
 
     setCanvasColumns(columns)
     setCanvasRows(Math.ceil(technologies.length / columns))
-  }, [windowWidth])
+  }, [windowWidth, scale])
   
   useEffect(() => {
     const canvasWidth = canvasPixelDimensions.x
@@ -57,7 +69,7 @@ const Technologies = () => {
       if (index >= (currentRow + 1) * canvasColumns) currentRow++
       
       // Use canvasPadding to create some space around the outer items to account for changes in position when floating animation is active.
-      const canvasPadding = 75
+      const canvasPadding = 200 * scale
       
       // Assign item to column.
       let gridXPosition
@@ -91,8 +103,11 @@ const Technologies = () => {
   }, [canvasRows])
 
   return (
-    <div className='technologies-container' ref={techContainerRef} >
-      <motion.div variants={textVariant()}>
+    <div className='sm:-mx-16 -mx-6' ref={techContainerRef} >
+      <motion.div
+        variants={textVariant()}
+        className='sm:px-16 px-6'
+      >
         <p className={styles.sectionSubText}>Some of the languages, libraries and frameworks I use</p>
         <h2 className={styles.sectionHeadText}>Technologies.</h2>
       </motion.div>

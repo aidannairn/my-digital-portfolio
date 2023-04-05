@@ -3,20 +3,20 @@ import { Decal, Float, Preload, useTexture } from '@react-three/drei'
 
 import CanvasLoader from '../Loader'
 
-const Ball = props => {
+const Ball = ({ gridDimensions: gd, icon, position, scale }) => {
   const setFloatingRange = () => {
-    const { position, gridDimensions: gd } = props
+    // Set the maximum distance from the center
     const max = Math.ceil(gd.x + gd.y)
     
     const absTotal = position.reduce((prev, curr) =>
       prev + Math.abs(curr), 0)
       
-    const rangeVal = (max - absTotal) * 0.02
+    const rangeVal = ((max - absTotal) * (scale * 0.01)) 
     const floatRange = [-rangeVal, rangeVal]
     return floatRange
   }
 
-  const [ decal ] = useTexture([ props.icon ])
+  const [ decal ] = useTexture([ icon ])
   
   const [isHovered, setIsHovered] = useState(false)
   const [floatRange, setFloatRange] = useState(setFloatingRange)
@@ -33,8 +33,8 @@ const Ball = props => {
         <mesh
           castShadow
           receiveShadow
-          position={props.position}
-          scale={isHovered ? 1.25 * props.scale : props.scale}
+          position={position}
+          scale={isHovered ? 1.25 * scale : scale}
           onPointerEnter={() => setIsHovered(true)}
           onPointerLeave={() => setIsHovered(false)}
         >
