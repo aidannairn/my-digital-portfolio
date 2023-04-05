@@ -129,7 +129,7 @@ const Technologies = () => {
               intensity={0.25}
               position={[0, 0, 0]}
             />
-            <axesHelper args={[5]} />
+            {/* <axesHelper args={[5]} /> */}
             <OrthographicCamera
               makeDefault
               zoom={90}

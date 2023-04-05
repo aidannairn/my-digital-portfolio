@@ -4,14 +4,28 @@ import { Decal, Float, Preload, useTexture } from '@react-three/drei'
 import CanvasLoader from '../Loader'
 
 const Ball = ({ gridDimensions: gd, icon, position, scale }) => {
+  /*
+    - The default behavior of floatingRange is for objects to have less range the closer they are to the center.
+    - setFloatingRange is designed to make each object have the same amount of floatingRange regardless of their position.
+  */
   const setFloatingRange = () => {
-    // Set the maximum distance from the center
-    const max = Math.ceil(gd.x + gd.y)
+    // Set the maximum distance from the center.
+    const maxDist= Math.ceil(gd.x + gd.y)
     
-    const absTotal = position.reduce((prev, curr) =>
+    // Get object's distance from center.
+    const distFromCenter = position.reduce((prev, curr) =>
       prev + Math.abs(curr), 0)
-      
-    const rangeVal = ((max - absTotal) * (scale * 0.01)) 
+
+    /* 
+      Divide maxDist by distFromCenter.
+      - This value will be used to reduce the amount of floating range the further they are positioned from the center.
+      - The further from the center; The lower the value will be.
+      - If the object has a position of [0, 0, 0], zero will divide into maxDist "Infinity" times.
+    */
+    const maxDivideDFC = maxDist / distFromCenter
+
+    const rangeVal = maxDivideDFC !== Infinity ? maxDivideDFC * 0.01 : 0.1
+
     const floatRange = [-rangeVal, rangeVal]
     return floatRange
   }
@@ -24,7 +38,6 @@ const Ball = ({ gridDimensions: gd, icon, position, scale }) => {
   return (
     <>
       <Float 
-        // speed={0} // default 1.75
         speed={(Math.random() * (1.8 - 1.7) + 1.7).toFixed(2)}
         rotationIntensity={1}
         floatIntensity={1}
