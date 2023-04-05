@@ -29,6 +29,13 @@ const graphql = `${tech}/graphql.svg`
 const mysql = `${tech}/mysql.svg`
 const aws = `${tech}/aws.svg`
 const express = `${tech}/express.svg`
+const googleCloud = `${tech}/google-cloud.svg`
+const cProgrammingLang = `${tech}/c-programming-language.svg`
+const cPlusPlus = `${tech}/c-plus-plus.svg`
+const django = `${tech}/django.svg`
+const nextJS = `${tech}/nextjs.svg`
+const github = `${tech}/github.svg`
+const affinity = `${tech}/affinity.svg`
 
 const harvard = `${education}/harvard.svg`
 const devAcademy = `${education}/dev-academy.png`
@@ -126,36 +133,40 @@ const technologies = [
     icon: threejs,
   },
   {
-    name: "git",
+    name: "Git",
     icon: git,
   },
   {
-    name: "docker",
+    name: "Docker",
     icon: docker,
   },
   {
-    name: "Three JS",
-    icon: threejs,
+    name: "Google Cloud",
+    icon: googleCloud,
   },
   {
-    name: "git",
-    icon: git,
+    name: "C Programming Language",
+    icon: cProgrammingLang,
   },
   {
-    name: "docker",
-    icon: docker,
+    name: "C++",
+    icon: cPlusPlus,
   },
   {
-    name: "Three JS",
-    icon: threejs,
+    name: "Django",
+    icon: django,
   },
   {
-    name: "git",
-    icon: git,
+    name: "Next JS",
+    icon: nextJS,
   },
   {
-    name: "docker",
-    icon: docker,
+    name: "GitHub",
+    icon: github,
+  },
+  {
+    name: "Affinity",
+    icon: affinity,
   },
 ]
 

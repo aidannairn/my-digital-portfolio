@@ -151,7 +151,6 @@ const Technologies = () => {
                   icon={technology.icon}
                   scale={scale}
                 />
-
               )
             })
           }
