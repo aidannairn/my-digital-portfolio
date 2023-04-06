@@ -3,43 +3,41 @@ import {
   backend,
   creator,
   web,
-  carrent,
-  jobit,
-  tripguide
 } from "../assets"
 
 const mediaBucket = import.meta.env.VITE_MEDIA_BUCKET
 
-const tech = `${mediaBucket}/technologies`
-const education = `${mediaBucket}/education`
+const techBucket = `${mediaBucket}/technologies`
+const eduBucket = `${mediaBucket}/education`
+const projectsBucket = `${mediaBucket}/projects`
 
-const css = `${tech}/css.svg`
-const docker = `${tech}/docker.svg`
-const git = `${tech}/git.svg`
-const html = `${tech}/html.svg`
-const javascript = `${tech}/javascript.svg`
-const mongodb = `${tech}/mongodb.svg`
-const nodejs = `${tech}/nodejs.svg`
-const reactjs = `${tech}/reactjs.svg`
-const tailwind = `${tech}/tailwind.svg`
-const typescript = `${tech}/typescript.svg`
-const threejs = `${tech}/threejs.svg`
-const python = `${tech}/python.svg`
-const graphql = `${tech}/graphql.svg`
-const mysql = `${tech}/mysql.svg`
-const aws = `${tech}/aws.svg`
-const express = `${tech}/express.svg`
-const googleCloud = `${tech}/google-cloud.svg`
-const cProgrammingLang = `${tech}/c-programming-language.svg`
-const cPlusPlus = `${tech}/c-plus-plus.svg`
-const django = `${tech}/django.svg`
-const nextJS = `${tech}/nextjs.svg`
-const github = `${tech}/github.svg`
-const affinity = `${tech}/affinity.svg`
+const css = `${techBucket}/css.svg`
+const docker = `${techBucket}/docker.svg`
+const git = `${techBucket}/git.svg`
+const html = `${techBucket}/html.svg`
+const javascript = `${techBucket}/javascript.svg`
+const mongodb = `${techBucket}/mongodb.svg`
+const nodejs = `${techBucket}/nodejs.svg`
+const reactjs = `${techBucket}/reactjs.svg`
+const tailwind = `${techBucket}/tailwind.svg`
+const typescript = `${techBucket}/typescript.svg`
+const threejs = `${techBucket}/threejs.svg`
+const python = `${techBucket}/python.svg`
+const graphql = `${techBucket}/graphql.svg`
+const mysql = `${techBucket}/mysql.svg`
+const aws = `${techBucket}/aws.svg`
+const express = `${techBucket}/express.svg`
+const googleCloud = `${techBucket}/google-cloud.svg`
+const cProgrammingLang = `${techBucket}/c-programming-language.svg`
+const cPlusPlus = `${techBucket}/c-plus-plus.svg`
+const django = `${techBucket}/django.svg`
+const nextJS = `${techBucket}/nextjs.svg`
+export const github = `${techBucket}/github.svg`
+const affinity = `${techBucket}/affinity.svg`
 
-const harvard = `${education}/harvard.svg`
-const devAcademy = `${education}/dev-academy.png`
-const missionReady = `${education}/mission-ready.png`
+const harvard = `${eduBucket}/harvard.svg`
+const devAcademy = `${eduBucket}/dev-academy.png`
+const missionReady = `${eduBucket}/mission-ready.png`
 
 export const navLinks = [
   {
@@ -240,67 +238,100 @@ const testimonials = [
 
 const projects = [
   {
-    name: "Car Rent",
+    name: "Insure A Vehicle",
     description:
-      "Web-based platform that allows users to search, book, and manage car rentals from various providers, providing a convenient and efficient solution for transportation needs.",
+      "A mock project I collaborated on with two other talented developers. Together we created a landing page and a detailed form that steps the user through how to insure their vehicle.",
     tags: [
       {
-        name: "react",
-        color: "blue-text-gradient",
+        name: "React",
       },
       {
-        name: "mongodb",
-        color: "green-text-gradient",
+        name: "TypeScript",
       },
       {
-        name: "tailwind",
-        color: "pink-text-gradient",
+        name: "CSS",
       },
     ],
-    image: carrent,
-    source_code_link: "https://github.com/",
+    image: projectsBucket + '/vehicle-insurance/vehicle_insurance-home.png',
+    source_code_link: "https://github.com/aidannairn/insure-a-vehicle",
   },
   {
-    name: "Job IT",
+    name: "AI Vehicle Search",
     description:
-      "Web application that enables users to search for job openings, view estimated salary ranges for positions, and locate available jobs based on their current location.",
+      "An experimental project where the user can upload an image of a vehicle to the browser and the application uses Machine Learning to find similar vehicles that match the make or type of vehicle.",
     tags: [
       {
-        name: "react",
-        color: "blue-text-gradient",
+        name: "Google Cloud",
       },
       {
-        name: "restapi",
-        color: "green-text-gradient",
-      },
-      {
-        name: "scss",
-        color: "pink-text-gradient",
+        name: "AutoML Vision",
       },
     ],
-    image: jobit,
-    source_code_link: "https://github.com/",
+    image: projectsBucket + '/vehicle-finder-ai/vehicle_finder_ai.png',
+    source_code_link: "https://github.com/aidannairn/ai-vehicle-finder",
   },
   {
-    name: "Trip Guide",
+    name: "LevelUp Works",
     description:
-      "A comprehensive travel booking platform that allows users to book flights, hotels, and rental cars, and offers curated recommendations for popular destinations.",
+      "Provide a Learning Management System (LMS) for school teachers to deliver the Digital Technologies curriculum (specifically, to deliver classes to learn programming) in an easy way.",
     tags: [
       {
-        name: "nextjs",
-        color: "blue-text-gradient",
+        name: "JavaScript",
       },
       {
-        name: "supabase",
-        color: "green-text-gradient",
+        name: "React",
       },
       {
-        name: "css",
-        color: "pink-text-gradient",
+        name: "NodeJS",
+      },
+      {
+        name: "MySql",
       },
     ],
-    image: tripguide,
-    source_code_link: "https://github.com/",
+    image: projectsBucket + '/level-up-works/level_up_works.png',
+    source_code_link: [
+      'https://github.com/aidannairn/level-up-works--frontend',
+      'https://github.com/aidannairn/level-up-works--backend'
+    ],
+  },
+  {
+    name: "PB Tech - Laptops",
+    description:
+      "A team project I was a part of where the developers had the opportunity to work with UX/UI designers. We were tasked with mocking up a redesign of PB Tech's Laptop section.",
+    tags: [
+      {
+        name: "MongoDB",
+      },
+      {
+        name: "GraphQL",
+      },
+      {
+        name: "Apollo",
+      },
+    ],
+    image: projectsBucket + '/pb-tech-laptops/pb_tech_laptops.png',
+    source_code_link: 'https://github.com/aidannairn/pb-tech-laptops/',
+  },
+  {
+    name: "Blaze Fitness",
+    description:
+      "A website for a company that owns gyms in the Bay of Plenty. This application was developed with scalability as a top priority. A new gym can be added with no additional code!",
+    tags: [
+      {
+        name: "[In Development]",
+        color: "gold-text-gradient",
+      },
+      {
+        name: "React",
+      },
+      {
+        name: "TypeScript",
+      },
+      {
+        name: "SCSS",
+      },
+    ],
+    image: projectsBucket + '/blaze-fitness/blaze_fitness-landing.png',
   },
 ]
 
