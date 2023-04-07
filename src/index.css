@@ -33,6 +33,20 @@
   ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
+.purple-gradient {
+  background: #150F30; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #231856,
+    #150F30
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #231856,
+    #150F30
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
 .violet-gradient {
   background: #804dee;
   background: linear-gradient(-90deg, #804dee 0%, rgba(60, 51, 80, 0) 100%);
@@ -140,6 +154,29 @@
   text-indent: -9999em;
   animation: mulShdSpin 1.1s infinite ease;
   transform: translateZ(0);
+}
+
+/* width */
+.scrollbar::-webkit-scrollbar {
+  width: 12.5px;
+}
+
+/* Track */
+.scrollbar::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px rgb(49 46 129); 
+  border-radius: 10px;
+}
+ 
+/* Handle */
+.scrollbar::-webkit-scrollbar-thumb {
+  background: rgb(49 46 129); 
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgb(36, 33, 101); 
+  cursor: grabbing
 }
 
 @keyframes mulShdSpin {

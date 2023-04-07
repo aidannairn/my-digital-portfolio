@@ -10,6 +10,7 @@ const mediaBucket = import.meta.env.VITE_MEDIA_BUCKET
 const techBucket = `${mediaBucket}/technologies`
 const eduBucket = `${mediaBucket}/education`
 const projectsBucket = `${mediaBucket}/projects`
+const iconsBucket = `${mediaBucket}/icons`
 
 const css = `${techBucket}/css.svg`
 const docker = `${techBucket}/docker.svg`
@@ -38,6 +39,8 @@ const affinity = `${techBucket}/affinity.svg`
 const harvard = `${eduBucket}/harvard.svg`
 const devAcademy = `${eduBucket}/dev-academy.png`
 const missionReady = `${eduBucket}/mission-ready.png`
+
+export const chainLink = `${iconsBucket}/chain_link.svg`
 
 export const navLinks = [
   {
@@ -253,7 +256,7 @@ const projects = [
       },
     ],
     image: projectsBucket + '/vehicle-insurance/vehicle_insurance-home.png',
-    source_code_link: "https://github.com/aidannairn/insure-a-vehicle",
+    links: ["https://github.com/aidannairn/insure-a-vehicle"],
   },
   {
     name: "AI Vehicle Search",
@@ -268,7 +271,7 @@ const projects = [
       },
     ],
     image: projectsBucket + '/vehicle-finder-ai/vehicle_finder_ai.png',
-    source_code_link: "https://github.com/aidannairn/ai-vehicle-finder",
+    links: ["https://github.com/aidannairn/ai-vehicle-finder"],
   },
   {
     name: "LevelUp Works",
@@ -289,7 +292,7 @@ const projects = [
       },
     ],
     image: projectsBucket + '/level-up-works/level_up_works.png',
-    source_code_link: [
+    links: [
       'https://github.com/aidannairn/level-up-works--frontend',
       'https://github.com/aidannairn/level-up-works--backend'
     ],
@@ -310,7 +313,7 @@ const projects = [
       },
     ],
     image: projectsBucket + '/pb-tech-laptops/pb_tech_laptops.png',
-    source_code_link: 'https://github.com/aidannairn/pb-tech-laptops/',
+    links: ['https://github.com/aidannairn/pb-tech-laptops/'],
   },
   {
     name: "Blaze Fitness",

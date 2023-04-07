@@ -5,18 +5,11 @@ import Tilt from 'react-parallax-tilt'
 import { styles } from '../styles'
 import { github } from '../constants'
 import { SectionWrapper } from '../hoc'
-import { projects } from '../constants'
+import { chainLink, projects } from '../constants'
 import { fadeIn, textVariant } from '../utils/motion'
 
-const ProjectCard = ({ index, name, description, tags, image, source_code_link }) => {
-  const [isSrcListVisible, setIsSrcListVisible] = useState(false)
-  
-  const handleGitHubClick = () => {
-    if (typeof source_code_link === 'string')
-      window.open(source_code_link, '_blank')
-    else
-      setIsSrcListVisible(true)
-  }
+const ProjectCard = ({ index, name, description, tags, image, links }) => {
+  const [isSrcListVisible, setIsSrcListVisible] = useState(false)  
 
   return (
     <motion.div variants={fadeIn('up', 'spring', index * 0.5, 0.75)} >
@@ -28,38 +21,48 @@ const ProjectCard = ({ index, name, description, tags, image, source_code_link }
         }}
         className='bg-tertiary p-5 rounded-2xl sm:w-[360px] w-full'
       >
-        <div className='relative w-full h-[180px]'>
+        <div className={`relative w-full h-[180px] rounded-2xl 
+          ${isSrcListVisible ? 'border border-indigo-900' : ''}`}>
           <img
             src={image}
             alt={name}
             className={`w-full h-full object-cover rounded-2xl ${isSrcListVisible ? 'invisible' : 'visible'}`}
           />
           <div
-            className='absolute inset-0 flex m-3 justify-end card-img_hover'
+            className='absolute inset-0 h-full max-h-[180px] flex justify-end card-img_hover w-full'
           >
             <div
-              onClick={handleGitHubClick}
-              className='w-full flex flex-col items-end cursor-pointer'
+              onMouseLeave={() => setIsSrcListVisible(false)}
+              className='w-full flex flex-col items-end'
             >
-              { source_code_link && <img className='w-10 h-10 rounded-full' src={github} alt='github' /> }
-              {
-                isSrcListVisible && (
-                  <div className='w-full flex flex-col'>
-                    {
-                      source_code_link.map((link, i) => (
-                        <a
-                          key={i}
-                          href={link}
-                          target='_blank'
-                          className='text-right py-1 capitalize'
-                        >
-                            {link.replace(/-/g, ' ').split('/')[4]}
-                        </a>
-                      ))
-                    }
+              { links && (
+                  <div className={`w-10 h-10 p-2 m-2 rounded-full cursor-pointer purple-gradient ${isSrcListVisible ? 'border-2 border-[#231856]' : ''}`}>
+                    <img
+                      onClick={() => setIsSrcListVisible(true)}
+                      className='invert'
+                      src={chainLink} alt='GitHub logo'
+                    />
                   </div>
-                )
-              } 
+              )}
+              { isSrcListVisible && (
+                <div className='w-full flex flex-col mb-2 scrollbar items-end overflow-y-auto'>
+                  { links.map((link, i) => (
+                    <a
+                      key={i}
+                      href={link}
+                      target='_blank'
+                      className='text-right py-1 mr-2 capitalize w-fit'
+                    >
+                      {/* 
+                        - Split GitHub URL.
+                        - Get position of repo name.
+                        - Replace each "-" with " " char.
+                      */}
+                      {link.replace(/-/g, ' ').split('/')[4]}
+                    </a>
+                  ))}
+                </div>
+              )} 
             </div>
           </div>
         </div>
@@ -95,7 +98,7 @@ const Projects = () => {
         </motion.p>
       </div>
       <div className='mt-20 flex flex-wrap gap-7'>
-        {projects.map((project, i) => (
+        { projects.map((project, i) => (
           <ProjectCard 
             key={`project-${i}`}
             index={i}
