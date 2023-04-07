@@ -1,6 +1,6 @@
 import { useEffect, useState, Suspense } from 'react'
 import { Canvas } from '@react-three/fiber'
-import { OrbitControls, Preload, useGLTF } from '@react-three/drei'
+import { OrbitControls, Preload, useGLTF, PerformanceMonitor } from '@react-three/drei'
 
 import CanvasLoader from '../Loader'
 
@@ -9,7 +9,7 @@ const Computers = ({ isMobile }) => {
   return (
     <mesh>
       <hemisphereLight intensity={0.15} groundColor='black' />
-      <pointLight intensity={1} />
+      <pointLight intensity={2} />
       <spotLight 
         position={[-20, 50, 10]}
         angle={0.12}
@@ -30,6 +30,7 @@ const Computers = ({ isMobile }) => {
 
 const ComputerCanvas = () => {
   const [isMobile, setIsMobile] = useState(false)
+  const [dpr, setDpr] = useState(2)
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(max-width: 768px)')
@@ -44,25 +45,34 @@ const ComputerCanvas = () => {
       mediaQuery.removeEventListener('change', handleMediaQueryChange)
     }
   }, [])
-  
+
+  // const handlePerfFactorChange = (factor) => 
+  //   setDpr(Math.round(0.5 + 1.5 * factor))
 
   return (
     <Canvas
       frameloop='demand'
       shadows
+      dpr={dpr}
       camera={{ position: [20, 3, 5], fov: 25 }}
       gl={{ preserveDrawingBuffer: true }}
       className='cursor-grab active:cursor-grabbing'
     >
-      <Suspense fallback={<CanvasLoader />}>
-        <OrbitControls
-        enableZoom={false}
-        minPolarAngle={Math.PI / 2}
-        maxPolarAngle={Math.PI / 2}
-      />
-        <Computers isMobile={isMobile} />
-      </Suspense>
-      <Preload all />
+      <PerformanceMonitor
+        onChange={({ factor }) => Math.round((0.5 + 1.5 * factor) * 2) / 2}
+        flipflops={3}
+        onFallback={() => setDpr(1)}
+      >
+        <Suspense fallback={<CanvasLoader />}>
+          <OrbitControls
+          enableZoom={false}
+          minPolarAngle={Math.PI / 2}
+          maxPolarAngle={Math.PI / 2}
+        />
+          <Computers isMobile={isMobile} />
+        </Suspense>
+        <Preload all />
+      </PerformanceMonitor>
     </Canvas>
   )
 }

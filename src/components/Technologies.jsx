@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { Canvas } from '@react-three/fiber'
-import { OrthographicCamera } from '@react-three/drei'
+import { OrthographicCamera, PerformanceMonitor } from '@react-three/drei'
 
 import { textVariant } from '../utils/motion'
 import { SectionWrapper } from '../hoc'
@@ -15,6 +15,7 @@ const Technologies = () => {
 
   const techContainerRef = useRef()
 
+  const [dpr, setDpr] = useState(2)
   const [canvasPixelDimensions, setCanvasPixelDimensions] = useState({ x: 0, y: 0 })
   const [canvasGridDimensions, setCanvasGridDimensions] = useState({ x: 0, y: 0 })
   const [canvasColumns, setCanvasColumns] = useState(0)
@@ -119,7 +120,7 @@ const Technologies = () => {
         }}
       >
         {!!technologyPositions.length && 
-          <Canvas>
+          <Canvas dpr={dpr}>
             <ambientLight intensity={0.033} />
             <directionalLight
               position={[0, 0, 1]}
@@ -141,19 +142,25 @@ const Technologies = () => {
               far={2000}
               position={[0, 0, 200]}
             />
-          {
-            technologies.map((technology, i) => {
-              return (
-                <BallCanvas
-                  key={`ball-${i}`}
-                  gridDimensions={canvasGridDimensions}
-                  position={technologyPositions[i]}
-                  icon={technology.icon}
-                  scale={scale}
-                />
-              )
-            })
-          }
+            <PerformanceMonitor
+              onChange={({ factor }) => Math.round((0.5 + 1.5 * factor) * 2) / 2}
+              flipflops={3}
+              onFallback={() => setDpr(1)}
+            >
+              {
+                technologies.map((technology, i) => {
+                  return (
+                    <BallCanvas
+                      key={`ball-${i}`}
+                      gridDimensions={canvasGridDimensions}
+                      position={technologyPositions[i]}
+                      icon={technology.icon}
+                      scale={scale}
+                    />
+                  )
+                })
+              }
+            </PerformanceMonitor>
         </Canvas>}
       </div>
     </div>
