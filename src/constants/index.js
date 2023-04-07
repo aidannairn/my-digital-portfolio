@@ -256,7 +256,10 @@ const projects = [
       },
     ],
     image: projectsBucket + '/vehicle-insurance/vehicle_insurance-home.png',
-    links: ["https://github.com/aidannairn/insure-a-vehicle"],
+    links: [{
+      title: 'Insure A Vehicle | GitHub',
+      url: "https://github.com/aidannairn/insure-a-vehicle"
+    }],
   },
   {
     name: "AI Vehicle Search",
@@ -271,7 +274,10 @@ const projects = [
       },
     ],
     image: projectsBucket + '/vehicle-finder-ai/vehicle_finder_ai.png',
-    links: ["https://github.com/aidannairn/ai-vehicle-finder"],
+    links: [{
+      title: 'AI Vehicle Search | GitHub',
+      url: "https://github.com/aidannairn/ai-vehicle-finder"
+    }],
   },
   {
     name: "LevelUp Works",
@@ -293,8 +299,14 @@ const projects = [
     ],
     image: projectsBucket + '/level-up-works/level_up_works.png',
     links: [
-      'https://github.com/aidannairn/level-up-works--frontend',
-      'https://github.com/aidannairn/level-up-works--backend'
+      {
+        title: 'Client Code | GitHub',
+        url: 'https://github.com/aidannairn/level-up-works--frontend'
+      },
+      {
+        title: 'Server Code | GitHub',
+        url: 'https://github.com/aidannairn/level-up-works--backend'
+      }
     ],
   },
   {
@@ -313,7 +325,10 @@ const projects = [
       },
     ],
     image: projectsBucket + '/pb-tech-laptops/pb_tech_laptops.png',
-    links: ['https://github.com/aidannairn/pb-tech-laptops/'],
+    links: [{
+      title: 'PB Tech - Laptops | GitHub',
+      url: 'https://github.com/aidannairn/pb-tech-laptops/'
+    }],
   },
   {
     name: "Blaze Fitness",

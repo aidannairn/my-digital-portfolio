@@ -49,16 +49,11 @@ const ProjectCard = ({ index, name, description, tags, image, links }) => {
                   { links.map((link, i) => (
                     <a
                       key={i}
-                      href={link}
+                      href={link.url}
                       target='_blank'
                       className='text-right py-1 mr-2 capitalize w-fit'
                     >
-                      {/* 
-                        - Split GitHub URL.
-                        - Get position of repo name.
-                        - Replace each "-" with " " char.
-                      */}
-                      {link.replace(/-/g, ' ').split('/')[4]}
+                      { link.title }
                     </a>
                   ))}
                 </div>
