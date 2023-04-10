@@ -12,29 +12,29 @@ const eduBucket = `${mediaBucket}/education`
 const projectsBucket = `${mediaBucket}/projects`
 const iconsBucket = `${mediaBucket}/icons`
 
-const css = `${techBucket}/css.svg`
-const docker = `${techBucket}/docker.svg`
-const git = `${techBucket}/git.svg`
-const html = `${techBucket}/html.svg`
-const javascript = `${techBucket}/javascript.svg`
-const mongodb = `${techBucket}/mongodb.svg`
-const nodejs = `${techBucket}/nodejs.svg`
-const reactjs = `${techBucket}/reactjs.svg`
-const tailwind = `${techBucket}/tailwind.svg`
-const typescript = `${techBucket}/typescript.svg`
-const threejs = `${techBucket}/threejs.svg`
-const python = `${techBucket}/python.svg`
-const graphql = `${techBucket}/graphql.svg`
-const mysql = `${techBucket}/mysql.svg`
-const aws = `${techBucket}/aws.svg`
-const express = `${techBucket}/express.svg`
-const googleCloud = `${techBucket}/google-cloud.svg`
-const cProgrammingLang = `${techBucket}/c-programming-language.svg`
-const cPlusPlus = `${techBucket}/c-plus-plus.svg`
-const django = `${techBucket}/django.svg`
-const nextJS = `${techBucket}/nextjs.svg`
-export const github = `${techBucket}/github.svg`
-const affinity = `${techBucket}/affinity.svg`
+const css = `${techBucket}/css.png`
+const docker = `${techBucket}/docker.png`
+const git = `${techBucket}/git.png`
+const html = `${techBucket}/html.png`
+const javascript = `${techBucket}/javascript.png`
+const mongodb = `${techBucket}/mongodb.png`
+const nodejs = `${techBucket}/nodejs.png`
+const reactjs = `${techBucket}/reactjs.png`
+const tailwind = `${techBucket}/tailwind.png`
+const typescript = `${techBucket}/typescript.png`
+const threejs = `${techBucket}/threejs.png`
+const python = `${techBucket}/python.png`
+const graphql = `${techBucket}/graphql.png`
+const mysql = `${techBucket}/mysql.png`
+const aws = `${techBucket}/aws.png`
+const express = `${techBucket}/express.png`
+const googleCloud = `${techBucket}/google-cloud.png`
+const cProgrammingLang = `${techBucket}/c-programming-language.png`
+const cPlusPlus = `${techBucket}/c-plus-plus.png`
+const django = `${techBucket}/django.png`
+const nextJS = `${techBucket}/nextjs.png`
+export const github = `${techBucket}/github.png`
+const affinity = `${techBucket}/affinity.png`
 
 const harvard = `${eduBucket}/harvard.svg`
 const devAcademy = `${eduBucket}/dev-academy.png`
@@ -108,10 +108,6 @@ const technologies = [
   {
     name: "MySQL",
     icon: mysql,
-  },
-  {
-    name: "Express",
-    icon: express,
   },
   {
     name: "Amazon Web Services",

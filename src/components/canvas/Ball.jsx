@@ -1,7 +1,5 @@
-import { useState, Suspense } from 'react'
-import { Decal, Float, Preload, useTexture } from '@react-three/drei'
-
-import CanvasLoader from '../Loader'
+import { useState } from 'react'
+import { Decal, Float, useTexture } from '@react-three/drei'
 
 const Ball = ({ gridDimensions: gd, icon, position, scale }) => {
   /*
@@ -71,15 +69,4 @@ const Ball = ({ gridDimensions: gd, icon, position, scale }) => {
   )
 }
 
-const BallCanvas = props => {
-  return (
-    <>
-      <Suspense fallback={<CanvasLoader />}>
-        <Ball {...props} />
-      </Suspense>
-      <Preload all />
-    </>
-  )
-}
-
-export default BallCanvas
+export default Ball

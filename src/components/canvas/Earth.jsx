@@ -5,7 +5,7 @@ import { OrbitControls, Preload, useGLTF, PerformanceMonitor } from "@react-thre
 import CanvasLoader from '../Loader'
 
 const Earth = () => {
-  const earth = useGLTF('./planet/scene.gltf')
+  const earth = useGLTF('/planet/scene.gltf')
 
   return (
     <primitive
@@ -19,6 +19,7 @@ const Earth = () => {
 
 const EarthCanvas = () => {
   const [dpr, setDpr] = useState(2)
+  
   return (
     <Canvas
       shadows
@@ -45,6 +46,7 @@ const EarthCanvas = () => {
             maxPolarAngle={Math.PI / 2}
           />
           <Earth />
+          <Preload all />
         </Suspense>
       </PerformanceMonitor>
     </Canvas>

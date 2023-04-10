@@ -7,6 +7,7 @@ import Experience from './Experience';
 import Projects from './Projects';
 import Feedback from './Feedback';
 import Contact from './Contact';
+import ErrorBoundary from './ErrorBoundary';
 
 export {
   Hero,
@@ -17,6 +18,7 @@ export {
   Projects,
   Feedback,
   Contact,
+  ErrorBoundary,
   EarthCanvas, 
   BallCanvas, 
   ComputersCanvas, 

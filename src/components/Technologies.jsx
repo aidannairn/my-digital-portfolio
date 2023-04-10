@@ -1,19 +1,20 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useLayoutEffect, useState, useRef, Suspense } from 'react'
 import { motion } from 'framer-motion'
 import { Canvas } from '@react-three/fiber'
-import { OrthographicCamera, PerformanceMonitor } from '@react-three/drei'
+import { OrthographicCamera, PerformanceMonitor, Preload } from '@react-three/drei'
 
+import CanvasLoader from './Loader'
 import { textVariant } from '../utils/motion'
 import { SectionWrapper } from '../hoc'
 import { technologies } from "../constants"
 import { styles } from '../styles'
-import BallCanvas from './canvas/Ball'
+import Ball from './canvas/Ball'
 import useWindowWidth from '../utils/useWindowWidth'
 
 const Technologies = () => {
   const windowWidth = useWindowWidth()
 
-  const techContainerRef = useRef()
+  const techContainerRef = useRef(null)
 
   const [dpr, setDpr] = useState(2)
   const [canvasPixelDimensions, setCanvasPixelDimensions] = useState({ x: 0, y: 0 })
@@ -29,7 +30,7 @@ const Technologies = () => {
     else setScale(0.5)
   }, [windowWidth])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     // Get the width of the Technologies component.
     const techContainerWidth = techContainerRef.current.clientWidth
 
@@ -119,49 +120,48 @@ const Technologies = () => {
           width: '100%'
         }}
       >
-        {!!technologyPositions.length && 
-          <Canvas dpr={dpr}>
-            <ambientLight intensity={0.033} />
-            <directionalLight
-              position={[0, 0, 1]}
-              intensity={.8}
-            />
-            <pointLight
-              intensity={0.25}
-              position={[0, 0, 0]}
-            />
-            {/* <axesHelper args={[5]} /> */}
-            <OrthographicCamera
-              makeDefault
-              zoom={90}
-              top={200}
-              bottom={-200}
-              left={200}
-              right={-200}
-              near={1}
-              far={2000}
-              position={[0, 0, 200]}
-            />
-            <PerformanceMonitor
-              onChange={({ factor }) => Math.round((0.5 + 1.5 * factor) * 2) / 2}
-              flipflops={3}
-              onFallback={() => setDpr(1)}
-            >
-              {
-                technologies.map((technology, i) => {
-                  return (
-                    <BallCanvas
-                      key={`ball-${i}`}
-                      gridDimensions={canvasGridDimensions}
-                      position={technologyPositions[i]}
-                      icon={technology.icon}
-                      scale={scale}
-                    />
-                  )
-                })
-              }
-            </PerformanceMonitor>
-        </Canvas>}
+        <Canvas dpr={dpr}>
+          <ambientLight intensity={0.033} />
+          <directionalLight
+            position={[0, 0, 1]}
+            intensity={.8}
+          />
+          <pointLight
+            intensity={0.25}
+            position={[0, 0, 0]}
+          />
+          {/* <axesHelper args={[5]} /> */}
+          <OrthographicCamera
+            makeDefault
+            zoom={90}
+            top={200}
+            bottom={-200}
+            left={200}
+            right={-200}
+            near={1}
+            far={2000}
+            position={[0, 0, 200]}
+          />
+          <PerformanceMonitor
+            onChange={({ factor }) => Math.round((0.5 + 1.5 * factor) * 2) / 2}
+            flipflops={3}
+            onFallback={() => setDpr(1)}
+          />
+          <Suspense fallback={<CanvasLoader />}>
+            { technologyPositions.length === technologies.length &&
+              technologies.map((technology, i) => (
+                <Ball
+                  key={`ball-${i}`}
+                  gridDimensions={canvasGridDimensions}
+                  position={technologyPositions[i]}
+                  icon={technology.icon}
+                  scale={scale}
+                />
+              ))
+            }
+          </Suspense>
+          <Preload all />
+        </Canvas>
       </div>
     </div>
   )

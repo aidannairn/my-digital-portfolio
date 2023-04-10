@@ -5,7 +5,8 @@ import { OrbitControls, Preload, useGLTF, PerformanceMonitor } from '@react-thre
 import CanvasLoader from '../Loader'
 
 const Computers = ({ isMobile }) => {
-  const computer = useGLTF('./desktop_pc/scene.gltf')
+  const computer = useGLTF('/desktop_pc/scene.gltf')
+  
   return (
     <mesh>
       <hemisphereLight intensity={0.15} groundColor='black' />
@@ -21,7 +22,7 @@ const Computers = ({ isMobile }) => {
       <primitive 
         object={computer.scene}
         scale={isMobile ? 0.7 : 0.75}
-        position={isMobile ? [0, -2.5, -1] : [0, -2.75, -1.15]}
+        position={isMobile ? [0, -1.5, -1] : [0, -1.5, -1.15]}
         rotation={[-0.01, -0.2, -0.1]}
       />
     </mesh>
@@ -46,18 +47,27 @@ const ComputerCanvas = () => {
     }
   }, [])
 
-  // const handlePerfFactorChange = (factor) => 
-  //   setDpr(Math.round(0.5 + 1.5 * factor))
-
   return (
     <Canvas
       frameloop='demand'
       shadows
       dpr={dpr}
-      camera={{ position: [20, 3, 5], fov: 25 }}
+      camera={{
+        position: [20, 3, 5],
+        fov: 25,
+        zoom: isMobile ? 2 : 1.5
+      }}
       gl={{ preserveDrawingBuffer: true }}
-      className='cursor-grab active:cursor-grabbing'
+      className={`
+        cursor-grab
+        active:cursor-grabbing
+        z-0
+        ${isMobile ? '' : '-mt-[7.5rem]'}
+      `}
+      style={{ maxHeight: `${isMobile ? 'calc(100vw - 10%)' : 'calc(100vw - 70%)'}`}}
     >
+      {/* -mt-[17.5rem]
+      sm:-mt-[27.5rem] */}
       <PerformanceMonitor
         onChange={({ factor }) => Math.round((0.5 + 1.5 * factor) * 2) / 2}
         flipflops={3}
