@@ -4,7 +4,7 @@ import { OrbitControls, Preload, useGLTF, PerformanceMonitor } from '@react-thre
 
 import CanvasLoader from '../Loader'
 
-const Computers = ({ isMobile }) => {
+const Computer = ({ isMobile }) => {
   const computer = useGLTF('/desktop_pc/scene.gltf')
   
   return (
@@ -35,16 +35,12 @@ const ComputerCanvas = () => {
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(max-width: 768px)')
-
     setIsMobile(mediaQuery.matches)
-
     const handleMediaQueryChange = e => setIsMobile(e.matches)
-
     mediaQuery.addEventListener('change', handleMediaQueryChange)
 
-    return () => {
+    return () =>
       mediaQuery.removeEventListener('change', handleMediaQueryChange)
-    }
   }, [])
 
   return (
@@ -79,7 +75,7 @@ const ComputerCanvas = () => {
           minPolarAngle={Math.PI / 2}
           maxPolarAngle={Math.PI / 2}
         />
-          <Computers isMobile={isMobile} />
+          <Computer isMobile={isMobile} />
         </Suspense>
         <Preload all />
       </PerformanceMonitor>

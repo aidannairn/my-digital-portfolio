@@ -1,5 +1,6 @@
 import { Outlet } from 'react-router-dom'
-import { About, Contact, Experience, Feedback, Hero, Navbar, Technologies, Projects, StarsCanvas } from './components'
+import { About, Contact, Experience, Feedback, Hero, Navbar, Technologies, Projects } from './components'
+import { StarsCanvas } from './components/canvas'
 
 const App = () => {
   return (

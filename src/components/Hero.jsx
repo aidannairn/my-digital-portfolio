@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 
 import { styles } from '../styles'
-import { ComputersCanvas } from './canvas'
+import { ComputerCanvas } from './canvas'
 
 const Hero = () => {
   return (
@@ -18,7 +18,7 @@ const Hero = () => {
           </p>
         </div>
       </div>
-      <ComputersCanvas />
+      <ComputerCanvas />
       <div className='absolute w-full h-[8.5rem] bottom-[0.5rem] z-20 flex justify-center items-start sm:items-end'>
         <a className='h-fit' href='#about'>
           <div className='w-[35px] h-[64px] rounded-3xl border-4 border-secondary flex justify-center items-start p-2'>

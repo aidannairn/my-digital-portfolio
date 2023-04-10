@@ -1,14 +1,11 @@
 import { useEffect, useLayoutEffect, useState, useRef, Suspense } from 'react'
 import { motion } from 'framer-motion'
-import { Canvas } from '@react-three/fiber'
-import { OrthographicCamera, PerformanceMonitor, Preload } from '@react-three/drei'
 
-import CanvasLoader from './Loader'
+import { BallCanvas } from './canvas'
 import { textVariant } from '../utils/motion'
 import { SectionWrapper } from '../hoc'
 import { technologies } from "../constants"
 import { styles } from '../styles'
-import Ball from './canvas/Ball'
 import useWindowWidth from '../utils/useWindowWidth'
 
 const Technologies = () => {
@@ -16,7 +13,6 @@ const Technologies = () => {
 
   const techContainerRef = useRef(null)
 
-  const [dpr, setDpr] = useState(2)
   const [canvasPixelDimensions, setCanvasPixelDimensions] = useState({ x: 0, y: 0 })
   const [canvasGridDimensions, setCanvasGridDimensions] = useState({ x: 0, y: 0 })
   const [canvasColumns, setCanvasColumns] = useState(0)
@@ -110,7 +106,7 @@ const Technologies = () => {
         variants={textVariant()}
         className='sm:px-16 px-6'
       >
-        <p className={styles.sectionSubText}>Some of the languages, libraries and frameworks I use</p>
+        <p className={styles.sectionSubText}>Some of the languages, libraries, frameworks and packages I use</p>
         <h2 className={styles.sectionHeadText}>Technologies.</h2>
       </motion.div>
       <div 
@@ -120,48 +116,12 @@ const Technologies = () => {
           width: '100%'
         }}
       >
-        <Canvas dpr={dpr}>
-          <ambientLight intensity={0.033} />
-          <directionalLight
-            position={[0, 0, 1]}
-            intensity={.8}
-          />
-          <pointLight
-            intensity={0.25}
-            position={[0, 0, 0]}
-          />
-          {/* <axesHelper args={[5]} /> */}
-          <OrthographicCamera
-            makeDefault
-            zoom={90}
-            top={200}
-            bottom={-200}
-            left={200}
-            right={-200}
-            near={1}
-            far={2000}
-            position={[0, 0, 200]}
-          />
-          <PerformanceMonitor
-            onChange={({ factor }) => Math.round((0.5 + 1.5 * factor) * 2) / 2}
-            flipflops={3}
-            onFallback={() => setDpr(1)}
-          />
-          <Suspense fallback={<CanvasLoader />}>
-            { technologyPositions.length === technologies.length &&
-              technologies.map((technology, i) => (
-                <Ball
-                  key={`ball-${i}`}
-                  gridDimensions={canvasGridDimensions}
-                  position={technologyPositions[i]}
-                  icon={technology.icon}
-                  scale={scale}
-                />
-              ))
-            }
-          </Suspense>
-          <Preload all />
-        </Canvas>
+        <BallCanvas
+          technologies={technologies}
+          positions={technologyPositions}
+          canvasGridDimensions={canvasGridDimensions}
+          scale={scale}
+        />
       </div>
     </div>
   )

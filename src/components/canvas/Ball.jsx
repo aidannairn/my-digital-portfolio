@@ -1,5 +1,8 @@
-import { useState } from 'react'
-import { Decal, Float, useTexture } from '@react-three/drei'
+import { useState, Suspense } from 'react'
+import { Canvas } from '@react-three/fiber'
+import { Decal, Float, useTexture, OrthographicCamera, PerformanceMonitor, Preload } from '@react-three/drei'
+
+import CanvasLoader from '../Loader'
 
 const Ball = ({ gridDimensions: gd, icon, position, scale }) => {
   /*
@@ -69,4 +72,51 @@ const Ball = ({ gridDimensions: gd, icon, position, scale }) => {
   )
 }
 
-export default Ball
+const BallCanvas = ({
+  technologies,
+  positions,
+  canvasGridDimensions,
+  scale
+}) => {
+  return (
+    <Canvas>
+      <ambientLight intensity={0.033} />
+      <directionalLight
+        position={[0, 0, 1]}
+        intensity={.8}
+      />
+      <pointLight
+        intensity={0.25}
+        position={[0, 0, 0]}
+      />
+      {/* <axesHelper args={[5]} /> */}
+      <OrthographicCamera
+        makeDefault
+        zoom={90}
+        top={200}
+        bottom={-200}
+        left={200}
+        right={-200}
+        near={1}
+        far={2000}
+        position={[0, 0, 200]}
+      />
+      <Suspense fallback={<CanvasLoader />}>
+        { positions.length === technologies.length &&
+          technologies.map((technology, i) => (
+            <Ball
+              key={`ball-${i}`}
+              gridDimensions={canvasGridDimensions}
+              position={positions[i]}
+              icon={technology.icon}
+              scale={scale}
+            />
+          ))
+        }
+      </Suspense>
+      <Preload all />
+    </Canvas>
+  )
+}
+
+export default BallCanvas
