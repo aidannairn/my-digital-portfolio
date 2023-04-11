@@ -29,7 +29,7 @@ const Computer = ({ isMobile }) => {
   )
 }
 
-const ComputerCanvas = () => {
+const ComputerCanvas = ({ canvasHeight, marginTop }) => {
   const [isMobile, setIsMobile] = useState(false)
   const [dpr, setDpr] = useState(2)
 
@@ -51,19 +51,19 @@ const ComputerCanvas = () => {
       camera={{
         position: [20, 3, 5],
         fov: 25,
-        zoom: isMobile ? 2 : 1.5
+        zoom: 1.5
       }}
       gl={{ preserveDrawingBuffer: true }}
       className={`
         cursor-grab
         active:cursor-grabbing
         z-0
-        ${isMobile ? '' : '-mt-[7.5rem]'}
       `}
-      style={{ maxHeight: `${isMobile ? 'calc(100vw - 10%)' : 'calc(100vw - 70%)'}`}}
+      style={{
+        maxHeight: canvasHeight,
+        top: marginTop
+      }}
     >
-      {/* -mt-[17.5rem]
-      sm:-mt-[27.5rem] */}
       <PerformanceMonitor
         onChange={({ factor }) => Math.round((0.5 + 1.5 * factor) * 2) / 2}
         flipflops={3}
