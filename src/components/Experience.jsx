@@ -10,10 +10,10 @@ import 'react-vertical-timeline-component/style.min.css'
 
 const ExperienceCard = ({ experience }) => (
   <VerticalTimelineElement
-    contentStyle={{ background: '#1D1836', color: '#FFF' }}
+    contentStyle={{ background: '#00143a', color: '#FFF' }}
     contentArrowStyle={{ borderRight: '7px solid #232631' }}
     date={experience.period}
-    iconStyle={{ background: experience.iconBg || 'rgb(29, 24, 54)' }}
+    iconStyle={{ background: experience.iconBg || 'rgb(0, 20, 58)' }}
     icon={
       <div className='flex justify-center items-center w-full h-full'>
         <img

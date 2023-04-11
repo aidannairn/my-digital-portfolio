@@ -22,7 +22,7 @@ const ProjectCard = ({ index, name, description, tags, image, links }) => {
         className='bg-tertiary p-5 rounded-2xl sm:w-[360px] w-full'
       >
         <div className={`relative w-full h-[180px] rounded-2xl 
-          ${isSrcListVisible ? 'border border-indigo-900' : ''}`}>
+          ${isSrcListVisible ? 'border border-quaternary' : ''}`}>
           <img
             src={image}
             alt={name}
@@ -36,7 +36,7 @@ const ProjectCard = ({ index, name, description, tags, image, links }) => {
               className='w-full flex flex-col items-end'
             >
               { links && (
-                  <div className={`w-10 h-10 p-2 m-2 rounded-full cursor-pointer purple-gradient ${isSrcListVisible ? 'border-2 border-[#231856]' : ''}`}>
+                  <div className={`w-10 h-10 p-2 m-2 rounded-full cursor-pointer blue-dark-gradient ${isSrcListVisible ? 'border-2 border-[#000D26]' : ''}`}>
                     <img
                       onClick={() => setIsSrcListVisible(true)}
                       className='invert'
