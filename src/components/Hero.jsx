@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 
 import { styles } from '../styles'
 import { ComputerCanvas } from './canvas'
+import useWindowSize from '../utils/useWindowSize'
 
 const Hero = () => {
   const heroMainRef = useRef(null)
@@ -12,7 +13,9 @@ const Hero = () => {
   const [canvasNegativeTopY, setCanvasNegativeTopY] = useState(0)
   const [canvasHeight, setCanvasHeight] = useState(0)
 
-  useLayoutEffect(() => {
+  const windowSize = useWindowSize()
+
+  const setCanvasPlot = () => {
     if (heroTextRef.current && scrollButtonRef.current) {
       const mainBottom = heroMainRef.current.getBoundingClientRect().bottom
       const textBottom = heroTextRef.current.getBoundingClientRect().bottom
@@ -21,7 +24,9 @@ const Hero = () => {
       setCanvasNegativeTopY(mainBottom - textBottom)
       setCanvasHeight(scrollButtonTop - textBottom)
     }
-  }, [])
+  }
+
+  useLayoutEffect(() => setCanvasPlot(), [windowSize])
   
   return (
     <section className='w-full h-screen mx-auto'>

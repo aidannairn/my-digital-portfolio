@@ -6,10 +6,10 @@ import { textVariant } from '../utils/motion'
 import { SectionWrapper } from '../hoc'
 import { technologies } from "../constants"
 import { styles } from '../styles'
-import useWindowWidth from '../utils/useWindowWidth'
+import useWindowSize from '../utils/useWindowSize'
 
 const Technologies = () => {
-  const windowWidth = useWindowWidth()
+  const windowWidth = useWindowSize('x')
 
   const techContainerRef = useRef(null)
 
@@ -110,7 +110,7 @@ const Technologies = () => {
         <h2 className={styles.sectionHeadText}>Technologies.</h2>
       </motion.div>
       <div 
-        className={`mt-20 mx-auto`}
+        className={`mt-10 mx-auto`}
         style={{ 
           height: `${canvasPixelDimensions.y}px`,
           width: '100%'
