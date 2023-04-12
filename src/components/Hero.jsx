@@ -47,7 +47,7 @@ const Hero = () => {
         canvasHeight={canvasHeight} 
         marginTop={-canvasNegativeTopY}
       />
-      <div ref={scrollButtonRef} className='absolute w-full h-[8.5rem] md:h-fit bottom-[0.5rem] z-20 flex justify-center items-start sm:items-end'>
+      <div ref={scrollButtonRef} className='absolute w-full h-fit mb-10 bottom-0 z-20 flex justify-center'>
         <a className='h-fit' href='#about'>
           <div className='w-[35px] h-[64px] rounded-3xl border-4 border-secondary flex justify-center items-start p-2'>
             <motion.div

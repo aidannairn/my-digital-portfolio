@@ -11,7 +11,7 @@ const ServiceCard = ({ index, title, icon }) => {
   return (
     <Tilt className='xs:w-[250px] w-full'>
       <motion.div
-        variants={fadeIn("right", "spring", index * 0.5, 0.75)}
+        variants={fadeIn("right", "spring", (index * 0.5) + 1, 0.75)}
         className='w-full green-blue-gradient p-[1px] rounded-[20px] shadow-card'
       >
         <div
@@ -38,7 +38,7 @@ const About = () => {
         <h2 className={styles.sectionHeadText}>Overview.</h2>
       </motion.div>
       <motion.p
-        variants={fadeIn('', '', 0.1, 1)}
+        variants={fadeIn('', '', 1, 1)}
         className='mt-4 text-secondary text-[17px] max-w-3xl leading-[30px]'
       >
         I'm a skilled software developer that uses coding as my creative outlet. I mostly work with JavaScript, TypeScript, React and NodeJS. I'm a quick learner. I have a strong passion for helping others. I create applications that are user-friendly, scalable and efficient.

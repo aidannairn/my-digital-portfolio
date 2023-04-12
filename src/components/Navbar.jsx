@@ -59,8 +59,8 @@ const Navbar = () => {
       <motion.div
         className={`${!toggle ? 'hidden' : 'flex'} p-6 bg-primary absolute top-[75px] z-10 right-0 w-full z-10`}
         initial='hidden'
-        whileInView='show'
-        variants={slideIn('up', 'tween', 0, 0.25)}
+        whileInView='visible'
+        variants={slideIn('down', 'tween', 0, 0.25)}
       >
         <ul className='list-none flex justify-end items-start flex-col gap-4'>
           {navLinks.map(link => (
