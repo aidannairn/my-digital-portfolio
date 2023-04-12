@@ -4,7 +4,7 @@ import { StarsCanvas } from './components/canvas'
 
 const App = () => {
   return (
-    <div className='bg-primary'>
+    <div className='App bg-primary'>
       <Navbar />
       <Hero />
       <Outlet />

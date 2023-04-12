@@ -4,6 +4,21 @@
 @tailwind components;
 @tailwind utilities;
 
+/*  The entire application will be inside the below class
+    - On mobile devices; often the browser will hide the browser navigation menu.
+    - This feature causes the viewport's height to constantly change when the user scrolls.
+    - I found that the Technologies Items would jitter whenever the viewport changed.
+    - The settings below alleviate this problem.
+*/
+.App {
+  height: 100vh;
+  height: 100dvh;
+  width: 100vw;
+  width: 100dvw;
+  position: fixed;
+  overflow-y: auto;
+}
+
 * {
   margin: 0;
   padding: 0;
