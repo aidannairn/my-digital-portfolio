@@ -55,7 +55,7 @@ const Technologies = () => {
 
     setCanvasColumns(columns)
     setCanvasRows(Math.ceil(technologies.length / columns))
-  }, [scale])
+  }, [scale, windowWidth])
   
   useEffect(() => {
     const canvasWidth = canvasPixelDimensions.x
