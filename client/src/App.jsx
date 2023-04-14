@@ -6,17 +6,17 @@ const App = () => {
   return (
     <div className='App bg-primary'>
       <Navbar />
-      <Hero />
+      {/* <Hero /> */}
       <Outlet />
       <About />
       <Experience />
-      <Technologies />
+      {/* <Technologies /> */}
       <Projects />
       {/* <Feedback /> */}
-      <div className='relative z-0'>
+      {/* <div className='relative z-0'>
         <Contact />
         <StarsCanvas />
-      </div>
+      </div> */}
     </div>
   )
 }
