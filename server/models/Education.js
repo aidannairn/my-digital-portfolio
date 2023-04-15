@@ -9,6 +9,6 @@ const EducationSchema = new mongoose.Schema({
   dateTo: Date,
   bullets: [String],
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
-})
+}, { timestamps: true })
 
 module.exports = mongoose.model('Education', EducationSchema)
