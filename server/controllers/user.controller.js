@@ -1,6 +1,5 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const jwtDecode = require('jwt-decode')
 
 const User = require('../models/User')
 
@@ -54,13 +53,31 @@ const userSignin = async (req, res) => {
 
       await user.save()
       res.status(200).json({ type: 'success', msg: `Hello, ${user.firstName}!` })
-    } else {
-      throw new Error()
-    }
+    } else { throw new Error() }
   } catch (error) {
     console.error(error)
     return res.status(401).json({ type: 'error', msg: 'User sign-in credentials were either incorrect or do not exist.' })
   }
 }
 
-module.exports = { userSignup, userSignin } 
+const userSignout = async (req, res) => {
+  const refreshToken = req.cookies.refreshToken
+
+  if (!refreshToken) return res.sendStatus(204)
+
+  try {
+    const user = await User.findOne({ refreshToken })
+
+    if (user) {
+      user.refreshToken = undefined
+      res.clearCookie('refreshToken')
+      await user.save()
+      return res.status(200).json({ type: 'success', msg: 'You have been signed out.' })
+    } else { throw new Error() }
+  } catch (error) {
+    console.error(error)
+    return res.status(401).json({ type: 'error', msg: 'There was a problem while trying to sign the user out.' })
+  }
+}
+
+module.exports = { userSignup, userSignin, userSignout } 
