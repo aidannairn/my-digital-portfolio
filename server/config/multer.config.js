@@ -11,4 +11,6 @@ const imageFilter = (req, file, callback) => {
   callback(null, true);
 }
 
-module.exports = { storage, imageFilter }
+const multerImage = multer({ storage, fileFilter: imageFilter }).single('image')
+
+module.exports = { storage, imageFilter, multerImage }
