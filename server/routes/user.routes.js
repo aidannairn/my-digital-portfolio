@@ -6,7 +6,7 @@ const { userSignup, userSignin, userSignout } = require('../controllers/user.con
 const userRouter = express.Router()
 
 // userRouter.post('/signup', multerImage, userSignup)
-userRouter.post('/signin', userSignin)
-userRouter.delete('/signout', userSignout)
+userRouter.post('/api/signin', userSignin)
+userRouter.delete('/api/signout', userSignout)
 
 module.exports = userRouter
