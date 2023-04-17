@@ -6,6 +6,6 @@ const { techCreate, techDeleteOne } = require('../controllers/technology.control
 const technologyRouter = express.Router()
 
 technologyRouter.post('/api/tech/create', multerImage, techCreate)
-// technologyRouter.delete('/api/tech/:id', techDeleteOne)
+technologyRouter.delete('/api/tech/:id', techDeleteOne)
 
 module.exports = technologyRouter

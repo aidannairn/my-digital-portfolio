@@ -1,14 +1,20 @@
 const AWS = require('aws-sdk')
 const fs = require('fs')
 
-const s3 = new AWS.S3({
-  accessKeyId: process.env.S3_ACCESS_KEY_ID,
-  secretAccessKey: process.env.S3_SECRET_ACCESS_KEY
-})
+const {
+  S3_ACCESS_KEY_ID: accessKeyId,
+  S3_SECRET_ACCESS_KEY: secretAccessKey
+ } = process.env
+
+const s3 = new AWS.S3({ accessKeyId, secretAccessKey })
 
 const s3Upload = async (name, path, directory) => {
-  const { S3_BUCKET_NAME: bucket } = process.env
-  const destination = directory ? `${bucket}/${directory}` : bucket
+  const {
+    S3_BUCKET_NAME: bucketName,
+    S3_BUCKET_ROOT: bucketRoot
+  } = process.env
+  
+  const destination = directory ? `${bucketName}/${directory}` : bucketName
 
   const uploadedFile = await s3.upload({
     Bucket: destination,
@@ -16,7 +22,17 @@ const s3Upload = async (name, path, directory) => {
     Key: `${Date.now()}-${name}`
   }).promise()
 
-  return uploadedFile.Location.replace(process.env.S3_BUCKET_ROOT, '')
+  return uploadedFile.Location.replace(bucketRoot, '')
 }
 
-module.exports = {s3, s3Upload}
+const s3Delete = async key => {
+  const bucketName = process.env.S3_BUCKET_NAME
+  const deletedImage = await s3.deleteObject({
+    Bucket: bucketName,
+    Key: key
+  }).promise()
+
+  return deletedImage
+}
+
+module.exports = {s3, s3Upload, s3Delete}
