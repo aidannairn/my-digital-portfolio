@@ -43,23 +43,33 @@ const userSignin = async (req, res) => {
   try {
     const user = await User.findOne({ email })
     
-    if (bcrypt.compareSync(password, user.password)) {
-      const refreshToken = jwt.sign(
-        { id: user._id, email: user.email },
-        process.env.JWT_ACCESS_TOKEN,
-        { expiresIn: '1d' }
-      )
+    const passwordsMatch = bcrypt.compareSync(password, user.password)
+    if (!passwordsMatch) throw new Error('Cannot find a user that matches email and password.')
 
-      user.refreshToken = refreshToken
+    const { _id: id, firstName, lastName, imageURL } = user
+    const userData = { id, firstName, lastName, imageURL }
 
-      res.cookie('refreshToken', refreshToken, {
-        httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000 // One day
-      })
+    const accessToken = jwt.sign(
+      userData,
+      process.env.JWT_ACCESS_TOKEN_SECRET,
+      { expiresIn: '15s' }
+    )
+    
+    const refreshToken = jwt.sign(
+      userData,
+      process.env.JWT_REFRESH_TOKEN_SECRET,
+      { expiresIn: '1d' }
+    )
 
-      await user.save()
-      res.status(200).json({ type: 'success', msg: `Hello, ${user.firstName}!` })
-    } else { throw new Error() }
+    user.refreshToken = refreshToken
+
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000 // One day
+    })
+
+    await user.save()
+    res.status(200).json({ accessToken })
   } catch (error) {
     console.error(error)
     return res.status(401).json({ type: 'error', msg: 'User sign-in credentials were either incorrect or do not exist.' })
@@ -73,13 +83,12 @@ const userSignout = async (req, res) => {
 
   try {
     const user = await User.findOne({ refreshToken })
+    if (!user) throw new Error('There was a problem while trying to sign the user out.')
 
-    if (user) {
-      user.refreshToken = undefined
-      res.clearCookie('refreshToken')
-      await user.save()
-      return res.status(200).json({ type: 'success', msg: 'You have been signed out.' })
-    } else { throw new Error() }
+    user.refreshToken = undefined
+    res.clearCookie('refreshToken')
+    await user.save()
+    return res.status(200).json({ type: 'success', msg: 'You have been signed out.' })
   } catch (error) {
     console.error(error)
     return res.status(401).json({ type: 'error', msg: 'There was a problem while trying to sign the user out.' })
