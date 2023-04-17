@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const path = require('path')
 
 const { s3Upload } = require('../config/aws.config')
 const User = require('../models/User')
@@ -14,7 +15,7 @@ const userSignup = async (req, res, next) => {
     const hashedPassword = bcrypt.hashSync(password, 10)
 
     const imageURL = req.file
-      ? await s3Upload(`${firstName}_${lastName}`, req.file.path, directory)
+      ? await s3Upload(`${firstName}_${lastName}` + path.extname(req.file.originalname), req.file.path, directory)
       : undefined // If no image exists - Set to "undefined" so column doesn't appear in database.
 
     const newUser = new User({

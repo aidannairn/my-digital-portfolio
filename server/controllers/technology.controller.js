@@ -1,3 +1,5 @@
+const path = require('path')
+
 const { s3Upload } = require('../config/aws.config')
 const Technology = require('../models/Technology')
 
@@ -9,7 +11,7 @@ const techCreate = async (req, res, next) => {
     return res.status(400).json({ type: 'error', msg: 'Missing required parameters.'})
 
   try {
-    const imageURL = await s3Upload(name, image.path, directory)
+    const imageURL = await s3Upload(name + path.extname(image.originalname), image.path, directory)
     const newTechnology = new Technology({ name, docsURL, imageURL, userId })
     newTechnology.save()
 

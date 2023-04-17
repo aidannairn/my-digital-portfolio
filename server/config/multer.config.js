@@ -6,7 +6,10 @@ const storage = multer.diskStorage({
 })
 
 const imageFilter = (req, file, callback) => {
-  if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i))
+  const [type, extension] = file.mimetype.split('/')
+  const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif']
+
+  if (type !== 'image' || !allowedExtensions.includes(extension))
     return callback(new Error('Only the following image file types can be uploaded:\n[.jpg, .jpeg, .png, .gif]'), false)
   callback(null, true);
 }
