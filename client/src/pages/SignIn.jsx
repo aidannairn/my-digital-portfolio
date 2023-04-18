@@ -1,7 +1,8 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
+import { UserContext } from '../contexts/UserContext'
 import { styles } from '../styles'
 
 const FormLabelInput = ({
@@ -47,7 +48,8 @@ const SignIn = () => {
     try {
       setLoading(true)
       await axios.post(`${import.meta.env.VITE_SERVER_BASE_URL}/api/signin`, { ...form })
-      redirect('/')
+      redirect('/', { replace: true })
+      window.location.reload()
     } catch (error) {
       console.error(error)
     } finally {
