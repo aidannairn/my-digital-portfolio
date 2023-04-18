@@ -1,4 +1,6 @@
 import { useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 import { styles } from '../styles'
 
@@ -26,6 +28,7 @@ const FormLabelInput = ({
 }
 
 const SignIn = () => {
+  const redirect = useNavigate()
   const formRef = useRef(null)
 
   const [form, setForm] = useState({
@@ -39,14 +42,22 @@ const SignIn = () => {
     setForm({ ...form, [name]: value })
   }
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault()
-    setLoading(true)
+    try {
+      setLoading(true)
+      await axios.post(`${import.meta.env.VITE_SERVER_BASE_URL}/api/signin`, { ...form })
+      redirect('/')
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
     <div className='bg-primary h-screen flex items-center justify-center'>
-      <div className='bg-[#00112e] p-8 rounded-2xl'>
+      <div className='bg-[#00112e] w-[80%] sm:w-[30rem] p-8 rounded-2xl'>
         <p className={styles.sectionSubText}>Have an account?</p>
         <h3 className={styles.sectionHeadText}>Sign In.</h3>
         <form
@@ -72,7 +83,7 @@ const SignIn = () => {
           />
           <button
             type='submit'
-            className='bg-tertiary py-3 px-8 self-end sm:self-start outline-none w-fit text-white font-bold shadow-md shadow-primary rounded-xl'
+            className='bg-tertiary py-3 px-8 self-end outline-none w-fit text-white font-bold shadow-md shadow-primary rounded-xl'
           >
             {loading ? 'Signing in...' : 'Sign in'}
           </button>
