@@ -2,7 +2,8 @@ const mongoose = require('mongoose')
 
 const EducationSchema = new mongoose.Schema({
   provider: { type: String, required: true },
-  qualifications: [{ type: String, required: true }],
+  qualification: { type: String, required: true },
+  certificateURL: String,
   logoURL: String,
   logoBgHex: String,
   dateFrom: { type: Date, required: true },
