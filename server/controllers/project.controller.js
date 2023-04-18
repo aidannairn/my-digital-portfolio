@@ -1,4 +1,4 @@
-const { s3Upload } = require('../config/aws.config')
+const { s3Upload, s3Delete } = require('../config/aws.config')
 const Project = require('../models/Project')
 
 const projectCreate = async (req, res, next) => {
@@ -20,4 +20,23 @@ const projectCreate = async (req, res, next) => {
   }
 }
 
-module.exports = { projectCreate }
+const projectDeleteOne = async (req, res) => {
+  const { id: projectId } = req.params
+
+  // TODO: Get user ID and validate that the project to be deleted belongs to the active user.
+
+  try {
+    const project = await Project.findByIdAndDelete(projectId)
+    if (!project) throw new Error(`There was a problem removing ${project.name} from the database.`)
+    
+    const projectImage = await s3Delete(project.imageURL)
+    if (!projectImage) throw new Error('Image was not removed from S3.')
+
+    return res.status(200).json({ type: 'success', msg: 'Project was removed successfully.' })
+  } catch (error) {
+    console.error(error)
+    return res.status(400).json({ type: 'error', msg: 'Could not delete project.' })
+  }
+}
+
+module.exports = { projectCreate, projectDeleteOne }
