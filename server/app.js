@@ -6,7 +6,12 @@ const cookieParser = require('cookie-parser')
 const connectDatabase = require('./config/database.config')
 const { multerImage } = require('./config/multer.config')
 const { s3Upload } = require('./config/aws.config')
-const { userRouter, technologyRouter, projectRouter } = require('./routes')
+const {
+  userRouter,
+  educationRouter,
+  technologyRouter,
+  projectRouter
+} = require('./routes')
 
 const app = express()
 dotenv.config()
@@ -18,6 +23,7 @@ app.use(cookieParser())
 app.use(express.json())
 
 app.use(userRouter)
+app.use(educationRouter)
 app.use(technologyRouter)
 app.use(projectRouter)
 
