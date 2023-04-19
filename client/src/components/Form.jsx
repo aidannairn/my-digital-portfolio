@@ -1,8 +1,10 @@
 import Modal from "../hoc/Modal"
 
-const Form = props => {
+const Form = () => {
   return (
-    <div className='bg-[#00112e] w-full sm:w-[30rem] py-5 px-12'>Form</div>
+    <div className='bg-[#00112e] w-[80vw] sm:w-[30rem] py-5 px-12'>
+      <div>Form</div>
+    </div>
   )
 }
 
