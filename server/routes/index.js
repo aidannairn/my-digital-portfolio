@@ -1,4 +1,11 @@
-export const userRouter = require('./user.routes')
-export const educationRouter = require('./education.routes')
-export const technologyRouter = require('./technology.routes')
-export const projectRouter = require('./project.routes')
+const userRouter = require('./user.routes')
+const educationRouter = require('./education.routes')
+const technologyRouter = require('./technology.routes')
+const projectRouter = require('./project.routes')
+
+module.exports = {
+  userRouter,
+  educationRouter,
+  technologyRouter,
+  projectRouter
+}
