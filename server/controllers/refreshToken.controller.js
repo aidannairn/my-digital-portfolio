@@ -5,7 +5,7 @@ const User = require('../models/User')
 const refreshToken = async (req, res) => {
   try {
     const refreshToken = req.cookies.refreshToken
-    if (!refreshToken) throw new Error('No refresh token exists.')
+    if (!refreshToken) return res.status(200).json({ type: 'info', msg: 'No user is currently signed' })
     
     const user = await User.findOne({ refreshToken })
     if (!user) throw new Error('No user with refresh token exists.')

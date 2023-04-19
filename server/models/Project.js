@@ -5,7 +5,7 @@ const ProjectSchema = new mongoose.Schema({
   imageURL: { type: String, required: true },
   links: [{ title: String, url: String }],
   tags: [{ type: String, color: String }],
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 }, { timestamps: true })
 
 module.exports = mongoose.model('Project', ProjectSchema)

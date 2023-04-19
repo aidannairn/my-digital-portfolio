@@ -19,7 +19,11 @@ const s3Upload = async (name, path, directory) => {
   const uploadedFile = await s3.upload({
     Bucket: destination,
     Body: fs.createReadStream(path),
-    Key: `${Date.now()}-${name}`
+    /*  S3 stores " " as "+". MongoDB stores " " as "%20"
+        - Use Regex to globally replace " " w/ "_".
+        - Date gives filenames "uniqueness".
+    */
+    Key: `${Date.now()}-${name.replace(/ +/g, '_')}`
   }).promise()
 
   return uploadedFile.Location.replace(bucketRoot, '')
