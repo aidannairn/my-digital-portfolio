@@ -1,8 +1,8 @@
 import Modal from "../hoc/Modal"
 
-const Form = () => {
+const Form = props => {
   return (
-    <div className='bg-[#00112e] w-[80vw] sm:w-[30rem] py-5 px-12'>
+    <div className={`${props.modalClassNames || ''}`}>
       <div>Form</div>
     </div>
   )

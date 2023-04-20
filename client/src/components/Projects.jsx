@@ -22,45 +22,48 @@ const ProjectCard = ({ index, name, description, tags, image, links }) => {
           speed: 450
         }}>
           <div 
-            className={`relative w-full h-[180px] rounded-2xl 
-            ${isSrcListVisible ? 'border border-quaternary' : ''}`}
+            className={`relative w-full max-h-[180px] h-[180px] p-px rounded-2xl 
+            ${isSrcListVisible ? 'green-blue-gradient' : ''}`}
           >
-            <img
-              src={image}
-              alt={name}
-              className={`w-full h-full object-cover rounded-2xl ${isSrcListVisible ? 'invisible' : 'visible'}`}
-            />
-            <div
-              className='absolute inset-0 h-full max-h-[180px] flex justify-end card-img_hover w-full'
-            >
+            <div className='bg-tertiary rounded-2xl h-[178px]'>
+              <img
+                src={image}
+                alt={name}
+                className={`w-full h-full object-cover rounded-2xl ${isSrcListVisible ? 'invisible' : 'visible'}`}
+              />
               <div
-                onMouseLeave={() => setIsSrcListVisible(false)}
-                className='w-full flex flex-col items-end'
+                className='absolute inset-0 h-full flex justify-end card-img_hover w-full'
               >
-                { links && (
-                    <div className={`w-10 h-10 p-2 m-2 rounded-full cursor-pointer blue-dark-gradient ${isSrcListVisible ? 'border-2 border-[#000D26]' : ''}`}>
-                      <img
-                        onClick={() => setIsSrcListVisible(true)}
-                        className='invert'
-                        src={chainLink} alt='GitHub logo'
-                      />
+                <div
+                  onMouseLeave={() => setIsSrcListVisible(false)}
+                  className='w-full flex flex-col items-end'
+                >
+                  { links && (
+                      <div className={`w-10 h-10 p-2 m-2 rounded-full cursor-pointer blue-dark-gradient ${isSrcListVisible ? 'border-2 border-[#000D26]' : ''}`}>
+                        <img
+                          onClick={() => setIsSrcListVisible(true)}
+                          className='invert'
+                          src={chainLink} alt='GitHub logo'
+                        />
+                      </div>
+                  )}
+                  { isSrcListVisible && (
+                    <div className='w-full flex flex-col mb-2 scrollbar items-end overflow-y-auto'>
+                      { links?.map((link, i) => (
+                        <a
+                          key={i}
+                          href={link.url}
+                          target='_blank'
+                          className='text-right py-1 mr-2 capitalize w-fit'
+                        >
+                          { link.title }
+                        </a>
+                      ))}
                     </div>
-                )}
-                { isSrcListVisible && (
-                  <div className='w-full flex flex-col mb-2 scrollbar items-end overflow-y-auto'>
-                    { links.map((link, i) => (
-                      <a
-                        key={i}
-                        href={link.url}
-                        target='_blank'
-                        className='text-right py-1 mr-2 capitalize w-fit'
-                      >
-                        { link.title }
-                      </a>
-                    ))}
-                  </div>
-                )} 
+                  )} 
+                </div>
               </div>
+
             </div>
           </div>
           <div className='mt-5'>
