@@ -13,7 +13,7 @@ const Modal = (Component) => (
 
     const componentProps = {
       ...props,
-      modalClassNames: 'scrollbar max-h-[70vh] sm:max-h-[50vh] overflow-y-auto w-[80vw] sm:w-[30rem] py-5 px-12 border-y-[5px] border-[#00112e] bg-[#00112e]'
+      modalClassNames: 'scrollbar max-h-[70vh] sm:max-h-[50vh] overflow-y-auto w-[80vw] sm:w-[30rem] py-5 px-6 sm:px-12 border-y-[5px] border-[#00112e] bg-[#00112e]'
     }
 
     delete componentProps.modal
