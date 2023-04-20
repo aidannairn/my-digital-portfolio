@@ -7,7 +7,7 @@ import { SectionWrapper } from '../hoc'
 import { chainLink, projects } from '../constants'
 import { fadeIn, textVariant } from '../utils/motion'
 import Form from './form/Form'
-import FormLabelTextInput from "./form/LabelTextInput"
+import Modal from '../hoc/Modal'
 
 const ProjectCard = ({ index, name, description, tags, image, links }) => {
   const [isSrcListVisible, setIsSrcListVisible] = useState(false) 
@@ -113,9 +113,11 @@ const Projects = () => {
     ]
   }
 
+  const FormModal = Modal(Form)
+
   return (
     <>
-      <Form
+      <FormModal
         modal={{
           visibility: isModalVisible,
           close: () => setIsModalVisible(false)

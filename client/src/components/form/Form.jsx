@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 
 import { styles } from "../../styles"
-import Modal from "../../hoc/Modal"
 import FormLabelTextInput from "./LabelTextInput"
 import isObjectEmpty from "../../utils/isObjectEmpty"
 
@@ -51,4 +50,4 @@ const Form = ({
   ) : <></>
 }
 
-export default Modal(Form)
+export default Form
