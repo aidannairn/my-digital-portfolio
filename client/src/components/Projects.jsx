@@ -123,20 +123,20 @@ const Projects = () => {
     subtitle: 'Share examples of your work',
     fields: [
       {
-        Component: 'LabelImageInput',
-        properties: {
-          label: 'Image',
-          name: 'image',
-          required: true
-        }
-      },
-      {
         Component: 'LabelTextInput',
         properties: {
           label: 'Project Name',
           type: 'text',
           name: 'title',
-          placeholder: 'What is your application called?',
+          placeholder: 'What is your app called?',
+          required: true
+        }
+      },
+      {
+        Component: 'LabelImageInput',
+        properties: {
+          label: 'Image',
+          name: 'image',
           required: true
         }
       },
