@@ -34,7 +34,7 @@ const Form = forwardRef(({
   useEffect(() => {
     const formDefaults = {}
     inputGroups.map(inputGroup => {
-      inputGroup.map(input => formDefaults[input.properties.name] = null)
+      inputGroup.inputs.map(input => formDefaults[input.properties.name] = null)
     })
     setForm(formDefaults)
   }, [])
@@ -49,7 +49,10 @@ const Form = forwardRef(({
       }
       <form className='flex flex-col' onSubmit={submit?.action}>
         { inputGroups?.map((inputGroup, i) => <section key={i}>
-          { inputGroup.map((input, j) => {
+          { inputGroup.settings?.heading && 
+            <h3 className='font-semibold text-lg text-white-100'>{inputGroup.settings.heading}</h3>
+          }
+          { inputGroup.inputs.map((input, j) => {
               const Component = componentMap[input.component]
               return (
                 <Component

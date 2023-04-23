@@ -103,7 +103,7 @@ const Projects = () => {
 
       const formData = new FormData()
       formData.append('image', form.image)
-      formData.append('name', form.title)
+      formData.append('name', form.projectTitle)
       formData.append('description', form.description)
       formData.append('userId', userId)
     
@@ -127,34 +127,66 @@ const Projects = () => {
     title: 'Add A Project',
     subtitle: 'Share examples of your work',
     inputGroups: [
-      [{
-        component: 'LabelTextInput',
-        properties: {
-          label: 'Project Name',
-          type: 'text',
-          name: 'title',
-          placeholder: 'What is your project called?',
-          required: true
-        }
+      {
+        settings: {
+          heading: 'General'
+        },
+        inputs: [
+          {
+            component: 'LabelTextInput',
+            properties: {
+              label: 'Project Name',
+              type: 'text',
+              name: 'projectTitle',
+              placeholder: 'What is your project called?',
+              required: true
+            }
+          },
+          {
+            component: 'LabelImageInput',
+            properties: {
+              label: 'Image',
+              name: 'image',
+              required: true
+            }
+          },
+          {
+            component: 'LabelTextArea',
+            properties: {
+              label: 'Description',
+              rows: 5,
+              name: 'description',
+              placeholder: 'Tell everyone a little bit about your project.',
+              required: true
+            }
+          }
+        ]
       },
       {
-        component: 'LabelImageInput',
-        properties: {
-          label: 'Image',
-          name: 'image',
-          required: true
-        }
-      },
-      {
-        component: 'LabelTextArea',
-        properties: {
-          label: 'Description',
-          rows: 5,
-          name: 'description',
-          placeholder: 'Tell everyone a little bit about your project.',
-          required: true
-        }
-      }]
+        settings: {
+          heading: 'Add links to your project'
+        },
+        inputs: [
+          {
+            component: 'LabelTextInput',
+            properties: {
+              label: 'Title',
+              type: 'text',
+              name: 'linkTitle',
+              placeholder: 'Where does this link go?',
+            }
+          },
+          {
+            component: 'LabelTextInput',
+            properties: {
+              label: 'URL',
+              type: 'text',
+              name: 'url',
+              placeholder: 'Enter the URL to the webpage.',
+            }
+          }
+        ]
+      }
     ],
     submit: {
       action: handleSubmit,
