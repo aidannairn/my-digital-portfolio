@@ -1,7 +1,9 @@
 const LabelImageInput = ({
   label,
   name,
-  handleChange
+  value: file,
+  handleChange,
+  required
 }) => {
   return (
     <label className='flex flex-col mb-6'>
@@ -11,7 +13,11 @@ const LabelImageInput = ({
         name={name}
         onChange={handleChange}
         className='bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outlined-none border-none font-medium'
-      />
+        required={required}
+        />
+        { file &&
+          <img src={URL.createObjectURL(file)} alt='A screenshot of the working project.' />
+        }
     </label>
   )
 }

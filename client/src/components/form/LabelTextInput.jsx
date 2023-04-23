@@ -4,7 +4,8 @@ const LabelTextInput = ({
   name,
   value,
   handleChange,
-  placeholder
+  placeholder,
+  required
 }) => {
   return (
     <label className='flex flex-col mb-6'>
@@ -16,6 +17,7 @@ const LabelTextInput = ({
         onChange={handleChange}
         placeholder={placeholder}
         className='bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outlined-none border-none font-medium'
+        required={required}
       />
     </label>
   )

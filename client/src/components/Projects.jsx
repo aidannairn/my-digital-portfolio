@@ -126,7 +126,8 @@ const Projects = () => {
         Component: 'LabelImageInput',
         properties: {
           label: 'Image',
-          name: 'image'
+          name: 'image',
+          required: true
         }
       },
       {
@@ -136,17 +137,19 @@ const Projects = () => {
           type: 'text',
           name: 'title',
           placeholder: 'What is your application called?',
+          required: true
         }
       },
-      // {
-      //   Component: 'LabelTextInput',
-      //   properties: {
-      //     label: 'Description',
-      //     type: 'text',
-      //     name: 'desc',
-      //     placeholder: 'Explain your project!',
-      //   }
-      // }
+      {
+        Component: 'LabelTextInput',
+        properties: {
+          label: 'Description',
+          type: 'text',
+          name: 'desc',
+          placeholder: 'Explain your project!',
+          required: true
+        }
+      }
     ],
     submit: {
       action: handleSubmit,
