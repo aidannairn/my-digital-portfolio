@@ -4,8 +4,8 @@ const ProjectSchema = new mongoose.Schema({
   name: { type: String, required: true },
   imageURL: { type: String, required: true },
   description: { type: String, required: true },
-  links: [{ title: String, url: String }],
-  tags: [{ type: String, color: String }],
+  links: [{ name: String, url: String }],
+  tags: [{ name: String, color: String }],
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 }, { timestamps: true })
 
