@@ -1,7 +1,7 @@
 import { forwardRef, useEffect, useState, useImperativeHandle } from "react"
 
 import { styles } from "../../styles"
-import { LabelImageInput, LabelTextInput } from "./index"
+import { LabelImageInput, LabelTextArea, LabelTextInput } from "./index"
 import isObjectEmpty from "../../utils/isObjectEmpty"
 
 const Form = forwardRef(({
@@ -22,6 +22,7 @@ const Form = forwardRef(({
 
   const componentMap = {
     LabelImageInput,
+    LabelTextArea,
     LabelTextInput
   }
 

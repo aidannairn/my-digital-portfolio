@@ -128,7 +128,7 @@ const Projects = () => {
           label: 'Project Name',
           type: 'text',
           name: 'title',
-          placeholder: 'What is your app called?',
+          placeholder: 'What is your project called?',
           required: true
         }
       },
@@ -141,12 +141,12 @@ const Projects = () => {
         }
       },
       {
-        Component: 'LabelTextInput',
+        Component: 'LabelTextArea',
         properties: {
           label: 'Description',
-          type: 'text',
+          rows: 5,
           name: 'desc',
-          placeholder: 'Explain your project!',
+          placeholder: 'Tell everyone a little bit about your project.',
           required: true
         }
       }
@@ -183,8 +183,9 @@ const Projects = () => {
         variants={fadeIn('', '', 1, 1)}
         className='flex gap-5 mt-5'
       >
-        <button onClick={() => setIsModalVisible(true)}>Add</button>
-        <button>Delete</button>
+        <div className='green-blue-gradient hover:green-blue-gradient--hover rounded-lg p-px'>
+          <button className='bg-primary hover:bg-tertiary rounded-lg p-2' onClick={() => setIsModalVisible(true)}>Add Project</button>
+        </div>
       </motion.div>
       <div className='mt-20 flex flex-wrap gap-7'>
         { projects.map((project, i) => (
