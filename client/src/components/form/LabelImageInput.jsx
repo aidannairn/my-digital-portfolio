@@ -1,24 +1,18 @@
-const LabelTextInput = ({
+const LabelImageInput = ({
   label,
-  type,
   name,
-  value,
-  handleChange,
-  placeholder
+  handleChange
 }) => {
   return (
     <label className='flex flex-col mb-6'>
       <span className='text-white font-medium mb-4'>{label}</span>
       <input
-        type={type}
+        type='file'
         name={name}
-        value={value}
         onChange={handleChange}
-        placeholder={placeholder}
         className='bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outlined-none border-none font-medium'
       />
     </label>
   )
 }
-
-export default LabelTextInput
+export default LabelImageInput

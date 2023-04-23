@@ -1,7 +1,7 @@
 import { forwardRef, useEffect, useState, useImperativeHandle } from "react"
 
 import { styles } from "../../styles"
-import FormLabelTextInput from "./LabelTextInput"
+import { LabelImageInput, LabelTextInput } from "./index"
 import isObjectEmpty from "../../utils/isObjectEmpty"
 
 const Form = forwardRef(({
@@ -21,17 +21,18 @@ const Form = forwardRef(({
   ), [form])
 
   const componentMap = {
-    FormLabelTextInput
+    LabelImageInput,
+    LabelTextInput
   }
 
   const handleChange = e => {
-    const { name, value } = e.target
-    setForm({ ...form, [name]: value })
+    const { name, value, files } = e.target
+    setForm({ ...form, [name]: files?.[0] || value })
   }
 
   useEffect(() => {
     const formDefaults = {}
-    fields.map(field => formDefaults[field.properties.name] = '')
+    fields.map(field => formDefaults[field.properties.name] = null)
     setForm(formDefaults)
   }, [])
   

@@ -1,8 +1,8 @@
-import { useRef } from "react"
+import { forwardRef, useRef } from "react"
 import { close } from "../assets"
 
-const Modal = (Component) => (
-  function HOC(props) {
+const Modal = (Component) => forwardRef(
+  function HOC(props, ref) {
     const { modal } = props
 
     const modalRef = useRef(null)
@@ -26,7 +26,7 @@ const Modal = (Component) => (
               <img src={close} alt='Exit button' />
             </div>
           </div>
-          <Component {...componentProps} />
+          <Component ref={ref} {...componentProps} />
         </div>
       </div>
     ) : <></>

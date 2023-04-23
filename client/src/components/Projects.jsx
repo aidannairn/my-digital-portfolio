@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { motion } from 'framer-motion'
+import axios from 'axios'
 import Tilt from 'react-parallax-tilt'
 
 import { styles } from '../styles'
@@ -86,14 +87,50 @@ const ProjectCard = ({ index, name, description, tags, image, links }) => {
 }
 
 const Projects = () => {
-  const [isModalVisible, setIsModalVisible] = useState(true) 
+  const formRef = useRef(null)
+
+  const [isModalVisible, setIsModalVisible] = useState(true)
+  const [loading, setLoading] = useState(false)
+
+  const handleSubmit = async e => {
+    e.preventDefault()
+    try {
+      const form = formRef.current.getFormState()
+      setLoading(true)
+
+      const formData = new FormData()
+      formData.append('image', form.image)
+      formData.append('name', form.title)
+    
+      await axios.post(
+        `${import.meta.env.VITE_SERVER_BASE_URL}/api/project/create`,
+        formData,
+        { 
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      )
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const formSettings = {
     title: 'Add A Project',
     subtitle: 'Share examples of your work',
     fields: [
       {
-        Component: 'FormLabelTextInput',
+        Component: 'LabelImageInput',
+        properties: {
+          label: 'Image',
+          name: 'image'
+        }
+      },
+      {
+        Component: 'LabelTextInput',
         properties: {
           label: 'Project Name',
           type: 'text',
@@ -101,16 +138,20 @@ const Projects = () => {
           placeholder: 'What is your application called?',
         }
       },
-      {
-        Component: 'FormLabelTextInput',
-        properties: {
-          label: 'Description',
-          type: 'text',
-          name: 'desc',
-          placeholder: 'Explain your project!',
-        }
-      }
-    ]
+      // {
+      //   Component: 'LabelTextInput',
+      //   properties: {
+      //     label: 'Description',
+      //     type: 'text',
+      //     name: 'desc',
+      //     placeholder: 'Explain your project!',
+      //   }
+      // }
+    ],
+    submit: {
+      action: handleSubmit,
+      text: loading ? 'Submitting Project...' : 'Submit Project'
+    }
   }
 
   const FormModal = Modal(Form)
@@ -118,6 +159,7 @@ const Projects = () => {
   return (
     <>
       <FormModal
+        ref={formRef}
         modal={{
           visibility: isModalVisible,
           close: () => setIsModalVisible(false)
