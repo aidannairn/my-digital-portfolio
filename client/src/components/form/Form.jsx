@@ -8,7 +8,7 @@ const Form = forwardRef(({
   modalClassNames,
   title,
   subtitle,
-  fields,
+  inputGroups,
   submit
 }, ref ) => {
   const [form, setForm] = useState({})
@@ -33,7 +33,9 @@ const Form = forwardRef(({
 
   useEffect(() => {
     const formDefaults = {}
-    fields.map(field => formDefaults[field.properties.name] = null)
+    inputGroups.map(inputGroup => {
+      inputGroup.map(input => formDefaults[input.properties.name] = null)
+    })
     setForm(formDefaults)
   }, [])
   
@@ -46,17 +48,20 @@ const Form = forwardRef(({
         </div>
       }
       <form className='flex flex-col' onSubmit={submit?.action}>
-        { fields?.map((field, i) => {
-          const Component = componentMap[field.Component]
-          return (
-            <Component
-              key={i}
-              handleChange={handleChange}
-              value={form[field.properties.name] || ''}
-              {...field.properties }
-            />
-          )
-        }) }
+        { inputGroups?.map((inputGroup, i) => <section key={i}>
+          { inputGroup.map((input, j) => {
+              const Component = componentMap[input.component]
+              return (
+                <Component
+                  key={`Form Input: ${i}${j}`}
+                  handleChange={handleChange}
+                  value={form[input.properties.name] || ''}
+                  {...input.properties }
+                />
+              )
+            })
+          }
+        </section> )}
         <button
           type='submit'
           className='bg-tertiary py-3 self-end px-8 outline-none w-fit text-white font-bold shadow-md shadow-primary rounded-xl'

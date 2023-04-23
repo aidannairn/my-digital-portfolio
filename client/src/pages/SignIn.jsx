@@ -27,9 +27,9 @@ const SignIn = () => {
   }
 
   const formSettings = {
-    fields: [
-      {
-        Component: 'LabelTextInput',
+    inputGroups: [
+      [{
+        component: 'LabelTextInput',
         properties: {
           label: 'Email',
           type: 'text',
@@ -38,14 +38,14 @@ const SignIn = () => {
         }
       },
       {
-        Component: 'LabelTextInput',
+        component: 'LabelTextInput',
         properties: {
           label: 'Password',
           type: 'password',
           name: 'password',
           placeholder: '********',
         }
-      }
+      }]
     ],
     submit: {
       action: handleSubmit,

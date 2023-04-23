@@ -126,9 +126,9 @@ const Projects = () => {
   const formSettings = {
     title: 'Add A Project',
     subtitle: 'Share examples of your work',
-    fields: [
-      {
-        Component: 'LabelTextInput',
+    inputGroups: [
+      [{
+        component: 'LabelTextInput',
         properties: {
           label: 'Project Name',
           type: 'text',
@@ -138,7 +138,7 @@ const Projects = () => {
         }
       },
       {
-        Component: 'LabelImageInput',
+        component: 'LabelImageInput',
         properties: {
           label: 'Image',
           name: 'image',
@@ -146,7 +146,7 @@ const Projects = () => {
         }
       },
       {
-        Component: 'LabelTextArea',
+        component: 'LabelTextArea',
         properties: {
           label: 'Description',
           rows: 5,
@@ -154,7 +154,7 @@ const Projects = () => {
           placeholder: 'Tell everyone a little bit about your project.',
           required: true
         }
-      }
+      }]
     ],
     submit: {
       action: handleSubmit,
