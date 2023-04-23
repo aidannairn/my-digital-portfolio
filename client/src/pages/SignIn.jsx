@@ -29,7 +29,7 @@ const SignIn = () => {
   const formSettings = {
     fields: [
       {
-        Component: 'FormLabelTextInput',
+        Component: 'LabelTextInput',
         properties: {
           label: 'Email',
           type: 'text',
@@ -38,7 +38,7 @@ const SignIn = () => {
         }
       },
       {
-        Component: 'FormLabelTextInput',
+        Component: 'LabelTextInput',
         properties: {
           label: 'Password',
           type: 'password',

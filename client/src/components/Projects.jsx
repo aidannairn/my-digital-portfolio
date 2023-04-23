@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useContext } from 'react'
 import { motion } from 'framer-motion'
 import axios from 'axios'
 import Tilt from 'react-parallax-tilt'
@@ -7,6 +7,7 @@ import { styles } from '../styles'
 import { SectionWrapper } from '../hoc'
 import { chainLink, projects } from '../constants'
 import { fadeIn, textVariant } from '../utils/motion'
+import { UserContext } from '../contexts/UserContext'
 import Form from './form/Form'
 import Modal from '../hoc/Modal'
 
@@ -89,6 +90,8 @@ const ProjectCard = ({ index, name, description, tags, image, links }) => {
 const Projects = () => {
   const formRef = useRef(null)
 
+  const { user: { id: userId } } = useContext(UserContext)
+
   const [isModalVisible, setIsModalVisible] = useState(true)
   const [loading, setLoading] = useState(false)
 
@@ -101,6 +104,8 @@ const Projects = () => {
       const formData = new FormData()
       formData.append('image', form.image)
       formData.append('name', form.title)
+      formData.append('description', form.description)
+      formData.append('userId', userId)
     
       await axios.post(
         `${import.meta.env.VITE_SERVER_BASE_URL}/api/project/create`,
@@ -145,7 +150,7 @@ const Projects = () => {
         properties: {
           label: 'Description',
           rows: 5,
-          name: 'desc',
+          name: 'description',
           placeholder: 'Tell everyone a little bit about your project.',
           required: true
         }
