@@ -19,6 +19,29 @@
   overflow-y: auto;
 }
 
+#file-upload-button, ::-webkit-file-upload-button {
+  cursor: pointer!important;
+}
+
+.modal {
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  overflow: hidden;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(3px);
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 30;
+}
+
+.modal > div, .modal > div > * { border-radius: 1rem; }
+
 * {
   margin: 0;
   padding: 0;
@@ -106,6 +129,12 @@
   background: "#00cea8";
   background: linear-gradient(90.13deg, #00cea8 1.9%, #0088FF 97.5%);
   background: -webkit-linear-gradient(-90.13deg, #00cea8 1.9%, #0088FF 97.5%);
+}
+
+.green-blue-gradient--hover {
+  background: "#007eec";
+  background: linear-gradient(90.13deg, #00c39f 1.9%, #007eec 97.5%);
+  background: -webkit-linear-gradient(-90.13deg, #00c39f 1.9%, #007eec 97.5%);
 }
 
 .orange-text-gradient {
@@ -208,19 +237,24 @@
 
 /* Track */
 .scrollbar::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px rgb(49 46 129); 
+  box-shadow: inset 0 0 5px #0070d1; 
   border-radius: 10px;
 }
  
 /* Handle */
 .scrollbar::-webkit-scrollbar-thumb {
-  background: rgb(49 46 129); 
+  background: "#0088FF";
+  background: linear-gradient(90.13deg, #00cea8 1.9%, #0088FF 97.5%);
+  background: -webkit-linear-gradient(-90.13deg, #00cea8 1.9%, #0088FF 97.5%);
   border-radius: 10px;
 }
 
 /* Handle on hover */
 .scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgb(36, 33, 101); 
+  background: "#007eec";
+  background: linear-gradient(90.13deg, #00c39f 1.9%, #007eec 97.5%);
+  background: -webkit-linear-gradient(-90.13deg, #00c39f 1.9%, #007eec 97.5%);
+  border-radius: 10px;
   cursor: grabbing
 }
 

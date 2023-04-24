@@ -6,8 +6,8 @@ const Home = () => {
     <div className='home bg-primary'>
       <Navbar />
       {/* <Hero /> */}
-      <About />
-      <Experience />
+      {/* <About /> */}
+      {/* <Experience /> */}
       {/* <Technologies /> */}
       <Projects />
       {/* <Feedback /> */}

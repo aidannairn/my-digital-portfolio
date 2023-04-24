@@ -1,14 +1,18 @@
-import { useState } from 'react'
+import { useState, useRef, useContext } from 'react'
 import { motion } from 'framer-motion'
+import axios from 'axios'
 import Tilt from 'react-parallax-tilt'
 
 import { styles } from '../styles'
 import { SectionWrapper } from '../hoc'
 import { chainLink, projects } from '../constants'
 import { fadeIn, textVariant } from '../utils/motion'
+import { UserContext } from '../contexts/UserContext'
+import Form from './form/Form'
+import Modal from '../hoc/Modal'
 
 const ProjectCard = ({ index, name, description, tags, image, links }) => {
-  const [isSrcListVisible, setIsSrcListVisible] = useState(false)  
+  const [isSrcListVisible, setIsSrcListVisible] = useState(false) 
 
   return (
     <Tilt className='sm:w-[360px] w-full'>
@@ -22,45 +26,48 @@ const ProjectCard = ({ index, name, description, tags, image, links }) => {
           speed: 450
         }}>
           <div 
-            className={`relative w-full h-[180px] rounded-2xl 
-            ${isSrcListVisible ? 'border border-quaternary' : ''}`}
+            className={`relative w-full max-h-[180px] h-[180px] p-px rounded-2xl 
+            ${isSrcListVisible ? 'green-blue-gradient' : ''}`}
           >
-            <img
-              src={image}
-              alt={name}
-              className={`w-full h-full object-cover rounded-2xl ${isSrcListVisible ? 'invisible' : 'visible'}`}
-            />
-            <div
-              className='absolute inset-0 h-full max-h-[180px] flex justify-end card-img_hover w-full'
-            >
+            <div className='bg-tertiary rounded-2xl h-[178px]'>
+              <img
+                src={image}
+                alt={name}
+                className={`w-full h-full object-cover rounded-2xl ${isSrcListVisible ? 'invisible' : 'visible'}`}
+              />
               <div
-                onMouseLeave={() => setIsSrcListVisible(false)}
-                className='w-full flex flex-col items-end'
+                className='absolute inset-0 h-full flex justify-end card-img_hover w-full'
               >
-                { links && (
-                    <div className={`w-10 h-10 p-2 m-2 rounded-full cursor-pointer blue-dark-gradient ${isSrcListVisible ? 'border-2 border-[#000D26]' : ''}`}>
-                      <img
-                        onClick={() => setIsSrcListVisible(true)}
-                        className='invert'
-                        src={chainLink} alt='GitHub logo'
-                      />
+                <div
+                  onMouseLeave={() => setIsSrcListVisible(false)}
+                  className='w-full flex flex-col items-end'
+                >
+                  { links && (
+                      <div className={`w-10 h-10 p-2 m-2 rounded-full cursor-pointer blue-dark-gradient ${isSrcListVisible ? 'border-2 border-[#000D26]' : ''}`}>
+                        <img
+                          onClick={() => setIsSrcListVisible(true)}
+                          className='invert'
+                          src={chainLink} alt='GitHub logo'
+                        />
+                      </div>
+                  )}
+                  { isSrcListVisible && (
+                    <div className='w-full flex flex-col mb-2 scrollbar items-end overflow-y-auto'>
+                      { links?.map((link, i) => (
+                        <a
+                          key={i}
+                          href={link.url}
+                          target='_blank'
+                          className='text-right py-1 mr-2 capitalize w-fit'
+                        >
+                          { link.title }
+                        </a>
+                      ))}
                     </div>
-                )}
-                { isSrcListVisible && (
-                  <div className='w-full flex flex-col mb-2 scrollbar items-end overflow-y-auto'>
-                    { links.map((link, i) => (
-                      <a
-                        key={i}
-                        href={link.url}
-                        target='_blank'
-                        className='text-right py-1 mr-2 capitalize w-fit'
-                      >
-                        { link.title }
-                      </a>
-                    ))}
-                  </div>
-                )} 
+                  )} 
+                </div>
               </div>
+
             </div>
           </div>
           <div className='mt-5'>
@@ -81,8 +88,162 @@ const ProjectCard = ({ index, name, description, tags, image, links }) => {
 }
 
 const Projects = () => {
+  const formRef = useRef(null)
+
+  const { user: { id: userId } } = useContext(UserContext)
+
+  const [isModalVisible, setIsModalVisible] = useState(true)
+  const [loading, setLoading] = useState(false)
+
+  const handleSubmit = async e => {
+    e.preventDefault()
+    try {
+      const form = formRef.current.getFormState()
+      setLoading(true)
+
+      const projectLinks = form.projectLinks.map(link => ({
+        name: link.linkName,
+        url: link.linkURL
+      }))
+
+      const projectTags = form.projectTags.map(tag => ({
+        name: tag.tagName,
+        color: tag.tagColor
+      }))
+
+      const formData = new FormData()
+      formData.append('image', form.image)
+      formData.append('name', form.projectTitle)
+      formData.append('description', form.description)
+      formData.append('projectLinks', JSON.stringify(projectLinks))
+      formData.append('projectTags', JSON.stringify(projectTags))
+      formData.append('userId', userId)
+    
+      await axios.post(
+        `${import.meta.env.VITE_SERVER_BASE_URL}/api/project/create`,
+        formData,
+        { 
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      )
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const formSettings = {
+    title: 'Add A Project',
+    subtitle: 'Share examples of your work',
+    inputGroups: [
+      {
+        settings: {
+          heading: 'General'
+        },
+        inputs: [
+          {
+            component: 'LabelTextInput',
+            properties: {
+              label: 'Project Name',
+              name: 'projectTitle',
+              placeholder: 'What is your project called?',
+              required: true
+            }
+          },
+          {
+            component: 'LabelImageInput',
+            properties: {
+              label: 'Image',
+              name: 'image',
+              required: true
+            }
+          },
+          {
+            component: 'LabelTextArea',
+            properties: {
+              label: 'Description',
+              rows: 5,
+              name: 'description',
+              placeholder: 'Tell everyone a little bit about your project.',
+              required: true
+            }
+          }
+        ]
+      },
+      {
+        settings: {
+          heading: 'Project Links',
+          array: {
+            name: 'projectLinks',
+          }
+        },
+        inputs: [
+          {
+            component: 'LabelTextInput',
+            properties: {
+              label: 'Title',
+              name: 'linkName',
+              placeholder: 'Where does this link go?',
+            }
+          },
+          {
+            component: 'LabelTextInput',
+            properties: {
+              label: 'URL',
+              name: 'linkURL',
+              placeholder: 'Enter the URL to the webpage.',
+            }
+          }
+        ]
+      },
+      {
+        settings: {
+          heading: 'Project Tags',
+          array: {
+            name: 'projectTags',
+          }
+        },
+        inputs: [
+          {
+            component: 'LabelTextInput',
+            properties: {
+              label: 'Tag',
+              name: 'tagName',
+              placeholder: 'Status, tech stack, etc.',
+            }
+          },
+          {
+            component: 'LabelTextInput',
+            properties: {
+              label: 'Colour',
+              name: 'tagColor',
+              placeholder: 'The colour of this tag.',
+            }
+          }
+        ]
+      },
+    ],
+    submit: {
+      action: handleSubmit,
+      text: loading ? 'Submitting Project...' : 'Submit Project'
+    }
+  }
+
+  const FormModal = Modal(Form)
+
   return (
     <>
+      <FormModal
+        ref={formRef}
+        modal={{
+          visibility: isModalVisible,
+          close: () => setIsModalVisible(false)
+        }}
+        {...formSettings}
+      />
       <motion.div variants={textVariant()}>
         <p className={styles.sectionSubText}>Things that I have created</p>
         <h2 className={styles.sectionHeadText}>Projects.</h2>
@@ -93,6 +254,14 @@ const Projects = () => {
       >
         The following projects showcase my skills and experience through real-world examples of my work. They reflect my ability to solve complex problems, work with different technologies and manage projects efficiently and effectively.
       </motion.p>
+      <motion.div
+        variants={fadeIn('', '', 1, 1)}
+        className='flex gap-5 mt-5'
+      >
+        <div className='green-blue-gradient hover:green-blue-gradient--hover rounded-lg p-px'>
+          <button className='bg-primary hover:bg-tertiary rounded-lg p-2' onClick={() => setIsModalVisible(true)}>Add Project</button>
+        </div>
+      </motion.div>
       <div className='mt-20 flex flex-wrap gap-7'>
         { projects.map((project, i) => (
           <ProjectCard key={`project-${i}`} index={i} {...project} />
