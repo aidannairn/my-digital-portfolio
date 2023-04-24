@@ -18,11 +18,11 @@ const educationCreate = async (req, res, next) => {
     return res.status(400).json({ type: 'error', msg: 'Missing required parameters.' })
 
   try {
-    const logoURL = logo
+    var logoURL = logo
       ? await s3Upload(logo.originalname, logo.path, 'education/logo')
       : undefined
 
-    const certificateURL = certificate
+    var certificateURL = certificate
       ? await s3Upload(certificate.originalname, certificate.path, 'education/certificate')
       : undefined
 
@@ -37,10 +37,12 @@ const educationCreate = async (req, res, next) => {
       certificateURL,
       userId
     })
-    education.save()
-
+    
+    await education.save()
     return res.status(200).json({ type: 'success', msg: 'You have added more learning experience!'})
   } catch (error) {
+    if (logoURL) s3Delete(logoURL)
+    if (certificateURL) s3Delete(certificateURL)
     console.error(error)
     return res.status(400).json({ type: 'error', msg: 'Could not add new learning experience.' })
   }

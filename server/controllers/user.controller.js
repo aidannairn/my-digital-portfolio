@@ -14,11 +14,16 @@ const userSignup = async (req, res, next) => {
   try {
     const hashedPassword = bcrypt.hashSync(password, 10)
 
-    const imageURL = req.file
+    /*  Prepare the image URL:
+        - Use var so that imageURL can be hoisted into the catch block.
+        - If there is an error while saving the project to the database, that image should be removed from the S3 bucket.
+        - If no image file exists - Set to "undefined" so column doesn't appear in database.
+    */
+    var imageURL = req.file
       ? await s3Upload(`${firstName}_${lastName}` + path.extname(req.file.originalname), req.file.path, directory)
-      : undefined // If no image exists - Set to "undefined" so column doesn't appear in database.
+      : undefined
 
-    const newUser = new User({
+    const user = new User({
       email,
       password: hashedPassword,
       firstName,
@@ -26,9 +31,10 @@ const userSignup = async (req, res, next) => {
       imageURL
     })
 
-    newUser.save()
+    await user.save()
     return res.status(200).json({ type: 'success', msg: `${firstName} has been signed up!`})
   } catch (error) {
+    if (imageURL) s3Delete(imageURL)
     console.error(error)
     return res.status(401).json({ type: 'error', msg: 'Could not sign up the user.' })
   }
