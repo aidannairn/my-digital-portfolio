@@ -32,7 +32,6 @@ const SignIn = () => {
         component: 'LabelTextInput',
         properties: {
           label: 'Email',
-          type: 'text',
           name: 'email',
           placeholder: 'What is your email?',
         }

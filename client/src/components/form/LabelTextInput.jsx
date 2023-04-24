@@ -1,6 +1,6 @@
 const LabelTextInput = ({
   label,
-  type,
+  type = 'text',
   name,
   value,
   handleChange,

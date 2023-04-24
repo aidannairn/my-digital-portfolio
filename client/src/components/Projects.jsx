@@ -138,7 +138,6 @@ const Projects = () => {
             component: 'LabelTextInput',
             properties: {
               label: 'Project Name',
-              type: 'text',
               name: 'projectTitle',
               placeholder: 'What is your project called?',
               required: true
@@ -176,8 +175,7 @@ const Projects = () => {
             component: 'LabelTextInput',
             properties: {
               label: 'Title',
-              type: 'text',
-              name: 'linkTitle',
+              name: 'linkName',
               placeholder: 'Where does this link go?',
             }
           },
@@ -185,8 +183,7 @@ const Projects = () => {
             component: 'LabelTextInput',
             properties: {
               label: 'URL',
-              type: 'text',
-              name: 'url',
+              name: 'linkURL',
               placeholder: 'Enter the URL to the webpage.',
             }
           }
@@ -204,8 +201,7 @@ const Projects = () => {
             component: 'LabelTextInput',
             properties: {
               label: 'Tag',
-              type: 'text',
-              name: 'tag',
+              name: 'tagName',
               placeholder: 'Status, tech stack, etc.',
             }
           },
@@ -213,7 +209,6 @@ const Projects = () => {
             component: 'LabelTextInput',
             properties: {
               label: 'Colour',
-              type: 'text',
               name: 'tagColor',
               placeholder: 'The colour of this tag.',
             }
