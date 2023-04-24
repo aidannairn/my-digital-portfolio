@@ -105,6 +105,8 @@ const Projects = () => {
       formData.append('image', form.image)
       formData.append('name', form.projectTitle)
       formData.append('description', form.description)
+      formData.append('projectLinks', JSON.stringify(form.projectLinks))
+      formData.append('projectTags', JSON.stringify(form.projectTags))
       formData.append('userId', userId)
     
       await axios.post(
@@ -164,7 +166,10 @@ const Projects = () => {
       },
       {
         settings: {
-          heading: 'Add links to your project'
+          heading: 'Project Links',
+          array: {
+            name: 'projectLinks',
+          }
         },
         inputs: [
           {
@@ -186,7 +191,35 @@ const Projects = () => {
             }
           }
         ]
-      }
+      },
+      {
+        settings: {
+          heading: 'Project Tags',
+          array: {
+            name: 'projectTags',
+          }
+        },
+        inputs: [
+          {
+            component: 'LabelTextInput',
+            properties: {
+              label: 'Tag',
+              type: 'text',
+              name: 'tag',
+              placeholder: 'Status, tech stack, etc.',
+            }
+          },
+          {
+            component: 'LabelTextInput',
+            properties: {
+              label: 'Colour',
+              type: 'text',
+              name: 'tagColor',
+              placeholder: 'The colour of this tag.',
+            }
+          }
+        ]
+      },
     ],
     submit: {
       action: handleSubmit,

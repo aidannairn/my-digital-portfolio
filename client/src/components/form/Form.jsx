@@ -4,6 +4,20 @@ import { styles } from "../../styles"
 import { LabelImageInput, LabelTextArea, LabelTextInput } from "./index"
 import isObjectEmpty from "../../utils/isObjectEmpty"
 
+const CollectionDisplay = ({ collection }) => {
+  return collection.length ? (
+    <div className='flex flex-col-reverse mb-2'>
+      { collection.map((group, i) => 
+        <div key={i} className='mb-2'>
+          { Object.keys(group).map((key, j) => 
+            <p key={j}>{group[key]}</p>
+          )}
+        </div>
+      )}
+    </div>
+  ) : <></>
+}
+
 const Form = forwardRef(({
   modalClassNames,
   title,
@@ -29,6 +43,27 @@ const Form = forwardRef(({
   const handleChange = e => {
     const { name, value, files } = e.target
     setForm({ ...form, [name]: files?.[0] || value })
+  }
+
+  const handleCollection = collectionIndex => {
+    const collectionName = inputGroups[collectionIndex].settings.array.name
+    const collectionData = {}
+    const inputProperties = {}
+    
+    inputGroups[collectionIndex].inputs.map(input => {
+      const propName = input.properties.name
+      inputProperties[propName] = null
+      if (form[propName])
+        collectionData[propName] = form[propName]
+    })
+
+    if (!isObjectEmpty(collectionData)) {
+      setForm({
+        ...form,
+        [collectionName]: [...form[collectionName] || [], collectionData],
+        ...inputProperties
+      })
+    }
   }
 
   useEffect(() => {
@@ -64,12 +99,20 @@ const Form = forwardRef(({
               )
             })
           }
+          { inputGroup.settings?.array &&
+            <>
+              <div className='green-blue-gradient w-fit mb-4 hover:green-blue-gradient--hover rounded-lg p-px'>
+                <button type='button' className='bg-primary hover:bg-tertiary rounded-lg p-2' onClick={() => handleCollection(i)}>Add</button>
+              </div>
+              <CollectionDisplay collection={form[inputGroup.settings.array.name] || []} />
+            </>
+          }
         </section> )}
         <button
           type='submit'
           className='bg-tertiary py-3 self-end px-8 outline-none w-fit text-white font-bold shadow-md shadow-primary rounded-xl'
         >
-            { submit?.text || 'Submit' }
+          { submit?.text || 'Submit' }
         </button>
       </form>
     </div>
