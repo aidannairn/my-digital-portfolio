@@ -9,15 +9,8 @@ const projectCreate = async (req, res, next) => {
     return res.status(400).json({ type: 'error', msg: 'Your new project should include a name and image.' })
     
   try {
-    const links = JSON.parse(projectLinks).map(link => ({
-      name: link.linkName,
-      url: link.linkURL
-    }))
-  
-    const tags = JSON.parse(projectTags).map(tag => ({
-      name: tag.tagName,
-      color: tag.tagColor
-    }))
+    const links = JSON.parse(projectLinks)
+    const tags = JSON.parse(projectTags)
 
     const imageURL = await s3Upload(image.originalname, image.path, 'projects')
 
