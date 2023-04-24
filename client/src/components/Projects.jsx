@@ -101,12 +101,22 @@ const Projects = () => {
       const form = formRef.current.getFormState()
       setLoading(true)
 
+      const projectLinks = form.projectLinks.map(link => ({
+        name: link.linkName,
+        url: link.linkURL
+      }))
+
+      const projectTags = form.projectTags.map(tag => ({
+        name: tag.tagName,
+        color: tag.tagColor
+      }))
+
       const formData = new FormData()
       formData.append('image', form.image)
       formData.append('name', form.projectTitle)
       formData.append('description', form.description)
-      formData.append('projectLinks', JSON.stringify(form.projectLinks))
-      formData.append('projectTags', JSON.stringify(form.projectTags))
+      formData.append('projectLinks', JSON.stringify(projectLinks))
+      formData.append('projectTags', JSON.stringify(projectTags))
       formData.append('userId', userId)
     
       await axios.post(
