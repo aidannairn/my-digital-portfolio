@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react'
 
 import isObjectEmpty from "../../utils/isObjectEmpty"
 
-const InputGroupRepeat = ({ form, group }) => {
+const InputGroupRepeat = ({ form, group, inputs }) => {
   const collectionName = group.settings.array.name
 
   const [isMax, setIsMax] = useState(false)
+  const [collectionLabels, setCollectionLabels] = useState([])
 
   useEffect(() => {
     if (form.state[collectionName]?.length >= group.settings.array?.max)
@@ -15,15 +16,19 @@ const InputGroupRepeat = ({ form, group }) => {
   const handleCollection = () => {
     const collectionData = {}
     const inputProperties = {}
+    const inputLabels = []
     
     group.inputs.map(input => {
       const propName = input.properties.name
       inputProperties[propName] = null
       if (form.state[propName])
         collectionData[propName] = form.state[propName]
+      if (collectionData[propName])
+        inputLabels.push(input.properties.label)
     })
 
     if (!isObjectEmpty(collectionData)) {
+      setCollectionLabels([...collectionLabels, labels])
       form.setState({
         ...form.state,
         [collectionName]: [...form.state[collectionName] || [], collectionData],
@@ -47,13 +52,13 @@ const InputGroupRepeat = ({ form, group }) => {
       }
       { !!collection.length && (
         <div className='flex flex-col-reverse mb-2'>
-          { collection.map((properties, i) => 
+          { collection.map((properties, i) => (
             <div key={i} className='mb-2'>
               { Object.keys(properties).map((key, j) => 
-                <p key={j}>{properties[key]}</p>
+                <p key={j}>{collectionLabels[i][j]}: {properties[key]}</p>
               )}
             </div>
-          )}
+          ))}
         </div>
       )}
     </>
