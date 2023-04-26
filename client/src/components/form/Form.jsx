@@ -61,12 +61,19 @@ const Form = forwardRef(({
               }
               { inputs.map((input, j) => {
                   const Component = componentMap[input.component]
+                  
+                  const required = input.conditionalRequire
+                    ? inputs.filter((inpt) => inpt !== input).some(inpt => !!form[inpt.properties.name])
+                    : input.properties.required || false
+
+                  input.properties.required = required
+
                   return (
                     <Component
                       key={`Form Input: ${i}${j}`}
                       handleChange={handleChange}
                       value={form[input.properties.name] || ''}
-                      {...input.properties }
+                      { ...input.properties }
                     />
                   )
                 })

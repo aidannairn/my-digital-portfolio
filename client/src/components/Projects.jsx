@@ -176,16 +176,18 @@ const Projects = () => {
             properties: {
               label: 'Title',
               name: 'linkName',
-              placeholder: 'Where does this link go?',
-            }
+              placeholder: 'Where does this link go?'
+            },
+            conditionalRequire: true
           },
           {
             component: 'LabelTextInput',
             properties: {
               label: 'URL',
               name: 'linkURL',
-              placeholder: 'Enter the URL to the webpage.',
-            }
+              placeholder: 'Enter the URL to the webpage.'
+            },
+            conditionalRequire: true
           }
         ]
       },
@@ -204,7 +206,8 @@ const Projects = () => {
               label: 'Tag',
               name: 'tagName',
               placeholder: 'Status, tech stack, etc.',
-            }
+            },
+            conditionalRequire: true
           },
           {
             component: 'LabelTextInput',

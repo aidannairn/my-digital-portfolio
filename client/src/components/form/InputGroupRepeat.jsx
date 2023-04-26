@@ -28,7 +28,7 @@ const InputGroupRepeat = ({ form, group, inputs }) => {
     })
 
     if (!isObjectEmpty(collectionData)) {
-      setCollectionLabels([...collectionLabels, labels])
+      setCollectionLabels([...collectionLabels, inputLabels])
       form.setState({
         ...form.state,
         [collectionName]: [...form.state[collectionName] || [], collectionData],
