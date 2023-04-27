@@ -61,12 +61,20 @@ const Form = forwardRef(({
               }
               { inputs.map((input, j) => {
                   const Component = componentMap[input.component]
-                  
-                  const required = input.conditionalRequire
-                    ? inputs.filter((inpt) => inpt !== input).some(inpt => !!form[inpt.properties.name])
-                    : input.properties.required || false
 
-                  input.properties.required = required
+                  const checkConditionalRequires = () => {
+                    const isDependency = settings.array?.dependencies
+                      .includes(input.properties.name)
+                    if (!isDependency)
+                      return input.properties.required || false
+                    const inputsMinusCurrInput = inputs
+                      .filter(current => current !== input)
+                    const areAnyInputsNotEmpty = inputsMinusCurrInput
+                      .some(current => !!form[current.properties.name])
+                    return areAnyInputsNotEmpty
+                  }
+
+                  input.properties.required = checkConditionalRequires()
 
                   return (
                     <Component

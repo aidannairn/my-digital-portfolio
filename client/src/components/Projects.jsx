@@ -168,6 +168,7 @@ const Projects = () => {
           heading: 'Project Links',
           array: {
             name: 'projectLinks',
+            dependencies: ['linkName', 'linkURL']
           }
         },
         inputs: [
@@ -178,7 +179,6 @@ const Projects = () => {
               name: 'linkName',
               placeholder: 'Where does this link go?'
             },
-            conditionalRequire: true
           },
           {
             component: 'LabelTextInput',
@@ -187,7 +187,6 @@ const Projects = () => {
               name: 'linkURL',
               placeholder: 'Enter the URL to the webpage.'
             },
-            conditionalRequire: true
           }
         ]
       },
@@ -196,7 +195,8 @@ const Projects = () => {
           heading: 'Project Tags',
           array: {
             name: 'projectTags',
-            max: 5
+            max: 5,
+            dependencies: ['tagName']
           }
         },
         inputs: [
@@ -207,7 +207,6 @@ const Projects = () => {
               name: 'tagName',
               placeholder: 'Status, tech stack, etc.',
             },
-            conditionalRequire: true
           },
           {
             component: 'LabelTextInput',

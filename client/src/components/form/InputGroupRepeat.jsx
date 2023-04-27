@@ -2,16 +2,33 @@ import { useEffect, useState } from 'react'
 
 import isObjectEmpty from "../../utils/isObjectEmpty"
 
-const InputGroupRepeat = ({ form, group, inputs }) => {
+const InputGroupRepeat = ({ form, group }) => {
   const collectionName = group.settings.array.name
 
-  const [isMax, setIsMax] = useState(false)
+  const [isMaxInputLimit, setIsMaxInputLimit] = useState(false)
   const [collectionLabels, setCollectionLabels] = useState([])
+  const [isAddingDisabled, setIsAddingDisabled] = useState(true)
 
   useEffect(() => {
     if (form.state[collectionName]?.length >= group.settings.array?.max)
-      setIsMax(true)
+      setIsMaxInputLimit(true)
   }, [form.state[collectionName]])
+
+  useEffect(() => {
+    const areAnyInputsNotEmpty = group.settings.array.dependencies
+      .some(dependent => !!form.state[dependent])
+    if (!areAnyInputsNotEmpty)
+      return setIsAddingDisabled(true)
+    const areAllRequiredNotEmpty = group.settings.array.dependencies
+      .every(dependent => !!form.state[dependent])
+    if (areAllRequiredNotEmpty)
+      return setIsAddingDisabled(false)
+    else return setIsAddingDisabled(true)
+  }, [
+    ...group.settings.array.dependencies
+      .map(dependent => form.state[dependent])
+  ])
+  
   
   const handleCollection = () => {
     const collectionData = {}
@@ -40,10 +57,10 @@ const InputGroupRepeat = ({ form, group, inputs }) => {
   const collection = form.state[group.settings.array.name] || []
   return (
     <>
-      { !isMax &&
+      { !isMaxInputLimit &&
         <div className='flex gap-4 items-center mb-4'>
           <div className='green-blue-gradient w-fit hover:green-blue-gradient--hover rounded-lg p-px'>
-            <button type='button' className={`bg-primary hover:bg-tertiary rounded-lg p-2 ${isMax ? 'cursor-not-allowed' : ''}`} onClick={handleCollection} disabled={isMax}>Add</button>
+            <button type='button' className={`bg-primary hover:bg-tertiary rounded-lg p-2 ${isAddingDisabled ? 'cursor-not-allowed' : ''}`} onClick={handleCollection} disabled={isAddingDisabled}>Add</button>
           </div>
           { group.settings.array?.max &&
             <i>{form.state[collectionName]?.length || 0}/{group.settings.array?.max}</i>
