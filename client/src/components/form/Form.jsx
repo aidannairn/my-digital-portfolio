@@ -50,10 +50,6 @@ const Form = forwardRef(({
       <form className='flex flex-col' onSubmit={submit?.action}>
         { inputGroups?.map((inputGroup, i) => {
           const { inputs, settings } = inputGroup
-          if (settings.array) {
-            settings.sectionIndex = i
-            settings.formLength = form[settings.array.name]?.length || 0
-          }
           return (
             <section key={i}>
               { settings?.heading && 
@@ -63,7 +59,7 @@ const Form = forwardRef(({
                   const Component = componentMap[input.component]
 
                   const checkConditionalRequires = () => {
-                    const isDependency = settings.array?.dependencies
+                    const isDependency = settings?.array?.dependencies
                       .includes(input.properties.name)
                     if (!isDependency)
                       return input.properties.required || false
