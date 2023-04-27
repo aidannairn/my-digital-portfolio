@@ -34,8 +34,12 @@ const Form = forwardRef(({
   useEffect(() => {
     const formDefaults = {}
     inputGroups.map(inputGroup => {
-      inputGroup.inputs.map(input => formDefaults[input.properties.name] = null)
+      if (inputGroup?.settings?.array)
+        formDefaults[inputGroup.settings.array.name] = []
+      inputGroup.inputs.map(input =>
+        formDefaults[input.properties.name] = null)
     })
+    console.log(formDefaults)
     setForm(formDefaults)
   }, [])
   
