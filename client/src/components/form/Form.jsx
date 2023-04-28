@@ -1,7 +1,13 @@
 import { forwardRef, useEffect, useState, useImperativeHandle } from "react"
 
 import { styles } from "../../styles"
-import { InputGroupRepeat, LabelImageInput, LabelTextArea, LabelTextInput } from "./index"
+import {
+  InputGroupRepeat,
+  LabelColorInput,
+  LabelImageInput,
+  LabelTextArea,
+  LabelTextInput
+} from "./index"
 import isObjectEmpty from "../../utils/isObjectEmpty"
 
 const Form = forwardRef(({
@@ -21,6 +27,7 @@ const Form = forwardRef(({
   ), [form])
 
   const componentMap = {
+    LabelColorInput,
     LabelImageInput,
     LabelTextArea,
     LabelTextInput
@@ -37,9 +44,8 @@ const Form = forwardRef(({
       if (inputGroup?.settings?.array)
         formDefaults[inputGroup.settings.array.name] = []
       inputGroup.inputs.map(input =>
-        formDefaults[input.properties.name] = null)
+        formDefaults[input.properties.name] = '')
     })
-    console.log(formDefaults)
     setForm(formDefaults)
   }, [])
   
@@ -80,7 +86,7 @@ const Form = forwardRef(({
                     <Component
                       key={`Form Input: ${i}${j}`}
                       handleChange={handleChange}
-                      value={form[input.properties.name] || ''}
+                      value={form[input.properties.name]}
                       { ...input.properties }
                     />
                   )

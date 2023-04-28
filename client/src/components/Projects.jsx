@@ -209,7 +209,7 @@ const Projects = () => {
             },
           },
           {
-            component: 'LabelTextInput',
+            component: 'LabelColorInput',
             properties: {
               label: 'Colour',
               name: 'tagColor',

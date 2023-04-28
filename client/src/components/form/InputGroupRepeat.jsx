@@ -37,7 +37,7 @@ const InputGroupRepeat = ({ form, group }) => {
     
     group.inputs.map(input => {
       const propName = input.properties.name
-      inputProperties[propName] = null
+      inputProperties[propName] = ''
       if (form.state[propName])
         collectionData[propName] = form.state[propName]
       if (collectionData[propName])
