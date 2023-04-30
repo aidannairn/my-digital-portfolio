@@ -89,9 +89,7 @@ const ProjectCard = ({ index, name, description, tags, image, links }) => {
 
 const Projects = () => {
   const formRef = useRef(null)
-
   const { user: { id: userId } } = useContext(UserContext)
-
   const [isModalVisible, setIsModalVisible] = useState(true)
   const [loading, setLoading] = useState(false)
 
