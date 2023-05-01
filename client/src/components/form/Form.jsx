@@ -69,7 +69,7 @@ const Form = forwardRef(({
                   const Component = componentMap[input.component]
 
                   const checkConditionalRequires = () => {
-                    const isDependency = settings?.array?.dependencies
+                    const isDependency = settings.array.dependencies
                       .includes(input.properties.name)
                     if (!isDependency)
                       return input.properties.required || false
@@ -80,7 +80,9 @@ const Form = forwardRef(({
                     return areAnyInputsNotEmpty
                   }
 
-                  input.properties.required = checkConditionalRequires()
+                  input.properties.required = settings?.array?.dependencies?.length
+                    ? checkConditionalRequires()
+                    : input.properties.required
 
                   return (
                     <Component

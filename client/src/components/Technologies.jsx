@@ -7,6 +7,7 @@ import { SectionWrapper } from '../hoc'
 import { technologies } from "../constants"
 import { styles } from '../styles'
 import { UserContext } from '../contexts/UserContext'
+import { fadeIn } from '../utils/motion'
 import useWindowSize from '../utils/useWindowSize'
 import Form from './form/Form'
 import Modal from '../hoc/Modal'
@@ -105,7 +106,7 @@ const Technologies = () => {
 
   const formRef = useRef(null)
   const { user: { id: userId } } = useContext(UserContext)
-  const [isModalVisible, setIsModalVisible] = useState(true)
+  const [isModalVisible, setIsModalVisible] = useState(false)
   const [loading, setLoading] = useState(false)
 
   const handleSubmit = async e => {
@@ -198,7 +199,7 @@ const Technologies = () => {
         </motion.div>
         <motion.div
           variants={fadeIn('', '', 1, 1)}
-          className='flex gap-5 mt-5'
+          className='flex gap-5 mt-5 sm:px-16 px-6'
         >
           <div className='green-blue-gradient hover:green-blue-gradient--hover rounded-lg p-px'>
             <button className='bg-primary hover:bg-tertiary rounded-lg p-2' onClick={() => setIsModalVisible(true)}>Add Technology</button>

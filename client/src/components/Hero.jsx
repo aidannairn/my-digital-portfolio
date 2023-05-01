@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 
 import { styles } from '../styles'
@@ -26,7 +26,7 @@ const Hero = () => {
     }
   }
 
-  useLayoutEffect(() => setCanvasPlot(), [windowSize])
+  useEffect(() => setCanvasPlot(), [windowSize])
   
   return (
     <section className='w-full h-screen mx-auto'>
@@ -47,7 +47,7 @@ const Hero = () => {
         canvasHeight={canvasHeight} 
         marginTop={-canvasNegativeTopY}
       />
-      <div ref={scrollButtonRef} className='absolute w-full h-fit mb-10 bottom-0 z-20 flex justify-center'>
+      <div ref={scrollButtonRef} className='absolute w-full h-fit mb-10 bottom-0 flex justify-center'>
         <a className='h-fit' href='#about'>
           <div className='w-[35px] h-[64px] rounded-3xl border-4 border-secondary flex justify-center items-start p-2'>
             <motion.div

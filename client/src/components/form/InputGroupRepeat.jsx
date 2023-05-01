@@ -15,6 +15,10 @@ const InputGroupRepeat = ({ form, group }) => {
   }, [form.state[collectionName]])
 
   useEffect(() => {
+    if (
+      !group.settings.array.dependencies.length
+      && group.inputs.some(input => form.state[input.properties.name])
+    ) { return setIsAddingDisabled(false) }  
     const areAnyInputsNotEmpty = group.settings.array.dependencies
       .some(dependent => !!form.state[dependent])
     if (!areAnyInputsNotEmpty)
@@ -25,10 +29,9 @@ const InputGroupRepeat = ({ form, group }) => {
       return setIsAddingDisabled(false)
     else return setIsAddingDisabled(true)
   }, [
-    ...group.settings.array.dependencies
-      .map(dependent => form.state[dependent])
+    ...group.inputs
+      .map(input => form.state[input.properties.name])
   ])
-  
   
   const handleCollection = () => {
     const collectionData = {}

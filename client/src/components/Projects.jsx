@@ -90,7 +90,7 @@ const ProjectCard = ({ index, name, description, tags, image, links }) => {
 const Projects = () => {
   const formRef = useRef(null)
   const { user: { id: userId } } = useContext(UserContext)
-  const [isModalVisible, setIsModalVisible] = useState(true)
+  const [isModalVisible, setIsModalVisible] = useState(false)
   const [loading, setLoading] = useState(false)
 
   const handleSubmit = async e => {
@@ -210,8 +210,7 @@ const Projects = () => {
             component: 'LabelColorInput',
             properties: {
               label: 'Colour',
-              name: 'tagColor',
-              placeholder: 'The colour of this tag.',
+              name: 'tagColor'
             }
           }
         ]
