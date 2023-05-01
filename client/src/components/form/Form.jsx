@@ -5,6 +5,7 @@ import {
   InputGroupRepeat,
   LabelColorInput,
   LabelImageInput,
+  LabelMultiChoice,
   LabelTextArea,
   LabelTextInput
 } from "./index"
@@ -29,6 +30,7 @@ const Form = forwardRef(({
   const componentMap = {
     LabelColorInput,
     LabelImageInput,
+    LabelMultiChoice,
     LabelTextArea,
     LabelTextInput
   }

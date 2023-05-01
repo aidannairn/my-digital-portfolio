@@ -75,7 +75,7 @@ const InputGroupRepeat = ({ form, group }) => {
           { collection.map((properties, i) => (
             <div key={i} className='mb-2'>
               { Object.keys(properties).map((key, j) => 
-                <p key={j}>{collectionLabels[i][j]}: {properties[key]}</p>
+                <p key={j} className='whitespace-pre-wrap'>{collectionLabels[i][j]}: {properties[key]}</p>
               )}
             </div>
           ))}

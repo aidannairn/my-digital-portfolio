@@ -158,10 +158,15 @@ const Experience = () => {
             },
           },
           {
-            component: 'LabelTextInput',
+            component: 'LabelMultiChoice',
             properties: {
               label: 'Are you still working toward this qualification?',
-              name: 'toPresent'
+              name: 'toPresent',
+              options: [
+                { name: 'No', value: false },
+                { name: 'Yes', value: true }
+              ],
+              required: true
             },
           },
         ]
@@ -176,12 +181,13 @@ const Experience = () => {
         },
         inputs: [
           {
-            component: 'LabelTextInput',
+            component: 'LabelTextArea',
             properties: {
               label: 'Skill',
+              rows: 5,
               name: 'skill',
               placeholder: 'What did this course teach you?'
-            },
+            }
           }
         ]
       }
