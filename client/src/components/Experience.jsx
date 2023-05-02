@@ -48,7 +48,7 @@ const ExperienceCard = ({ experience }) => (
 const Experience = () => {
   const formRef = useRef(null)
   const { user: { id: userId } } = useContext(UserContext)
-  const [isModalVisible, setIsModalVisible] = useState(false)
+  const [isModalVisible, setIsModalVisible] = useState(true)
   const [loading, setLoading] = useState(false)
 
   const handleSubmit = async e => {
@@ -65,7 +65,7 @@ const Experience = () => {
       formData.append('qualification', form.qualification)
       formData.append('certificate', form.certificate)
       formData.append('dateFrom', form.dateFrom)
-      formData.append('dateTo', form.toPresent ? null : form.dateTo)
+      formData.append('dateTo', form.activelyLearning ? null : form.dateTo)
       formData.append('bullets', JSON.stringify(bullets))
       formData.append('userId', userId)
     
@@ -141,27 +141,26 @@ const Experience = () => {
         },
         inputs: [
           {
-            component: 'LabelTextInput',
+            component: 'LabelCalendar',
             properties: {
               label: 'From',
               name: 'dateFrom',
-              placeholder: 'When did you begin studying?',
-              required: true
+              required: true,
+              untilNow: true
             },
           },
           {
-            component: 'LabelTextInput',
+            component: 'LabelCalendar',
             properties: {
               label: 'To',
-              name: 'dateTo',
-              placeholder: 'When did you finish studying?'
+              name: 'dateTo'
             },
           },
           {
             component: 'LabelMultiChoice',
             properties: {
-              label: 'Are you still working toward this qualification?',
-              name: 'toPresent',
+              label: 'Are you still working towards this qualification?',
+              name: 'activelyLearning',
               options: [
                 { name: 'No', value: false },
                 { name: 'Yes', value: true }

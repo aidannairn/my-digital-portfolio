@@ -3,6 +3,7 @@ import { forwardRef, useEffect, useState, useImperativeHandle } from "react"
 import { styles } from "../../styles"
 import {
   InputGroupRepeat,
+  LabelCalendar,
   LabelColorInput,
   LabelImageInput,
   LabelMultiChoice,
@@ -29,6 +30,7 @@ const Form = forwardRef(({
 
   const componentMap = {
     LabelColorInput,
+    LabelCalendar,
     LabelImageInput,
     LabelMultiChoice,
     LabelTextArea,

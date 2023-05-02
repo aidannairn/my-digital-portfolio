@@ -5,10 +5,10 @@ const Home = () => {
   return (
     <div className='home bg-primary'>
       <Navbar />
-      <Hero />
+      {/* <Hero /> */}
       {/* <About /> */}
       <Experience />
-      <Technologies />
+      {/* <Technologies /> */}
       <Projects />
       {/* <Feedback /> */}
       {/* <div className='relative z-0'>
