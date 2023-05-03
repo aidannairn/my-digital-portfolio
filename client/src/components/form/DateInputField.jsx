@@ -1,6 +1,7 @@
 import { forwardRef } from 'react'
 
 const DateInputField = forwardRef(({
+  className,
   name,
   placeholder,
   min,
@@ -42,7 +43,7 @@ const DateInputField = forwardRef(({
     <input
       ref={ref}
       type='number'
-      className='bg-tertiary py-4 px-2 sm:w-[5rem] w-full text-center placeholder:text-secondary text-white outlined-none border-none font-medium'
+      className={`bg-tertiary py-4 px-2 sm:w-[5rem] w-full text-center placeholder:text-secondary text-white outlined-none border-none font-medium ${className || ''}`}
       placeholder={placeholder}
       name={name}
       min={min}

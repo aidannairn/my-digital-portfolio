@@ -182,14 +182,16 @@ const Technologies = () => {
 
   return (
     <>
-      <FormModal
-        ref={formRef}
-        modal={{
-          visibility: isModalVisible,
-          close: () => setIsModalVisible(false)
-        }}
-        {...formSettings}
-      />
+      { userId &&
+        <FormModal
+          ref={formRef}
+          modal={{
+            visibility: isModalVisible,
+            close: () => setIsModalVisible(false)
+          }}
+          {...formSettings}
+        />
+      }
       <div className='sm:-mx-16 -mx-6' ref={techContainerRef} >
         <motion.div
           variants={textVariant()}
@@ -198,14 +200,16 @@ const Technologies = () => {
           <p className={styles.sectionSubText}>Some of the languages, libraries, frameworks and packages I use</p>
           <h2 className={styles.sectionHeadText}>Technologies.</h2>
         </motion.div>
-        <motion.div
-          variants={fadeIn('', '', 1, 1)}
-          className='flex gap-5 mt-5 sm:px-16 px-6'
-        >
-          <div className='green-blue-gradient hover:green-blue-gradient--hover rounded-lg p-px'>
-            <button className='bg-primary hover:bg-tertiary rounded-lg p-2' onClick={() => setIsModalVisible(true)}>Add Technology</button>
-          </div>
-        </motion.div>
+        { userId &&
+          <motion.div
+            variants={fadeIn('', '', 1, 1)}
+            className='flex gap-5 mt-5 sm:px-16 px-6'
+          >
+            <div className='green-blue-gradient hover:green-blue-gradient--hover rounded-lg p-px'>
+              <button className='bg-primary hover:bg-tertiary rounded-lg p-2' onClick={() => setIsModalVisible(true)}>Add Technology</button>
+            </div>
+          </motion.div>
+        }
         <div 
           className={`mt-10 mx-auto`}
           style={{ 

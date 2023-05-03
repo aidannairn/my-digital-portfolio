@@ -69,6 +69,7 @@ const LabelCalendar = ({
         <label className='flex items-center w-full'>
           <DateInputField
             ref={dayInputRef}
+            className='rounded-l-lg'
             name='day'
             placeholder='dd'
             min='1'
@@ -89,6 +90,7 @@ const LabelCalendar = ({
           <span className='bg-tertiary py-4 pr-[0.25rem] sm:pr-4'>-</span>
           <DateInputField
             ref={yearInputRef}
+            className='rounded-r-lg'
             name='year'
             placeholder='yyyy'
             min={currentDate.getFullYear() - 100}

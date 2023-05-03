@@ -49,7 +49,7 @@ const ExperienceCard = ({ experience }) => (
 const Experience = () => {
   const formRef = useRef(null)
   const { user: { id: userId } } = useContext(UserContext)
-  const [isModalVisible, setIsModalVisible] = useState(true)
+  const [isModalVisible, setIsModalVisible] = useState(false)
   const [loading, setLoading] = useState(false)
 
   const handleSubmit = async e => {
@@ -202,26 +202,30 @@ const Experience = () => {
 
   return (
     <>
-      <FormModal
-        ref={formRef}
-        modal={{
-          visibility: isModalVisible,
-          close: () => setIsModalVisible(false)
-        }}
-        {...formSettings}
-      />
+      { userId &&
+        <FormModal
+          ref={formRef}
+          modal={{
+            visibility: isModalVisible,
+            close: () => setIsModalVisible(false)
+          }}
+          {...formSettings}
+        />
+      }
       <motion.div variants={textVariant()}>
         <p className={styles.sectionSubText}>What I have done so far</p>
         <h2 className={styles.sectionHeadText}>Experience.</h2>
       </motion.div>
-      <motion.div
-        variants={fadeIn('', '', 1, 1)}
-        className='flex gap-5 mt-5'
-      >
-        <div className='green-blue-gradient hover:green-blue-gradient--hover rounded-lg p-px'>
-          <button className='bg-primary hover:bg-tertiary rounded-lg p-2' onClick={() => setIsModalVisible(true)}>Add Experience</button>
-        </div>
-      </motion.div>
+      { userId &&
+        <motion.div
+          variants={fadeIn('', '', 1, 1)}
+          className='flex gap-5 mt-5'
+        >
+          <div className='green-blue-gradient hover:green-blue-gradient--hover rounded-lg p-px'>
+            <button className='bg-primary hover:bg-tertiary rounded-lg p-2' onClick={() => setIsModalVisible(true)}>Add Experience</button>
+          </div>
+        </motion.div>
+      }
       <div className="mt-20 flex flex-col">
         <VerticalTimeline>
           {experiences.map((experience, i) => (
