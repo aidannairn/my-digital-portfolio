@@ -1,12 +1,17 @@
-import { useEffect, useLayoutEffect, useState, useRef, Suspense } from 'react'
+import { useContext, useEffect, useLayoutEffect, useState, useRef } from 'react'
 import { motion } from 'framer-motion'
+import axios from 'axios'
 
 import { BallCanvas } from './canvas'
 import { textVariant } from '../utils/motion'
 import { SectionWrapper } from '../hoc'
 import { technologies } from "../constants"
 import { styles } from '../styles'
+import { UserContext } from '../contexts/UserContext'
+import { fadeIn } from '../utils/motion'
 import useWindowSize from '../utils/useWindowSize'
+import Form from './form/Form'
+import Modal from '../hoc/Modal'
 
 const Technologies = () => {
   const windowWidth = useWindowSize('x')
@@ -100,30 +105,123 @@ const Technologies = () => {
     setTechnologyPositions(techPos)
   }, [canvasRows])
 
+  const formRef = useRef(null)
+  const { user: { id: userId } } = useContext(UserContext)
+  const [isModalVisible, setIsModalVisible] = useState(false)
+  const [loading, setLoading] = useState(false)
+
+  const handleSubmit = async e => {
+    e.preventDefault()
+    try {
+      const form = formRef.current.getFormState()
+      setLoading(true)
+
+      const formData = new FormData()
+      formData.append('image', form.logo)
+      formData.append('name', form.name)
+      formData.append('docsURL', form.docsURL)
+      formData.append('userId', userId)
+    
+      await axios.post(
+        `${import.meta.env.VITE_SERVER_BASE_URL}/api/tech/create`,
+        formData,
+        { 
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      )
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const formSettings = {
+    title: 'Add A Technology',
+    subtitle: "List some of the technologies you're confident with",
+    inputGroups: [
+      {
+        inputs: [
+          {
+            component: 'LabelTextInput',
+            properties: {
+              label: 'Name',
+              name: 'name',
+              placeholder: 'The name of the technology',
+              required: true
+            }
+          },
+          {
+            component: 'LabelImageInput',
+            properties: {
+              label: 'Logo',
+              name: 'logo',
+              required: true
+            }
+          },
+          {
+            component: 'LabelTextInput',
+            properties: {
+              label: 'Documentation Link',
+              name: 'docsURL',
+              placeholder: "Link to this technology's documentation",
+            }
+          }
+        ]
+      }
+    ],
+    submit: {
+      action: handleSubmit,
+      text: loading ? 'Submitting Technology...' : 'Submit Technology'
+    }
+  }
+
+  const FormModal = Modal(Form)
+
   return (
-    <div className='sm:-mx-16 -mx-6' ref={techContainerRef} >
-      <motion.div
-        variants={textVariant()}
-        className='sm:px-16 px-6'
-      >
-        <p className={styles.sectionSubText}>Some of the languages, libraries, frameworks and packages I use</p>
-        <h2 className={styles.sectionHeadText}>Technologies.</h2>
-      </motion.div>
-      <div 
-        className={`mt-10 mx-auto`}
-        style={{ 
-          height: `${canvasPixelDimensions.y}px`,
-          width: '100%'
+    <>
+      <FormModal
+        ref={formRef}
+        modal={{
+          visibility: isModalVisible,
+          close: () => setIsModalVisible(false)
         }}
-      >
-        <BallCanvas
-          technologies={technologies}
-          positions={technologyPositions}
-          canvasGridDimensions={canvasGridDimensions}
-          scale={scale}
-        />
+        {...formSettings}
+      />
+      <div className='sm:-mx-16 -mx-6' ref={techContainerRef} >
+        <motion.div
+          variants={textVariant()}
+          className='sm:px-16 px-6'
+        >
+          <p className={styles.sectionSubText}>Some of the languages, libraries, frameworks and packages I use</p>
+          <h2 className={styles.sectionHeadText}>Technologies.</h2>
+        </motion.div>
+        <motion.div
+          variants={fadeIn('', '', 1, 1)}
+          className='flex gap-5 mt-5 sm:px-16 px-6'
+        >
+          <div className='green-blue-gradient hover:green-blue-gradient--hover rounded-lg p-px'>
+            <button className='bg-primary hover:bg-tertiary rounded-lg p-2' onClick={() => setIsModalVisible(true)}>Add Technology</button>
+          </div>
+        </motion.div>
+        <div 
+          className={`mt-10 mx-auto`}
+          style={{ 
+            height: `${canvasPixelDimensions.y}px`,
+            width: '100%'
+          }}
+        >
+          <BallCanvas
+            technologies={technologies}
+            positions={technologyPositions}
+            canvasGridDimensions={canvasGridDimensions}
+            scale={scale}
+          />
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 

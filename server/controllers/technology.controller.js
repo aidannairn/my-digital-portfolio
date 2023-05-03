@@ -11,12 +11,14 @@ const techCreate = async (req, res, next) => {
     return res.status(400).json({ type: 'error', msg: 'Your new technology should include the name and logo.'})
 
   try {
-    const imageURL = await s3Upload(name + path.extname(image.originalname), image.path, 'technologies')
+    var imageURL = await s3Upload(name + path.extname(image.originalname), image.path, 'technologies')
+    
     const technology = new Technology({ name, docsURL, imageURL, userId })
-    technology.save()
-
+    
+    await technology.save()
     return res.status(200).json({ type: 'success', msg: `${name} has been added to your technologies!`})
   } catch (error) {
+    if (imageURL) s3Delete(imageURL)
     console.error(error)
     return res.status(400).json({ type: 'error', msg: 'Could not add new technology.' })
   }

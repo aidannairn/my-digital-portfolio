@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 
 const LabelImageInput = ({
   label,
@@ -12,7 +12,7 @@ const LabelImageInput = ({
   return (
     <div className='mb-6'>
       <label htmlFor='imgSelectBtn' className='flex flex-col'>
-        <span className='text-white font-medium mb-4'>{label}</span>
+        <span className='text-white font-medium mb-4'>{label}{required ? <i className='font-thin'> (required)</i> : ''}</span>
       </label>
       <div className={`relative w-40 h-10 p-px rounded-lg green-blue-gradient ${btnHover ? 'green-blue-gradient--hover' : 'green-blue-gradient'}`}>
         <div className={`${btnHover ? 'bg-tertiary' : 'bg-quinary'} w-full h-full rounded-lg`}>

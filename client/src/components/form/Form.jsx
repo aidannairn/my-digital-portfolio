@@ -1,22 +1,16 @@
 import { forwardRef, useEffect, useState, useImperativeHandle } from "react"
 
 import { styles } from "../../styles"
-import { LabelImageInput, LabelTextArea, LabelTextInput } from "./index"
+import {
+  InputGroupRepeat,
+  LabelCalendar,
+  LabelColorInput,
+  LabelImageInput,
+  LabelMultiChoice,
+  LabelTextArea,
+  LabelTextInput
+} from "./index"
 import isObjectEmpty from "../../utils/isObjectEmpty"
-
-const CollectionDisplay = ({ collection }) => {
-  return collection.length ? (
-    <div className='flex flex-col-reverse mb-2'>
-      { collection.map((group, i) => 
-        <div key={i} className='mb-2'>
-          { Object.keys(group).map((key, j) => 
-            <p key={j}>{group[key]}</p>
-          )}
-        </div>
-      )}
-    </div>
-  ) : <></>
-}
 
 const Form = forwardRef(({
   modalClassNames,
@@ -35,7 +29,10 @@ const Form = forwardRef(({
   ), [form])
 
   const componentMap = {
+    LabelColorInput,
+    LabelCalendar,
     LabelImageInput,
+    LabelMultiChoice,
     LabelTextArea,
     LabelTextInput
   }
@@ -45,31 +42,13 @@ const Form = forwardRef(({
     setForm({ ...form, [name]: files?.[0] || value })
   }
 
-  const handleCollection = collectionIndex => {
-    const collectionName = inputGroups[collectionIndex].settings.array.name
-    const collectionData = {}
-    const inputProperties = {}
-    
-    inputGroups[collectionIndex].inputs.map(input => {
-      const propName = input.properties.name
-      inputProperties[propName] = null
-      if (form[propName])
-        collectionData[propName] = form[propName]
-    })
-
-    if (!isObjectEmpty(collectionData)) {
-      setForm({
-        ...form,
-        [collectionName]: [...form[collectionName] || [], collectionData],
-        ...inputProperties
-      })
-    }
-  }
-
   useEffect(() => {
     const formDefaults = {}
     inputGroups.map(inputGroup => {
-      inputGroup.inputs.map(input => formDefaults[input.properties.name] = null)
+      if (inputGroup?.settings?.array)
+        formDefaults[inputGroup.settings.array.name] = []
+      inputGroup.inputs.map(input =>
+        formDefaults[input.properties.name] = '')
     })
     setForm(formDefaults)
   }, [])
@@ -83,31 +62,51 @@ const Form = forwardRef(({
         </div>
       }
       <form className='flex flex-col' onSubmit={submit?.action}>
-        { inputGroups?.map((inputGroup, i) => <section key={i}>
-          { inputGroup.settings?.heading && 
-            <h3 className='font-semibold text-lg text-white-100'>{inputGroup.settings.heading}</h3>
-          }
-          { inputGroup.inputs.map((input, j) => {
-              const Component = componentMap[input.component]
-              return (
-                <Component
-                  key={`Form Input: ${i}${j}`}
-                  handleChange={handleChange}
-                  value={form[input.properties.name] || ''}
-                  {...input.properties }
+        { inputGroups?.map((inputGroup, i) => {
+          const { inputs, settings } = inputGroup
+          return (
+            <section key={i}>
+              { settings?.heading && 
+                <h3 className='font-semibold text-lg text-white-100'>{settings.heading}</h3>
+              }
+              { inputs.map((input, j) => {
+                  const Component = componentMap[input.component]
+
+                  const checkConditionalRequires = () => {
+                    const isDependency = settings.array.dependencies
+                      .includes(input.properties.name)
+                    if (!isDependency)
+                      return input.properties.required || false
+                    const inputsMinusCurrInput = inputs
+                      .filter(current => current !== input)
+                    const areAnyInputsNotEmpty = inputsMinusCurrInput
+                      .some(current => !!form[current.properties.name])
+                    return areAnyInputsNotEmpty
+                  }
+
+                  input.properties.required = settings?.array?.dependencies?.length
+                    ? checkConditionalRequires()
+                    : input.properties.required
+
+                  return (
+                    <Component
+                      key={`Form Input: ${i}${j}`}
+                      handleChange={handleChange}
+                      value={form[input.properties.name]}
+                      { ...input.properties }
+                    />
+                  )
+                })
+              }
+              { settings?.array &&
+                <InputGroupRepeat
+                  form={{ state: form, setState: setForm }}
+                  group={inputGroup}
                 />
-              )
-            })
-          }
-          { inputGroup.settings?.array &&
-            <>
-              <div className='green-blue-gradient w-fit mb-4 hover:green-blue-gradient--hover rounded-lg p-px'>
-                <button type='button' className='bg-primary hover:bg-tertiary rounded-lg p-2' onClick={() => handleCollection(i)}>Add</button>
-              </div>
-              <CollectionDisplay collection={form[inputGroup.settings.array.name] || []} />
-            </>
-          }
-        </section> )}
+              }
+            </section>
+          )
+        })}
         <button
           type='submit'
           className='bg-tertiary py-3 self-end px-8 outline-none w-fit text-white font-bold shadow-md shadow-primary rounded-xl'

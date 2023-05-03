@@ -9,7 +9,7 @@ const LabelTextInput = ({
 }) => {
   return (
     <label className='flex flex-col mb-6'>
-      <span className='text-white font-medium mb-4'>{label}</span>
+      <span className='text-white font-medium mb-4'>{label}{required ? <i className='font-thin'> (required)</i> : ''}</span>
       <input
         type={type}
         name={name}

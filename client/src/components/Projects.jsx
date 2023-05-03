@@ -89,10 +89,8 @@ const ProjectCard = ({ index, name, description, tags, image, links }) => {
 
 const Projects = () => {
   const formRef = useRef(null)
-
   const { user: { id: userId } } = useContext(UserContext)
-
-  const [isModalVisible, setIsModalVisible] = useState(true)
+  const [isModalVisible, setIsModalVisible] = useState(false)
   const [loading, setLoading] = useState(false)
 
   const handleSubmit = async e => {
@@ -101,22 +99,12 @@ const Projects = () => {
       const form = formRef.current.getFormState()
       setLoading(true)
 
-      const projectLinks = form.projectLinks.map(link => ({
-        name: link.linkName,
-        url: link.linkURL
-      }))
-
-      const projectTags = form.projectTags.map(tag => ({
-        name: tag.tagName,
-        color: tag.tagColor
-      }))
-
       const formData = new FormData()
       formData.append('image', form.image)
       formData.append('name', form.projectTitle)
       formData.append('description', form.description)
-      formData.append('projectLinks', JSON.stringify(projectLinks))
-      formData.append('projectTags', JSON.stringify(projectTags))
+      formData.append('projectLinks', JSON.stringify(form.projectLinks))
+      formData.append('projectTags', JSON.stringify(form.projectTags))
       formData.append('userId', userId)
     
       await axios.post(
@@ -178,6 +166,7 @@ const Projects = () => {
           heading: 'Project Links',
           array: {
             name: 'projectLinks',
+            dependencies: ['linkName', 'linkURL']
           }
         },
         inputs: [
@@ -186,16 +175,16 @@ const Projects = () => {
             properties: {
               label: 'Title',
               name: 'linkName',
-              placeholder: 'Where does this link go?',
-            }
+              placeholder: 'Where does this link go?'
+            },
           },
           {
             component: 'LabelTextInput',
             properties: {
               label: 'URL',
               name: 'linkURL',
-              placeholder: 'Enter the URL to the webpage.',
-            }
+              placeholder: 'Enter the URL to the webpage.'
+            },
           }
         ]
       },
@@ -204,6 +193,8 @@ const Projects = () => {
           heading: 'Project Tags',
           array: {
             name: 'projectTags',
+            max: 5,
+            dependencies: ['tagName']
           }
         },
         inputs: [
@@ -213,14 +204,13 @@ const Projects = () => {
               label: 'Tag',
               name: 'tagName',
               placeholder: 'Status, tech stack, etc.',
-            }
+            },
           },
           {
-            component: 'LabelTextInput',
+            component: 'LabelColorInput',
             properties: {
               label: 'Colour',
-              name: 'tagColor',
-              placeholder: 'The colour of this tag.',
+              name: 'tagColor'
             }
           }
         ]

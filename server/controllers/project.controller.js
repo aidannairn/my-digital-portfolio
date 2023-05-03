@@ -9,16 +9,17 @@ const projectCreate = async (req, res, next) => {
     return res.status(400).json({ type: 'error', msg: 'Your new project should include a name and image.' })
     
   try {
-    const links = JSON.parse(projectLinks)
-    const tags = JSON.parse(projectTags)
+    const links = await JSON.parse(projectLinks)
+    const tags = await JSON.parse(projectTags)
 
-    const imageURL = await s3Upload(image.originalname, image.path, 'projects')
+    var imageURL = await s3Upload(image.originalname, image.path, 'projects')
 
     const project = new Project({ name, description, links, tags, imageURL, userId })
-    project.save()
 
+    await project.save()
     return res.status(200).json({ type: 'success', msg: 'You have added a new project!'})
   } catch (error) {
+    if (imageURL) s3Delete(imageURL)
     console.error(error)
     return res.status(400).json({ type: 'error', msg: 'Could not add new project.' })
   }

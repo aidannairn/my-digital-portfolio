@@ -7,8 +7,8 @@ const Home = () => {
       <Navbar />
       {/* <Hero /> */}
       {/* <About /> */}
-      {/* <Experience /> */}
-      {/* <Technologies /> */}
+      <Experience />
+      <Technologies />
       <Projects />
       {/* <Feedback /> */}
       {/* <div className='relative z-0'>
