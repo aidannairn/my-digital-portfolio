@@ -8,11 +8,11 @@ const educationCreate = async (req, res, next) => {
     logoBgHex,
     dateFrom,
     dateTo,
-    bullets,
+    bullets: bulletsStr,
     userId
   } = req.body
-  const logo = req.files?.logo[0]
-  const certificate = req.files?.certificate[0]
+  const logo = req.files?.logo?.[0]
+  const certificate = req.files?.certificate?.[0]
 
   if (!(provider && qualification && dateFrom && userId))
     return res.status(400).json({ type: 'error', msg: 'Missing required parameters.' })
@@ -24,6 +24,10 @@ const educationCreate = async (req, res, next) => {
 
     var certificateURL = certificate
       ? await s3Upload(certificate.originalname, certificate.path, 'education/certificate')
+      : undefined
+
+    const bullets = bulletsStr 
+      ? await JSON.parse(bulletsStr)
       : undefined
 
     const education = new Education({
