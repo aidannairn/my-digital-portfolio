@@ -1,5 +1,6 @@
 import { useContext, useEffect, useLayoutEffect, useState, useRef } from 'react'
 import { motion } from 'framer-motion'
+import axios from 'axios'
 
 import { BallCanvas } from './canvas'
 import { textVariant } from '../utils/motion'

@@ -1,6 +1,7 @@
 import { useContext, useRef, useState } from 'react'
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component'
 import { motion } from 'framer-motion'
+import axios from 'axios'
 
 import { styles } from '../styles'
 import { experiences } from '../constants'
@@ -65,7 +66,7 @@ const Experience = () => {
       formData.append('qualification', form.qualification)
       formData.append('certificate', form.certificate)
       formData.append('dateFrom', form.dateFrom)
-      formData.append('dateTo', form.activelyLearning ? null : form.dateTo)
+      formData.append('dateTo', form.activelyLearning ? '' : form.dateTo)
       formData.append('bullets', JSON.stringify(bullets))
       formData.append('userId', userId)
     

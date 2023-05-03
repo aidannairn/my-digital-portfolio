@@ -8,7 +8,7 @@ const Home = () => {
       {/* <Hero /> */}
       {/* <About /> */}
       <Experience />
-      {/* <Technologies /> */}
+      <Technologies />
       <Projects />
       {/* <Feedback /> */}
       {/* <div className='relative z-0'>
