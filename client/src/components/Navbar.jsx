@@ -8,7 +8,7 @@ import { navLinks } from '../constants'
 import { logo, menu, close } from '../assets'
 import { UserContext } from '../contexts/UserContext'
 
-const Navbar = () => {
+const Navbar = ({ isLoading }) => {
   const [active, setActive] = useState('')
   const [toggle, setToggle] = useState(false)
   const { user: { id: userId }, userSignOut } = useContext(UserContext)
@@ -34,7 +34,7 @@ const Navbar = () => {
             </p>
           </Link>
           <ul className='list-none hidden sm:flex flex-row gap-10'>
-            {navLinks.map(link => (
+            { !isLoading && navLinks.map(link => (
               <li
                 key={link.id}
                 className={`
