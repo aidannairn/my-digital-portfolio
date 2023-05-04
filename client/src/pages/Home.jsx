@@ -22,9 +22,10 @@ const Home = () => {
       setExperiences(res.data.experiences)
       setTechnologies(res.data.technologies)
       setProjects(res.data.projects)
-      setIsLoading(false)
     } catch (error) {
       console.error(error)
+    } finally {
+      setIsLoading(false)
     }
   }
 

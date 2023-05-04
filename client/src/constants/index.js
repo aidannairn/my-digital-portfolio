@@ -1,7 +1,6 @@
 import {
   mobile,
   backend,
-  creator,
   web,
 } from "../assets"
 
@@ -12,29 +11,7 @@ const eduBucket = `${mediaBucket}/education`
 const projectsBucket = `${mediaBucket}/projects`
 const iconsBucket = `${mediaBucket}/icons`
 
-const css = `${techBucket}/css.png`
-const docker = `${techBucket}/docker.png`
-const git = `${techBucket}/git.png`
-const html = `${techBucket}/html.png`
-const javascript = `${techBucket}/javascript.png`
-const mongodb = `${techBucket}/mongodb.png`
-const nodejs = `${techBucket}/nodejs.png`
-const reactjs = `${techBucket}/reactjs.png`
-const tailwind = `${techBucket}/tailwind.png`
-const typescript = `${techBucket}/typescript.png`
-const threejs = `${techBucket}/threejs.png`
-const python = `${techBucket}/python.png`
-const graphql = `${techBucket}/graphql.png`
-const mysql = `${techBucket}/mysql.png`
-const aws = `${techBucket}/aws.png`
-const express = `${techBucket}/express.png`
-const googleCloud = `${techBucket}/google-cloud.png`
-const cProgrammingLang = `${techBucket}/c-programming-language.png`
-const cPlusPlus = `${techBucket}/c-plus-plus.png`
-const django = `${techBucket}/django.png`
-const nextJS = `${techBucket}/nextjs.png`
 export const github = `${techBucket}/github.png`
-const affinity = `${techBucket}/affinity.png`
 
 const harvard = `${eduBucket}/harvard.svg`
 const devAcademy = `${eduBucket}/dev-academy.png`
@@ -69,101 +46,6 @@ const services = [
   {
     title: "Mobile Web Developer",
     icon: mobile,
-  },
-  // {
-  //   title: "Content Creator",
-  //   icon: creator,
-  // },
-]
-
-const technologies = [
-  {
-    name: "HTML 5",
-    icon: html,
-  },
-  {
-    name: "CSS 3",
-    icon: css,
-  },
-  {
-    name: "JavaScript",
-    icon: javascript,
-  },
-  {
-    name: "TypeScript",
-    icon: typescript,
-  },
-  {
-    name: "React JS",
-    icon: reactjs,
-  },
-  {
-    name: "Python",
-    icon: python,
-  },
-  {
-    name: "Graph QL",
-    icon: graphql,
-  },
-  {
-    name: "MySQL",
-    icon: mysql,
-  },
-  {
-    name: "Amazon Web Services",
-    icon: aws,
-  },
-  {
-    name: "Tailwind CSS",
-    icon: tailwind,
-  },
-  {
-    name: "Node JS",
-    icon: nodejs,
-  },
-  {
-    name: "MongoDB",
-    icon: mongodb,
-  },
-  {
-    name: "Three JS",
-    icon: threejs,
-  },
-  {
-    name: "Git",
-    icon: git,
-  },
-  {
-    name: "Docker",
-    icon: docker,
-  },
-  {
-    name: "Google Cloud",
-    icon: googleCloud,
-  },
-  {
-    name: "C Programming Language",
-    icon: cProgrammingLang,
-  },
-  {
-    name: "C++",
-    icon: cPlusPlus,
-  },
-  {
-    name: "Django",
-    icon: django,
-  },
-  {
-    name: "Next JS",
-    icon: nextJS,
-  },
-  {
-    name: "GitHub",
-    icon: github,
-  },
-  {
-    name: "Affinity",
-    icon: affinity,
   },
 ]
 
@@ -349,4 +231,4 @@ const projects = [
   },
 ]
 
-export { services, technologies, experiences, testimonials, projects }
+export { services, experiences, testimonials, projects }

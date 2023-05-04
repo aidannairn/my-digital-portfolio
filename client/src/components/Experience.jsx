@@ -226,13 +226,16 @@ const Experience = () => {
           </div>
         </motion.div>
       }
-      <div className="mt-20 flex flex-col">
+      <motion.div 
+        variants={fadeIn('', '', 1, 1)}
+        className='mt-20 flex flex-col'
+      >
         <VerticalTimeline>
           {experiences.map((experience, i) => (
             <ExperienceCard key={i} experience={experience} />
           ))}
         </VerticalTimeline>
-      </div>
+      </motion.div>
     </>
   )
 }

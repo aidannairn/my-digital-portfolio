@@ -49,8 +49,8 @@ const Ball = ({ gridDimensions: gd, icon, position, scale }) => {
           receiveShadow
           position={position}
           scale={isHovered ? 1.25 * scale : scale}
-          onPointerEnter={() => setIsHovered(true)}
-          onPointerLeave={() => setIsHovered(false)}
+          // onPointerEnter={() => setIsHovered(true)}
+          // onPointerLeave={() => setIsHovered(false)}
         >
           <icosahedronGeometry args={[1, 1]} />
           <meshStandardMaterial 
@@ -105,10 +105,10 @@ const BallCanvas = ({
         { positions.length === technologies.length &&
           technologies.map((technology, i) => (
             <Ball
-              key={`ball-${i}`}
+              key={`ball-${technology._id}`}
               gridDimensions={canvasGridDimensions}
               position={positions[i]}
-              icon={technology.icon}
+              icon={`${import.meta.env.VITE_MEDIA_BUCKET}/${technology.imageURL}`}
               scale={scale}
             />
           ))
