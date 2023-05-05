@@ -5,44 +5,47 @@ import Tilt from 'react-parallax-tilt'
 
 import { styles } from '../styles'
 import { SectionWrapper } from '../hoc'
-import { chainLink, projects } from '../constants'
+import { chainLink } from '../constants'
 import { fadeIn, textVariant } from '../utils/motion'
 import { UserContext } from '../contexts/UserContext'
 import Form from './form/Form'
 import Modal from '../hoc/Modal'
 
-const ProjectCard = ({ index, name, description, tags, image, links }) => {
+const ProjectCard = ({ index, name, description, tags, imageURL, links }) => {
   const [isSrcListVisible, setIsSrcListVisible] = useState(false) 
 
   return (
-    <Tilt className='sm:w-[360px] w-full'>
+    <Tilt className='sm:w-[360px] max-w-[90vw]'>
       <motion.div
-        className='bg-tertiary p-5 rounded-2xl'
+        className='bg-tertiary h-full p-5 rounded-2xl'
         variants={fadeIn('up', 'spring', (index * 0.5) + 1, 0.75)}
       >
-        <div options={{
-          max: 45,
-          scale: 1,
-          speed: 450
-        }}>
+        <div 
+          options={{
+            max: 45,
+            scale: 1,
+            speed: 450
+          }}
+          className='flex flex-col justify-content-stretch h-full'
+        >
           <div 
-            className={`relative w-full max-h-[180px] h-[180px] p-px rounded-2xl 
+            className={`relative w-full p-px rounded-2xl 
             ${isSrcListVisible ? 'green-blue-gradient' : ''}`}
           >
             <div className='bg-tertiary rounded-2xl h-[178px]'>
               <img
-                src={image}
+                src={`${import.meta.env.VITE_MEDIA_BUCKET}/${imageURL}`}
                 alt={name}
                 className={`w-full h-full object-cover rounded-2xl ${isSrcListVisible ? 'invisible' : 'visible'}`}
               />
               <div
-                className='absolute inset-0 h-full flex justify-end card-img_hover w-full'
+                className='absolute inset-0 flex justify-end card-img_hover w-full'
               >
                 <div
                   onMouseLeave={() => setIsSrcListVisible(false)}
                   className='w-full flex flex-col items-end'
                 >
-                  { links && (
+                  { !!links.length && (
                       <div className={`w-10 h-10 p-2 m-2 rounded-full cursor-pointer blue-dark-gradient ${isSrcListVisible ? 'border-2 border-[#000D26]' : ''}`}>
                         <img
                           onClick={() => setIsSrcListVisible(true)}
@@ -56,11 +59,11 @@ const ProjectCard = ({ index, name, description, tags, image, links }) => {
                       { links?.map((link, i) => (
                         <a
                           key={i}
-                          href={link.url}
+                          href={link.linkURL}
                           target='_blank'
                           className='text-right py-1 mr-2 capitalize w-fit'
                         >
-                          { link.title }
+                          { link.linkName }
                         </a>
                       ))}
                     </div>
@@ -70,14 +73,18 @@ const ProjectCard = ({ index, name, description, tags, image, links }) => {
 
             </div>
           </div>
-          <div className='mt-5'>
+          <div className='flex-grow mt-5'>
             <h3 className='text-white font-bold text-[24px]'>{name}</h3>
-            <p className='mt-2 text-secondary text-[14px]'>{description}</p>
+            <p className='mt-2 text-secondary text-[14px] whitespace-pre-line'>{description}</p>
           </div>
           <div className='mt-4 flex flex-wrap gap-2'>
             {tags.map((tag) => (
-              <p key={tag.name} className={`text-[14px] ${tag.color || 'blue-text-gradient'}`}>
-                {tag.name}
+              <p
+                key={tag.tagName}
+                className='text-[14px]'
+                style={{ color: tag.tagColor || '#0088FE' }}
+              >
+                {tag.tagName}
               </p>
             ))}
           </div>
@@ -87,7 +94,7 @@ const ProjectCard = ({ index, name, description, tags, image, links }) => {
   )
 }
 
-const Projects = () => {
+const Projects = ({ projects }) => {
   const formRef = useRef(null)
   const { user: { id: userId } } = useContext(UserContext)
   const [isModalVisible, setIsModalVisible] = useState(false)
@@ -225,7 +232,7 @@ const Projects = () => {
   const FormModal = Modal(Form)
 
   return (
-    <>
+    <div className='flex flex-col'>
       { userId &&
         <FormModal
           ref={formRef}
@@ -256,12 +263,15 @@ const Projects = () => {
           </div>
         </motion.div>
       }
-      <div className='mt-20 flex flex-wrap gap-7'>
+      <div
+        className='mt-20 grid gap-7 w-full justify-center'
+        style={{ gridTemplateColumns: 'repeat(auto-fill, 360px)' }}
+      >
         { projects.map((project, i) => (
           <ProjectCard key={`project-${i}`} index={i} {...project} />
         ))}
       </div>
-    </>
+    </div>
   )
 }
 
