@@ -4,7 +4,6 @@ import { motion } from 'framer-motion'
 import axios from 'axios'
 
 import { styles } from '../styles'
-import { experiences } from '../constants'
 import { SectionWrapper } from '../hoc'
 import { fadeIn, textVariant } from '../utils/motion'
 import { UserContext } from '../contexts/UserContext'
@@ -13,40 +12,97 @@ import Modal from '../hoc/Modal'
 
 import 'react-vertical-timeline-component/style.min.css'
 
-const ExperienceCard = ({ experience }) => (
-  <VerticalTimelineElement
-    contentStyle={{ background: '#00143a', color: '#FFF' }}
-    contentArrowStyle={{ borderRight: '7px solid #232631' }}
-    date={experience.period}
-    iconStyle={{ background: experience.iconBg || 'rgb(0, 20, 58)' }}
-    icon={
-      <div className='flex justify-center items-center w-full h-full'>
-        <img
-          src={experience.icon}
-          alt={experience.company_name}
-          className='w-[60%] h-[60%] object-contain'
-        />
-      </div>
-    }
-  >
-    <div>
-      <h3 className='text-white whitespace-pre-line text-[24px] font-bold'>{experience.title}</h3>
-      <p className='text-secondary text-[16px] font-semibold' style={{ margin: 0 }}>{experience.company_name}</p>
-    </div>
-    <ul className='mt-5 list-disc ml-5 space-y-2'>
-      {experience.points.map((point, i) => (
-        <li
-          key={`experience-point-${i}`}
-          className='text-white-100 text-[14px] pl-1 tracking-wider'
-        >
-          {point}
-        </li>
-      ))}
-    </ul>
-  </VerticalTimelineElement>
+const Image = ({ modal, imageURL, imageAlt }) => (
+  <img
+    className={`${modal?.className || ''} w-full`}
+    src={imageURL}
+    alt={imageAlt}
+  />
 )
 
-const Experience = () => {
+const ExperienceCard = ({
+  provider,
+  qualification,
+  certificateURL,
+  logoURL,
+  logoBgHex,
+  dateFrom: timestampFrom,
+  dateTo: timestampTo,
+  bullets,
+  userId: owner
+}) => {
+  const [isImageExpanded, setIsImageExpanded] = useState(false)
+
+  const getDateFromTimeStamp = (timestamp, format) =>
+    new Date(timestamp).toLocaleDateString('en-NZ', format)
+  
+  const dateOptions = { month: 'short', year: '2-digit' }
+  const dateFrom = getDateFromTimeStamp(timestampFrom, dateOptions)
+  const dateTo = getDateFromTimeStamp(timestampTo, dateOptions)
+  
+  const mediaBucket = import.meta.env.VITE_MEDIA_BUCKET
+
+  const ImageModal = Modal(Image)
+
+  return (
+  <>
+    { isImageExpanded && certificateURL &&
+      <ImageModal
+        modal={{
+          visibility: isImageExpanded,
+          close: () => setIsImageExpanded(false)
+        }}
+        imageURL={`${mediaBucket}/${certificateURL}`}
+        imageAlt={`${qualification} certificate`}
+        noScroll={true}
+      />
+    }
+    <VerticalTimelineElement
+      contentStyle={{ background: '#00143a', color: '#FFF' }}
+      contentArrowStyle={{ borderRight: '7px solid #232631' }}
+      date={`${dateFrom} - ${dateTo || 'present'}`}
+      iconStyle={{ background: logoBgHex || 'rgb(0, 20, 58)' }}
+      icon={
+        <div className='flex justify-center items-center w-full h-full'>
+          { logoURL
+            ? <img
+              src={`${mediaBucket}/${logoURL}`}
+              alt={`${provider} logo`}
+              className='w-[60%] h-[60%] object-contain'
+            />
+            : <h3 className='text-2xl'>{provider.charAt(0)}</h3>
+          }
+          
+        </div>
+      }
+    >
+      <div>
+        <h3 className='text-white whitespace-pre-line text-[24px] font-bold'>{qualification}</h3>
+        <p className='text-secondary text-[16px] font-semibold' style={{ margin: 0 }}>{provider}</p>
+      </div>
+      <ul className='mt-5 list-disc ml-5 space-y-2'>
+        {bullets.map((point, i) => (
+          <li
+            key={`experience-point-${i}`}
+            className='text-white-100 text-[14px] pl-1 tracking-wider'
+          >
+            {point}
+          </li>
+        ))}
+      </ul>
+      { certificateURL &&
+        <img
+          className='mt-5 w-full sm:max-w-[200px] cursor-pointer'
+          src={`${mediaBucket}/${certificateURL}`}
+          alt={`${qualification} certificate`}
+          onClick={() => setIsImageExpanded(true)}
+        />
+      }
+    </VerticalTimelineElement>
+  </>
+)}
+
+const Experience = ({ experiences }) => {
   const formRef = useRef(null)
   const { user: { id: userId } } = useContext(UserContext)
   const [isModalVisible, setIsModalVisible] = useState(false)
@@ -232,7 +288,7 @@ const Experience = () => {
       >
         <VerticalTimeline>
           {experiences.map((experience, i) => (
-            <ExperienceCard key={i} experience={experience} />
+            <ExperienceCard key={i} { ...experience } />
           ))}
         </VerticalTimeline>
       </motion.div>

@@ -40,8 +40,6 @@
   z-index: 30;
 }
 
-.modal > div, .modal > div > * { border-radius: 1rem; }
-
 * {
   margin: 0;
   padding: 0;
