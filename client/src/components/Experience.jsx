@@ -14,13 +14,43 @@ import 'react-vertical-timeline-component/style.min.css'
 
 const Image = ({ modal, imageURL, imageAlt }) => (
   <img
-    className={`${modal?.className || ''} w-full`}
+    className={`${modal?.className || ''}`}
     src={imageURL}
     alt={imageAlt}
   />
 )
 
+const DeleteTechnology = ({ modal, provider, qualification, removeOne }) => {
+  const handleRemoveBtnClick = () => {
+    removeOne()
+    modal.close()
+  }
+
+  return (
+    <div className={`${modal?.className || ''} w-[90vw] sm:w-[50vw] max-h-[60vh] pt-5 pb-3 px-6`}>
+      <h1 className='text-center font-bold text-[1.5em]'>Are you sure?</h1>
+      <h2 className='my-4 font-extralight'>You are about to remove <span className='italic'>{qualification}</span> at <span className='font-normal'>{provider}</span> from your learning experiences.</h2>
+      <p className='text-center mb-2'>Would you like to proceed?</p>
+      <div className='flex justify-center gap-2'>
+        <button
+          className='py-[0.25rem] w-20 bg-tertiary hover:brightness-125 rounded-lg'
+          onClick={modal.close}
+        >
+          No
+        </button>
+        <button
+          className='py-[0.25rem] w-20 bg-tertiary hover:brightness-125 rounded-lg'
+          onClick={handleRemoveBtnClick}
+        >
+          Yes
+        </button>
+      </div>
+    </div>
+  )
+}
+
 const ExperienceCard = ({
+  _id,
   provider,
   qualification,
   certificateURL,
@@ -29,20 +59,33 @@ const ExperienceCard = ({
   dateFrom: timestampFrom,
   dateTo: timestampTo,
   bullets,
-  userId: owner
+  userId: author,
+  currentUser
 }) => {
   const [isImageExpanded, setIsImageExpanded] = useState(false)
+  const [isDeleteModalExpanded, setIsDeleteModalExpanded] = useState(false)
 
   const getDateFromTimeStamp = (timestamp, format) =>
     new Date(timestamp).toLocaleDateString('en-NZ', format)
   
   const dateOptions = { month: 'short', year: '2-digit' }
   const dateFrom = getDateFromTimeStamp(timestampFrom, dateOptions)
-  const dateTo = getDateFromTimeStamp(timestampTo, dateOptions)
+  const dateTo = timestampTo
+    ? getDateFromTimeStamp(timestampTo, dateOptions)
+    : 'present'
+
+  const removeAnExperience = async () => {
+    try {
+      const res = await axios.delete(`${import.meta.env.VITE_SERVER_BASE_URL}/api/education/${_id}`)
+    } catch (error) {
+      console.error(error)
+    }
+  }
   
   const mediaBucket = import.meta.env.VITE_MEDIA_BUCKET
 
   const ImageModal = Modal(Image)
+  const DeleteModal = Modal(DeleteTechnology)
 
   return (
   <>
@@ -57,10 +100,35 @@ const ExperienceCard = ({
         noScroll={true}
       />
     }
+    { author === currentUser && 
+      isDeleteModalExpanded &&
+      <DeleteModal
+        modal={{
+          visibility: isDeleteModalExpanded,
+          close: () => setIsDeleteModalExpanded(false)
+        }}
+        provider={provider}
+        qualification={qualification}
+        removeOne={removeAnExperience}
+      />
+    }
+    { author === currentUser &&
+      <div className='relative z-20'>
+        <div className='p-px'>
+          <button
+            className='absolute right-0 top-0 border-white hover:border-[#8c0505] rounded hover:text-[#8c0505]'
+            onClick={() => setIsDeleteModalExpanded(true)}
+          >
+            <span className='font-light border-inherit border-r-[1.5px] pr-2 mr-2'>Remove</span>
+            <i className='fa fa-trash-o text-lg' aria-hidden='true'></i>
+          </button>
+        </div>
+      </div>
+    }
     <VerticalTimelineElement
       contentStyle={{ background: '#00143a', color: '#FFF' }}
       contentArrowStyle={{ borderRight: '7px solid #232631' }}
-      date={`${dateFrom} - ${dateTo || 'present'}`}
+      date={dateTo ? `${dateFrom} - ${dateTo || 'present'}` : null}
       iconStyle={{ background: logoBgHex || 'rgb(0, 20, 58)' }}
       icon={
         <div className='flex justify-center items-center w-full h-full'>
@@ -258,7 +326,7 @@ const Experience = ({ experiences }) => {
 
   return (
     <>
-      { userId &&
+      { userId === import.meta.env.VITE_INITIAL_USER_ID &&
         <FormModal
           ref={formRef}
           modal={{
@@ -272,13 +340,15 @@ const Experience = ({ experiences }) => {
         <p className={styles.sectionSubText}>What I have done so far</p>
         <h2 className={styles.sectionHeadText}>Experience.</h2>
       </motion.div>
-      { userId &&
+      { userId === import.meta.env.VITE_INITIAL_USER_ID &&
         <motion.div
           variants={fadeIn('', '', 1, 1)}
           className='flex gap-5 mt-5'
         >
           <div className='green-blue-gradient hover:green-blue-gradient--hover rounded-lg p-px'>
-            <button className='bg-primary hover:bg-tertiary rounded-lg p-2' onClick={() => setIsModalVisible(true)}>Add Experience</button>
+            <button className='bg-primary hover:bg-tertiary rounded-lg p-2' onClick={() => setIsModalVisible(true)}>
+              Add An Experience
+            </button>
           </div>
         </motion.div>
       }
@@ -288,7 +358,7 @@ const Experience = ({ experiences }) => {
       >
         <VerticalTimeline>
           {experiences.map((experience, i) => (
-            <ExperienceCard key={i} { ...experience } />
+            <ExperienceCard key={i} { ...experience } currentUser={userId || null} />
           ))}
         </VerticalTimeline>
       </motion.div>

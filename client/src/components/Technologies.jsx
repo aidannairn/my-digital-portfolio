@@ -187,7 +187,7 @@ const Technologies = ({ technologies }) => {
 
   return (
     <>
-      { userId &&
+      { userId === import.meta.env.VITE_INITIAL_USER_ID &&
         <FormModal
           ref={formRef}
           modal={{
@@ -205,13 +205,22 @@ const Technologies = ({ technologies }) => {
           <p className={styles.sectionSubText}>Some of the languages, libraries, frameworks and packages I use</p>
           <h2 className={styles.sectionHeadText}>Technologies.</h2>
         </motion.div>
-        { userId &&
+        { userId === import.meta.env.VITE_INITIAL_USER_ID &&
           <motion.div
             variants={fadeIn('', '', 1, 1)}
             className='flex gap-5 mt-5 sm:px-16 px-6'
           >
-            <div className='green-blue-gradient hover:green-blue-gradient--hover rounded-lg p-px'>
-              <button className='bg-primary hover:bg-tertiary rounded-lg p-2' onClick={() => setIsModalVisible(true)}>Add Technology</button>
+            <div className='flex gap-4'>
+              <div className='green-blue-gradient hover:green-blue-gradient--hover rounded-lg p-px'>
+                <button className='bg-primary hover:bg-tertiary rounded-lg p-2' onClick={() => setIsModalVisible(true)}>
+                  Add A Technology
+                </button>
+              </div>
+              <div className='white-grey-gradient hover:white-grey-gradient--hover rounded-lg p-px'>
+                <button className='bg-primary hover:bg-tertiary rounded-lg p-2' onClick={() => setIsModalVisible(true)}>
+                  Remove A Technology
+                </button>
+              </div>
             </div>
           </motion.div>
         }

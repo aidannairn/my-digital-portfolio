@@ -233,7 +233,7 @@ const Projects = ({ projects }) => {
 
   return (
     <div className='flex flex-col'>
-      { userId &&
+      { userId === import.meta.env.VITE_INITIAL_USER_ID &&
         <FormModal
           ref={formRef}
           modal={{
@@ -253,13 +253,15 @@ const Projects = ({ projects }) => {
       >
         The following projects showcase my skills and experience through real-world examples of my work. They reflect my ability to solve complex problems, work with different technologies and manage projects efficiently and effectively.
       </motion.p>
-      { userId &&
+      { userId === import.meta.env.VITE_INITIAL_USER_ID &&
         <motion.div
           variants={fadeIn('', '', 1, 1)}
           className='flex gap-5 mt-5'
         >
           <div className='green-blue-gradient hover:green-blue-gradient--hover rounded-lg p-px'>
-            <button className='bg-primary hover:bg-tertiary rounded-lg p-2' onClick={() => setIsModalVisible(true)}>Add Project</button>
+            <button className='bg-primary hover:bg-tertiary rounded-lg p-2' onClick={() => setIsModalVisible(true)}>
+              Add A Project
+            </button>
           </div>
         </motion.div>
       }

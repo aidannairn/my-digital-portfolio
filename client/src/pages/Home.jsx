@@ -34,7 +34,7 @@ const Home = () => {
   return (
     <div className='home bg-primary'>
       <Navbar isLoading={isLoading} />
-      <Hero isLoading={isLoading} />
+      {/* <Hero isLoading={isLoading} /> */}
       { !isLoading && 
         <>
           {/* <About /> */}
