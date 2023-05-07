@@ -7,7 +7,7 @@ import { styles } from '../styles'
 import { SectionWrapper } from '../hoc'
 import { fadeIn, textVariant } from '../utils/motion'
 import { UserContext } from '../contexts/UserContext'
-import { ExpandedImageModal, FormModal, RemoveOneModal } from './modals'
+import { ExpandedImageModal, FormModal, OnConfirmModal } from './modals'
 
 import 'react-vertical-timeline-component/style.min.css'
 
@@ -47,10 +47,9 @@ const ExperienceCard = ({
   const mediaBucket = import.meta.env.VITE_MEDIA_BUCKET
 
   const displayDeleteMessage = () => (
-    <>
-      <h2 className='my-4 font-extralight'>You are about to remove <span className='italic'>{qualification}</span> at <span className='font-normal'>{provider}</span> from your learning experiences.</h2>
-      <p className='text-center mb-2'>Would you like to proceed?</p>
-    </>
+    <h2 className='my-4 font-extralight'>
+      You are about to remove <span className='italic'>{qualification}</span> at <span className='font-normal'>{provider}</span> from your learning experiences.
+    </h2>
   )
 
   return (
@@ -68,13 +67,13 @@ const ExperienceCard = ({
     }
     { author === currentUser && 
       isDeleteModalExpanded &&
-      <RemoveOneModal
+      <OnConfirmModal
         modal={{
           visibility: isDeleteModalExpanded,
           close: () => setIsDeleteModalExpanded(false)
         }}
         message={displayDeleteMessage}
-        removeOne={removeAnExperience}
+        action={removeAnExperience}
       />
     }
     { author === currentUser &&

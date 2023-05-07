@@ -1,9 +1,9 @@
+import OnConfirmModal from './OnConfirmModal'
 import ExpandedImageModal from './ExpandedImageModal'
 import FormModal from './FormModal'
-import RemoveOneModal from './RemoveOneModal'
 
 export {
+  OnConfirmModal,
   ExpandedImageModal,
-  FormModal,
-  RemoveOneModal
+  FormModal
 }

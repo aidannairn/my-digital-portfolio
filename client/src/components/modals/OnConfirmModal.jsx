@@ -1,8 +1,8 @@
 import Modal from '../../hoc/Modal'
 
-const RemoveOneModal = ({ modal, message: Message, removeOne }) => {
+const OnConfirmModal = ({ modal, message: Message, action }) => {
   const handleRemoveBtnClick = () => {
-    removeOne()
+    action()
     modal.close()
   }
 
@@ -10,6 +10,7 @@ const RemoveOneModal = ({ modal, message: Message, removeOne }) => {
     <div className={`${modal?.className || ''} w-[90vw] sm:w-[50vw] max-h-[60vh] pt-5 pb-3 px-6`}>
       <h1 className='text-center font-bold text-[1.5em]'>Are you sure?</h1>
       { Message && <Message /> }
+      <p className='text-center mb-2'>Would you like to proceed?</p>
       <div className='flex justify-center gap-2'>
         <button
           className='py-[0.25rem] w-20 bg-tertiary hover:brightness-125 rounded-lg'
@@ -28,4 +29,4 @@ const RemoveOneModal = ({ modal, message: Message, removeOne }) => {
   )
 }
 
-export default Modal(RemoveOneModal)
+export default Modal(OnConfirmModal)
