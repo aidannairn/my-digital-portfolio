@@ -9,8 +9,7 @@ import { styles } from '../styles'
 import { UserContext } from '../contexts/UserContext'
 import { fadeIn } from '../utils/motion'
 import useWindowSize from '../utils/useWindowSize'
-import Form from './form/Form'
-import Modal from '../hoc/Modal'
+import { FormModal } from './modals'
 
 const Technologies = ({ technologies }) => {
   const windowWidth = useWindowSize('x')
@@ -182,8 +181,6 @@ const Technologies = ({ technologies }) => {
       text: loading ? 'Submitting Technology...' : 'Submit Technology'
     }
   }
-
-  const FormModal = Modal(Form)
 
   return (
     <>

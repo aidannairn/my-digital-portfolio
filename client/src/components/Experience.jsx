@@ -7,47 +7,9 @@ import { styles } from '../styles'
 import { SectionWrapper } from '../hoc'
 import { fadeIn, textVariant } from '../utils/motion'
 import { UserContext } from '../contexts/UserContext'
-import Form from './form/Form'
-import Modal from '../hoc/Modal'
+import { ExpandedImageModal, FormModal, RemoveOneModal } from './modals'
 
 import 'react-vertical-timeline-component/style.min.css'
-
-const Image = ({ modal, imageURL, imageAlt }) => (
-  <img
-    className={`${modal?.className || ''}`}
-    src={imageURL}
-    alt={imageAlt}
-  />
-)
-
-const DeleteTechnology = ({ modal, provider, qualification, removeOne }) => {
-  const handleRemoveBtnClick = () => {
-    removeOne()
-    modal.close()
-  }
-
-  return (
-    <div className={`${modal?.className || ''} w-[90vw] sm:w-[50vw] max-h-[60vh] pt-5 pb-3 px-6`}>
-      <h1 className='text-center font-bold text-[1.5em]'>Are you sure?</h1>
-      <h2 className='my-4 font-extralight'>You are about to remove <span className='italic'>{qualification}</span> at <span className='font-normal'>{provider}</span> from your learning experiences.</h2>
-      <p className='text-center mb-2'>Would you like to proceed?</p>
-      <div className='flex justify-center gap-2'>
-        <button
-          className='py-[0.25rem] w-20 bg-tertiary hover:brightness-125 rounded-lg'
-          onClick={modal.close}
-        >
-          No
-        </button>
-        <button
-          className='py-[0.25rem] w-20 bg-tertiary hover:brightness-125 rounded-lg'
-          onClick={handleRemoveBtnClick}
-        >
-          Yes
-        </button>
-      </div>
-    </div>
-  )
-}
 
 const ExperienceCard = ({
   _id,
@@ -84,13 +46,17 @@ const ExperienceCard = ({
   
   const mediaBucket = import.meta.env.VITE_MEDIA_BUCKET
 
-  const ImageModal = Modal(Image)
-  const DeleteModal = Modal(DeleteTechnology)
+  const displayDeleteMessage = () => (
+    <>
+      <h2 className='my-4 font-extralight'>You are about to remove <span className='italic'>{qualification}</span> at <span className='font-normal'>{provider}</span> from your learning experiences.</h2>
+      <p className='text-center mb-2'>Would you like to proceed?</p>
+    </>
+  )
 
   return (
   <>
     { isImageExpanded && certificateURL &&
-      <ImageModal
+      <ExpandedImageModal
         modal={{
           visibility: isImageExpanded,
           close: () => setIsImageExpanded(false)
@@ -102,13 +68,12 @@ const ExperienceCard = ({
     }
     { author === currentUser && 
       isDeleteModalExpanded &&
-      <DeleteModal
+      <RemoveOneModal
         modal={{
           visibility: isDeleteModalExpanded,
           close: () => setIsDeleteModalExpanded(false)
         }}
-        provider={provider}
-        qualification={qualification}
+        message={displayDeleteMessage}
         removeOne={removeAnExperience}
       />
     }
@@ -321,8 +286,6 @@ const Experience = ({ experiences }) => {
       text: loading ? 'Submitting Experience...' : 'Submit Experience'
     }
   }
-
-  const FormModal = Modal(Form)
 
   return (
     <>

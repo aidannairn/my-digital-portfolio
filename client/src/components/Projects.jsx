@@ -8,8 +8,7 @@ import { SectionWrapper } from '../hoc'
 import { chainLink } from '../constants'
 import { fadeIn, textVariant } from '../utils/motion'
 import { UserContext } from '../contexts/UserContext'
-import Form from './form/Form'
-import Modal from '../hoc/Modal'
+import { FormModal } from './modals'
 
 const ProjectCard = ({ index, name, description, tags, imageURL, links }) => {
   const [isSrcListVisible, setIsSrcListVisible] = useState(false) 
@@ -228,8 +227,6 @@ const Projects = ({ projects }) => {
       text: loading ? 'Submitting Project...' : 'Submit Project'
     }
   }
-
-  const FormModal = Modal(Form)
 
   return (
     <div className='flex flex-col'>
