@@ -57,6 +57,7 @@ const UserProvider = ({ children }) => {
     try {
       await axios.delete(`${import.meta.env.VITE_SERVER_BASE_URL}/api/signout`)
       navigate('/', { replace: true })
+      navigate(0)
     } catch (error) {
       console.error(error)
     }

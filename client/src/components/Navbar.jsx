@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 
@@ -6,10 +6,12 @@ import { slideIn } from '../utils/motion'
 import { styles } from '../styles'
 import { navLinks } from '../constants'
 import { logo, menu, close } from '../assets'
+import { UserContext } from '../contexts/UserContext'
 
-const Navbar = () => {
+const Navbar = ({ isLoading }) => {
   const [active, setActive] = useState('')
   const [toggle, setToggle] = useState(false)
+  const { user: { id: userId }, userSignOut } = useContext(UserContext)
 
   return (
     <>
@@ -28,11 +30,11 @@ const Navbar = () => {
             <img src={logo} alt='Logo' className='w-9 h-9 object-contain' />
             <p className='text-white text=[18px] font-bold curson-pointer flex'>
               Aidan Nairn&nbsp;
-              <span className='sm:block hidden'>| Full Stack Developer</span>
+              <span className='sm:block hidden border-l-[2.5px] pl-2 ml-[0.25rem]'>Full Stack Developer</span>
             </p>
           </Link>
           <ul className='list-none hidden sm:flex flex-row gap-10'>
-            {navLinks.map(link => (
+            { !isLoading && navLinks.map(link => (
               <li
                 key={link.id}
                 className={`
@@ -44,6 +46,14 @@ const Navbar = () => {
                 <a href={`#${link.id}`}>{link.title}</a>
               </li>
             ))}
+            { userId &&
+              <li
+                className='text-secondary hover:text-white text-[18px] font-medium cursor-pointer'
+                onClick={userSignOut}
+              >
+                Logout
+              </li>
+            }
           </ul>
           <div className='sm:hidden flex flex-1 justify-end items-center'>
             <img 
@@ -52,7 +62,6 @@ const Navbar = () => {
               className='w-[28px] h-[28px] object-contain cursor-pointer'
               onClick={() => setToggle(!toggle)}
             />
-            
           </div>
         </div>
       </nav>
@@ -78,6 +87,14 @@ const Navbar = () => {
               <a href={`#${link.id}`}>{link.title}</a>
             </li>
           ))}
+          { userId &&
+            <li
+              className='text-secondary hover:text-white text-[16px] font-medium cursor-pointer'
+              onClick={userSignOut}
+            >
+              Logout
+            </li>
+          }
         </ul>
       </motion.div>
     </>

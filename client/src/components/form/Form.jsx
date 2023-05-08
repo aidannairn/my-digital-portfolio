@@ -13,7 +13,7 @@ import {
 import isObjectEmpty from "../../utils/isObjectEmpty"
 
 const Form = forwardRef(({
-  modalClassNames,
+  modal,
   title,
   subtitle,
   inputGroups,
@@ -54,7 +54,7 @@ const Form = forwardRef(({
   }, [])
   
   return !isObjectEmpty(form) ? (
-    <div className={`${modalClassNames || ''}`}>
+    <div className={`${modal?.className || ''} ${modal ? 'w-[80vw] sm:w-[30rem] py-5 px-6 sm:px-12' : ''}`}>
       { title && subtitle &&
         <div className='mb-6'>
           <p className={styles.sectionSubText}>{subtitle}</p>

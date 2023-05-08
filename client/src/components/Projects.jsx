@@ -5,89 +5,135 @@ import Tilt from 'react-parallax-tilt'
 
 import { styles } from '../styles'
 import { SectionWrapper } from '../hoc'
-import { chainLink, projects } from '../constants'
+import { chainLink } from '../constants'
 import { fadeIn, textVariant } from '../utils/motion'
 import { UserContext } from '../contexts/UserContext'
-import Form from './form/Form'
-import Modal from '../hoc/Modal'
+import { FormModal, OnConfirmModal } from './modals'
 
-const ProjectCard = ({ index, name, description, tags, image, links }) => {
+const ProjectCard = ({ index, _id, name, description, tags, imageURL, links, userId: author, currentUser }) => {
   const [isSrcListVisible, setIsSrcListVisible] = useState(false) 
+  const [isDeleteModalExpanded, setIsDeleteModalExpanded] = useState(false)
+
+  const removeAProject = async () => {
+    try {
+      const res = await axios.delete(`${import.meta.env.VITE_SERVER_BASE_URL}/api/project/${_id}`)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const displayDeleteMessage = () => (
+    <h2 className='my-4 font-extralight'>
+      You are about to remove <span className='font-normal'>{name}</span> from your projects.
+    </h2>
+  )
 
   return (
-    <Tilt className='sm:w-[360px] w-full'>
-      <motion.div
-        className='bg-tertiary p-5 rounded-2xl'
-        variants={fadeIn('up', 'spring', (index * 0.5) + 1, 0.75)}
-      >
-        <div options={{
-          max: 45,
-          scale: 1,
-          speed: 450
-        }}>
+    <>
+      { author === currentUser && 
+        isDeleteModalExpanded &&
+        <OnConfirmModal
+          modal={{
+            visibility: isDeleteModalExpanded,
+            close: () => setIsDeleteModalExpanded(false)
+          }}
+          message={displayDeleteMessage}
+          action={removeAProject}
+        />
+      }
+      <Tilt className='sm:w-[360px] max-w-[90vw]'>
+        <motion.div
+          className='bg-tertiary h-full p-5 rounded-2xl'
+          variants={fadeIn('up', 'spring', (index * 0.5) + 1, 0.75)}
+        >
           <div 
-            className={`relative w-full max-h-[180px] h-[180px] p-px rounded-2xl 
-            ${isSrcListVisible ? 'green-blue-gradient' : ''}`}
+            options={{
+              max: 45,
+              scale: 1,
+              speed: 450
+            }}
+            className='flex flex-col justify-content-stretch h-full'
           >
-            <div className='bg-tertiary rounded-2xl h-[178px]'>
-              <img
-                src={image}
-                alt={name}
-                className={`w-full h-full object-cover rounded-2xl ${isSrcListVisible ? 'invisible' : 'visible'}`}
-              />
-              <div
-                className='absolute inset-0 h-full flex justify-end card-img_hover w-full'
-              >
+            <div 
+              className={`relative w-full p-px rounded-2xl 
+              ${isSrcListVisible ? 'green-blue-gradient' : ''}`}
+            >
+              <div className='bg-tertiary rounded-2xl h-[178px]'>
+                <img
+                  src={`${import.meta.env.VITE_MEDIA_BUCKET}/${imageURL}`}
+                  alt={name}
+                  className={`w-full h-full object-cover rounded-2xl ${isSrcListVisible ? 'invisible' : 'visible'}`}
+                />
                 <div
-                  onMouseLeave={() => setIsSrcListVisible(false)}
-                  className='w-full flex flex-col items-end'
+                  className='absolute inset-0 flex justify-end card-img_hover w-full'
                 >
-                  { links && (
-                      <div className={`w-10 h-10 p-2 m-2 rounded-full cursor-pointer blue-dark-gradient ${isSrcListVisible ? 'border-2 border-[#000D26]' : ''}`}>
-                        <img
-                          onClick={() => setIsSrcListVisible(true)}
-                          className='invert'
-                          src={chainLink} alt='GitHub logo'
-                        />
-                      </div>
-                  )}
-                  { isSrcListVisible && (
-                    <div className='w-full flex flex-col mb-2 scrollbar items-end overflow-y-auto'>
-                      { links?.map((link, i) => (
-                        <a
-                          key={i}
-                          href={link.url}
-                          target='_blank'
-                          className='text-right py-1 mr-2 capitalize w-fit'
+                  <div
+                    onMouseLeave={() => setIsSrcListVisible(false)}
+                    className='w-full flex flex-col items-end'
+                  >
+                    <div className='flex gap-2 mr-2 mt-2'>
+                      { author === currentUser &&
+                        <button
+                          className='w-10 h-10 p-2 flex items-center justify-center rounded-full  blue-dark-gradient text-[#DDE1E0] hover:text-[#8c0505]'
+                          onClick={() => setIsDeleteModalExpanded(true)}
                         >
-                          { link.title }
-                        </a>
-                      ))}
+                          <i className='fa fa-trash-o text-2xl' aria-hidden='true'></i>
+                        </button>
+                      }
+                      { !!links.length && (
+                        <button
+                          className={`w-10 h-10 p-2 ml-0 rounded-full  blue-dark-gradient ${isSrcListVisible ? 'border-2 border-[#000D26]' : ''}`}
+                          onClick={() => setIsSrcListVisible(true)}
+                        >
+                          <img
+                            className='invert'
+                            src={chainLink} alt='Show links icon'
+                          />
+                        </button>
+                      )}
                     </div>
-                  )} 
+                    { isSrcListVisible && (
+                      <div className='w-full flex flex-col mb-2 scrollbar items-end overflow-y-auto'>
+                        { links?.map((link, i) => (
+                          <a
+                            key={i}
+                            href={link.linkURL}
+                            target='_blank'
+                            className='text-right py-1 mr-2 capitalize w-fit'
+                          >
+                            { link.linkName }
+                          </a>
+                        ))}
+                      </div>
+                    )} 
+                  </div>
                 </div>
-              </div>
 
+              </div>
+            </div>
+            <div className='flex-grow mt-5'>
+              <h3 className='text-white font-bold text-[24px]'>{name}</h3>
+              <p className='mt-2 text-secondary text-[14px] whitespace-pre-line'>{description}</p>
+            </div>
+            <div className='mt-4 flex flex-wrap gap-2'>
+              {tags.map((tag) => (
+                <p
+                  key={tag.tagName}
+                  className='text-[14px]'
+                  style={{ color: tag.tagColor || '#0088FE' }}
+                >
+                  {tag.tagName}
+                </p>
+              ))}
             </div>
           </div>
-          <div className='mt-5'>
-            <h3 className='text-white font-bold text-[24px]'>{name}</h3>
-            <p className='mt-2 text-secondary text-[14px]'>{description}</p>
-          </div>
-          <div className='mt-4 flex flex-wrap gap-2'>
-            {tags.map((tag) => (
-              <p key={tag.name} className={`text-[14px] ${tag.color || 'blue-text-gradient'}`}>
-                {tag.name}
-              </p>
-            ))}
-          </div>
-        </div>
-      </motion.div>
-    </Tilt>
+        </motion.div>
+      </Tilt>
+    </>
   )
 }
 
-const Projects = () => {
+const Projects = ({ projects }) => {
   const formRef = useRef(null)
   const { user: { id: userId } } = useContext(UserContext)
   const [isModalVisible, setIsModalVisible] = useState(false)
@@ -222,18 +268,18 @@ const Projects = () => {
     }
   }
 
-  const FormModal = Modal(Form)
-
   return (
-    <>
-      <FormModal
-        ref={formRef}
-        modal={{
-          visibility: isModalVisible,
-          close: () => setIsModalVisible(false)
-        }}
-        {...formSettings}
-      />
+    <div className='flex flex-col'>
+      { userId === import.meta.env.VITE_INITIAL_USER_ID &&
+        <FormModal
+          ref={formRef}
+          modal={{
+            visibility: isModalVisible,
+            close: () => setIsModalVisible(false)
+          }}
+          {...formSettings}
+        />
+      }
       <motion.div variants={textVariant()}>
         <p className={styles.sectionSubText}>Things that I have created</p>
         <h2 className={styles.sectionHeadText}>Projects.</h2>
@@ -244,20 +290,27 @@ const Projects = () => {
       >
         The following projects showcase my skills and experience through real-world examples of my work. They reflect my ability to solve complex problems, work with different technologies and manage projects efficiently and effectively.
       </motion.p>
-      <motion.div
-        variants={fadeIn('', '', 1, 1)}
-        className='flex gap-5 mt-5'
+      { userId === import.meta.env.VITE_INITIAL_USER_ID &&
+        <motion.div
+          variants={fadeIn('', '', 1, 1)}
+          className='flex gap-5 mt-5'
+        >
+          <div className='green-blue-gradient hover:green-blue-gradient--hover rounded-lg p-px'>
+            <button className='bg-primary hover:bg-tertiary rounded-lg p-2' onClick={() => setIsModalVisible(true)}>
+              Add A Project
+            </button>
+          </div>
+        </motion.div>
+      }
+      <div
+        className='mt-20 grid gap-7 w-full justify-center'
+        style={{ gridTemplateColumns: 'repeat(auto-fill, 360px)' }}
       >
-        <div className='green-blue-gradient hover:green-blue-gradient--hover rounded-lg p-px'>
-          <button className='bg-primary hover:bg-tertiary rounded-lg p-2' onClick={() => setIsModalVisible(true)}>Add Project</button>
-        </div>
-      </motion.div>
-      <div className='mt-20 flex flex-wrap gap-7'>
         { projects.map((project, i) => (
-          <ProjectCard key={`project-${i}`} index={i} {...project} />
+          <ProjectCard key={`project-${i}`} index={i} {...project} currentUser={userId || null} />
         ))}
       </div>
-    </>
+    </div>
   )
 }
 

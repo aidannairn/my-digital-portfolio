@@ -4,6 +4,32 @@ const path = require('path')
 
 const { s3Upload } = require('../config/aws.config')
 const User = require('../models/User')
+const Experience = require('../models/Education')
+const Technology = require('../models/Technology')
+const Project = require('../models/Project')
+
+const getUserContent = async (req, res) => {
+  const { id: userId } = req.params
+
+  try {
+    const excludedFields = ['-__v', '-createdAt', '-updatedAt']
+    const experiences = await Experience
+      .find({ userId })
+      .select(excludedFields)
+    const technologies = await Technology
+      .find({ userId })
+      .select(excludedFields)
+    const projects = await Project
+      .find({ userId })
+      .select(excludedFields)
+
+    const data = { experiences, technologies, projects }
+    return res.status(200).send(data)
+  } catch (error) {
+    console.error(error)
+    return res.status(400).json({ type: 'error', msg: 'Could not get user content.' })
+  }
+}
 
 const userSignup = async (req, res, next) => {
   const { email, password, firstName, lastName, directory } = req.body
@@ -101,4 +127,4 @@ const userSignout = async (req, res) => {
   }
 }
 
-module.exports = { userSignup, userSignin, userSignout } 
+module.exports = { getUserContent, userSignup, userSignin, userSignout } 

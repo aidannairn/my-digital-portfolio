@@ -4,52 +4,140 @@ import { motion } from 'framer-motion'
 import axios from 'axios'
 
 import { styles } from '../styles'
-import { experiences } from '../constants'
 import { SectionWrapper } from '../hoc'
 import { fadeIn, textVariant } from '../utils/motion'
 import { UserContext } from '../contexts/UserContext'
-import Form from './form/Form'
-import Modal from '../hoc/Modal'
+import { ExpandedImageModal, FormModal, OnConfirmModal } from './modals'
 
 import 'react-vertical-timeline-component/style.min.css'
 
-const ExperienceCard = ({ experience }) => (
-  <VerticalTimelineElement
-    contentStyle={{ background: '#00143a', color: '#FFF' }}
-    contentArrowStyle={{ borderRight: '7px solid #232631' }}
-    date={experience.period}
-    iconStyle={{ background: experience.iconBg || 'rgb(0, 20, 58)' }}
-    icon={
-      <div className='flex justify-center items-center w-full h-full'>
-        <img
-          src={experience.icon}
-          alt={experience.company_name}
-          className='w-[60%] h-[60%] object-contain'
-        />
+const ExperienceCard = ({
+  _id,
+  provider,
+  qualification,
+  certificateURL,
+  logoURL,
+  logoBgHex,
+  dateFrom: timestampFrom,
+  dateTo: timestampTo,
+  bullets,
+  userId: author,
+  currentUser
+}) => {
+  const [isImageExpanded, setIsImageExpanded] = useState(false)
+  const [isDeleteModalExpanded, setIsDeleteModalExpanded] = useState(false)
+
+  const getDateFromTimeStamp = (timestamp, format) =>
+    new Date(timestamp).toLocaleDateString('en-NZ', format)
+  
+  const dateOptions = { month: 'short', year: '2-digit' }
+  const dateFrom = getDateFromTimeStamp(timestampFrom, dateOptions)
+  const dateTo = timestampTo
+    ? getDateFromTimeStamp(timestampTo, dateOptions)
+    : 'present'
+
+  const removeAnExperience = async () => {
+    try {
+      const res = await axios.delete(`${import.meta.env.VITE_SERVER_BASE_URL}/api/education/${_id}`)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+  
+  const mediaBucket = import.meta.env.VITE_MEDIA_BUCKET
+
+  const displayDeleteMessage = () => (
+    <h2 className='my-4 font-extralight'>
+      You are about to remove <span className='italic'>{qualification}</span> at <span className='font-normal'>{provider}</span> from your learning experiences.
+    </h2>
+  )
+
+  return (
+  <>
+    { isImageExpanded && certificateURL &&
+      <ExpandedImageModal
+        modal={{
+          visibility: isImageExpanded,
+          close: () => setIsImageExpanded(false)
+        }}
+        imageURL={`${mediaBucket}/${certificateURL}`}
+        imageAlt={`${qualification} certificate`}
+        noScroll={true}
+      />
+    }
+    { author === currentUser && 
+      isDeleteModalExpanded &&
+      <OnConfirmModal
+        modal={{
+          visibility: isDeleteModalExpanded,
+          close: () => setIsDeleteModalExpanded(false)
+        }}
+        message={displayDeleteMessage}
+        action={removeAnExperience}
+      />
+    }
+    { author === currentUser &&
+      <div className='relative z-20'>
+        <div className='p-px'>
+          <button
+            className='absolute right-0 top-0 border-white hover:border-[#8c0505] rounded hover:text-[#8c0505]'
+            onClick={() => setIsDeleteModalExpanded(true)}
+          >
+            <span className='font-light border-inherit border-r-[1.5px] pr-2 mr-2'>Remove</span>
+            <i className='fa fa-trash-o text-lg' aria-hidden='true'></i>
+          </button>
+        </div>
       </div>
     }
-  >
-    <div>
-      <h3 className='text-white whitespace-pre-line text-[24px] font-bold'>{experience.title}</h3>
-      <p className='text-secondary text-[16px] font-semibold' style={{ margin: 0 }}>{experience.company_name}</p>
-    </div>
-    <ul className='mt-5 list-disc ml-5 space-y-2'>
-      {experience.points.map((point, i) => (
-        <li
-          key={`experience-point-${i}`}
-          className='text-white-100 text-[14px] pl-1 tracking-wider'
-        >
-          {point}
-        </li>
-      ))}
-    </ul>
-  </VerticalTimelineElement>
-)
+    <VerticalTimelineElement
+      contentStyle={{ background: '#00143a', color: '#FFF' }}
+      contentArrowStyle={{ borderRight: '7px solid #232631' }}
+      date={dateTo ? `${dateFrom} - ${dateTo || 'present'}` : null}
+      iconStyle={{ background: logoBgHex || 'rgb(0, 20, 58)' }}
+      icon={
+        <div className='flex justify-center items-center w-full h-full'>
+          { logoURL
+            ? <img
+              src={`${mediaBucket}/${logoURL}`}
+              alt={`${provider} logo`}
+              className='w-[60%] h-[60%] object-contain'
+            />
+            : <h3 className='text-2xl'>{provider.charAt(0)}</h3>
+          }
+          
+        </div>
+      }
+    >
+      <div>
+        <h3 className='text-white whitespace-pre-line text-[24px] font-bold'>{qualification}</h3>
+        <p className='text-secondary text-[16px] font-semibold' style={{ margin: 0 }}>{provider}</p>
+      </div>
+      <ul className='mt-5 list-disc ml-5 space-y-2'>
+        {bullets.map((point, i) => (
+          <li
+            key={`experience-point-${i}`}
+            className='text-white-100 text-[14px] pl-1 tracking-wider'
+          >
+            {point}
+          </li>
+        ))}
+      </ul>
+      { certificateURL &&
+        <img
+          className='mt-5 w-full sm:max-w-[200px] cursor-pointer'
+          src={`${mediaBucket}/${certificateURL}`}
+          alt={`${qualification} certificate`}
+          onClick={() => setIsImageExpanded(true)}
+        />
+      }
+    </VerticalTimelineElement>
+  </>
+)}
 
-const Experience = () => {
+const Experience = ({ experiences }) => {
   const formRef = useRef(null)
   const { user: { id: userId } } = useContext(UserContext)
-  const [isModalVisible, setIsModalVisible] = useState(true)
+  const [isModalVisible, setIsModalVisible] = useState(false)
   const [loading, setLoading] = useState(false)
 
   const handleSubmit = async e => {
@@ -198,37 +286,44 @@ const Experience = () => {
     }
   }
 
-  const FormModal = Modal(Form)
-
   return (
     <>
-      <FormModal
-        ref={formRef}
-        modal={{
-          visibility: isModalVisible,
-          close: () => setIsModalVisible(false)
-        }}
-        {...formSettings}
-      />
+      { userId === import.meta.env.VITE_INITIAL_USER_ID &&
+        <FormModal
+          ref={formRef}
+          modal={{
+            visibility: isModalVisible,
+            close: () => setIsModalVisible(false)
+          }}
+          {...formSettings}
+        />
+      }
       <motion.div variants={textVariant()}>
         <p className={styles.sectionSubText}>What I have done so far</p>
         <h2 className={styles.sectionHeadText}>Experience.</h2>
       </motion.div>
-      <motion.div
+      { userId === import.meta.env.VITE_INITIAL_USER_ID &&
+        <motion.div
+          variants={fadeIn('', '', 1, 1)}
+          className='flex gap-5 mt-5'
+        >
+          <div className='green-blue-gradient hover:green-blue-gradient--hover rounded-lg p-px'>
+            <button className='bg-primary hover:bg-tertiary rounded-lg p-2' onClick={() => setIsModalVisible(true)}>
+              Add An Experience
+            </button>
+          </div>
+        </motion.div>
+      }
+      <motion.div 
         variants={fadeIn('', '', 1, 1)}
-        className='flex gap-5 mt-5'
+        className='mt-20 flex flex-col'
       >
-        <div className='green-blue-gradient hover:green-blue-gradient--hover rounded-lg p-px'>
-          <button className='bg-primary hover:bg-tertiary rounded-lg p-2' onClick={() => setIsModalVisible(true)}>Add Experience</button>
-        </div>
-      </motion.div>
-      <div className="mt-20 flex flex-col">
         <VerticalTimeline>
           {experiences.map((experience, i) => (
-            <ExperienceCard key={i} experience={experience} />
+            <ExperienceCard key={i} { ...experience } currentUser={userId || null} />
           ))}
         </VerticalTimeline>
-      </div>
+      </motion.div>
     </>
   )
 }
