@@ -110,7 +110,7 @@ const Technologies = ({ technologies, setTechnologies }) => {
   }, [canvasRows, scale, technologies])
 
   const formRef = useRef(null)
-  const { user: { id: userId } } = useContext(UserContext)
+  const { user: { id: userId, token: userToken }, userRequest } = useContext(UserContext)
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [loading, setLoading] = useState(false)
 
@@ -230,6 +230,8 @@ const Technologies = ({ technologies, setTechnologies }) => {
               canvasGridDimensions={canvasGridDimensions}
               scale={scale}
               currentUserId={userId}
+              currentUserToken={userToken}
+              userRequest={userRequest}
             />
           </motion.div>
         }

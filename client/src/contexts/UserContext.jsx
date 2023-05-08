@@ -14,7 +14,8 @@ const UserProvider = ({ children }) => {
     firstName: '',
     lastName: '',
     imageURL: '',
-    tokenExpiry: ''
+    tokenExpiry: '',
+    token: ''
   })
 
   const getRefreshToken = async () => {
@@ -26,7 +27,7 @@ const UserProvider = ({ children }) => {
 
       const resDecoded = await decode(res.data.accessToken)
       const { id, email, firstName, lastName, imageURL, exp: tokenExpiry } = resDecoded
-      setUser({ id, email, firstName, lastName, imageURL, tokenExpiry })
+      setUser({ id, email, firstName, lastName, imageURL, tokenExpiry, token: res.data.accessToken })
       console.log(`${firstName} is signed in.`)
     } catch (error) {
       console.error(error)
@@ -35,9 +36,9 @@ const UserProvider = ({ children }) => {
 
   useEffect(() => { getRefreshToken() }, [])
 
-  const axiosJWT = axios.create()
+  const userRequest = axios.create()
 
-  axiosJWT.interceptors.request.use(async config => {
+  userRequest.interceptors.request.use(async config => {
     const currentDate = new Date()
     try {
       if (user.tokenExpiry * 1000 < currentDate.getTime()) {
@@ -45,7 +46,7 @@ const UserProvider = ({ children }) => {
         config.headers.Authorization = `Bearer ${res.data.accessToken}`
         const resDecoded = await decode(res.data.accessToken)
         const { id, email, firstName, lastName, imageURL, exp: tokenExpiry } = resDecoded
-        setUser({ id, email, firstName, lastName, imageURL, tokenExpiry })
+        setUser({ id, email, firstName, lastName, imageURL, tokenExpiry,token: res.data.accessToken })
       }
       return config
     } catch (error) {
@@ -64,7 +65,7 @@ const UserProvider = ({ children }) => {
   }
 
   return (
-    <UserContext.Provider value={{ user, userSignOut }}>
+    <UserContext.Provider value={{ user, userSignOut, userRequest }}>
       { children }
     </UserContext.Provider>
   )

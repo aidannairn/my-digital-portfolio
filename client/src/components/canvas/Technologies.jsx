@@ -86,7 +86,9 @@ const TechCanvas = ({
   positions,
   canvasGridDimensions,
   scale,
-  currentUserId
+  currentUserId,
+  currentUserToken,
+  userRequest
 }) => {
   const [activeTechIndex, setActiveTechIndex] = useState(0)
   const [isTechModalExpanded, setIsTechModalExpanded] = useState(false)
@@ -99,15 +101,16 @@ const TechCanvas = ({
 
   const removeATechnology = async () => {
     try {
-      const res = await axios.delete(`${import.meta.env.VITE_SERVER_BASE_URL}/api/tech/${technologies[activeTechIndex]._id}`)
+      const res = await userRequest.delete(
+        `${import.meta.env.VITE_SERVER_BASE_URL}/api/tech/${technologies[activeTechIndex]._id}`, 
+        { headers: { Authorization: `Bearer ${currentUserToken}` } }
+      )
 
-      if (res.data.type === 'success') {
-        setTechnologies(prevState => 
-          prevState.filter(tech => 
-            technologies[activeTechIndex]._id !== tech._id
-          )
+      setTechnologies(prevState => 
+        prevState.filter(tech => 
+          tech._id !== res.data.id
         )
-      }
+      )
     } catch (error) {
       console.error(error)
     }
