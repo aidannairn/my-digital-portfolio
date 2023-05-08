@@ -110,7 +110,13 @@ const Technologies = ({ technologies, setTechnologies }) => {
   }, [canvasRows, scale, technologies])
 
   const formRef = useRef(null)
-  const { user: { id: userId, token: userToken }, userRequest } = useContext(UserContext)
+  const {
+    user: { 
+      id: userId,
+      token: userToken
+    }, 
+    authRequest
+  } = useContext(UserContext)
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [loading, setLoading] = useState(false)
 
@@ -124,17 +130,19 @@ const Technologies = ({ technologies, setTechnologies }) => {
       formData.append('image', form.logo)
       formData.append('name', form.name)
       formData.append('docsURL', form.docsURL)
-      formData.append('userId', userId)
     
-      await axios.post(
+      const res = await authRequest.post(
         `${import.meta.env.VITE_SERVER_BASE_URL}/api/tech/create`,
         formData,
         { 
           headers: {
+            Authorization: `Bearer ${userToken}`,
             'Content-Type': 'multipart/form-data'
           }
         }
       )
+
+      setTechnologies(prevState => [...prevState, res.data.technology])
     } catch (error) {
       console.error(error)
     } finally {
@@ -229,9 +237,7 @@ const Technologies = ({ technologies, setTechnologies }) => {
               positions={technologyPositions}
               canvasGridDimensions={canvasGridDimensions}
               scale={scale}
-              currentUserId={userId}
-              currentUserToken={userToken}
-              userRequest={userRequest}
+              currentUser={{ userId, userToken, authRequest }}
             />
           </motion.div>
         }

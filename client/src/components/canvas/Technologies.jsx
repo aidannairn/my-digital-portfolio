@@ -86,9 +86,7 @@ const TechCanvas = ({
   positions,
   canvasGridDimensions,
   scale,
-  currentUserId,
-  currentUserToken,
-  userRequest
+  currentUser: { userId, userToken, authRequest }
 }) => {
   const [activeTechIndex, setActiveTechIndex] = useState(0)
   const [isTechModalExpanded, setIsTechModalExpanded] = useState(false)
@@ -101,9 +99,9 @@ const TechCanvas = ({
 
   const removeATechnology = async () => {
     try {
-      const res = await userRequest.delete(
+      const res = await authRequest.delete(
         `${import.meta.env.VITE_SERVER_BASE_URL}/api/tech/${technologies[activeTechIndex]._id}`, 
-        { headers: { Authorization: `Bearer ${currentUserToken}` } }
+        { headers: { Authorization: `Bearer ${userToken}` } }
       )
 
       setTechnologies(prevState => 
@@ -134,7 +132,7 @@ const TechCanvas = ({
           name={technologies[activeTechIndex].name}
           docs={technologies[activeTechIndex].docsURL}
           image={`${import.meta.env.VITE_MEDIA_BUCKET}/${technologies[activeTechIndex].imageURL}`}
-          userIsAuthor={currentUserId === technologies[activeTechIndex].userId}
+          userIsAuthor={userId === technologies[activeTechIndex].userId}
           openTechDeleteModal={() => setIsDeleteModalExpanded(true)}
         />
       }

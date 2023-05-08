@@ -36,9 +36,9 @@ const UserProvider = ({ children }) => {
 
   useEffect(() => { getRefreshToken() }, [])
 
-  const userRequest = axios.create()
+  const authRequest = axios.create()
 
-  userRequest.interceptors.request.use(async config => {
+  authRequest.interceptors.request.use(async config => {
     const currentDate = new Date()
     try {
       if (user.tokenExpiry * 1000 < currentDate.getTime()) {
@@ -65,7 +65,7 @@ const UserProvider = ({ children }) => {
   }
 
   return (
-    <UserContext.Provider value={{ user, userSignOut, userRequest }}>
+    <UserContext.Provider value={{ user, userSignOut, authRequest }}>
       { children }
     </UserContext.Provider>
   )

@@ -3,8 +3,9 @@ const path = require('path')
 const { s3Upload, s3Delete } = require('../config/aws.config')
 const Technology = require('../models/Technology')
 
-const techCreate = async (req, res, next) => {
-  const { name, docsURL, userId } = req.body
+const techCreate = async (req, res) => {
+  const { name, docsURL } = req.body
+  const userId = req.userId
   const image = req.file
 
   if (!(name && image && userId))
@@ -16,7 +17,7 @@ const techCreate = async (req, res, next) => {
     const technology = new Technology({ name, docsURL, imageURL, userId })
     
     await technology.save()
-    return res.status(200).json({ type: 'success', msg: `${name} has been added to your technologies!`})
+    return res.status(200).json({ type: 'success', msg: `${name} has been added to your technologies!`, technology })
   } catch (error) {
     if (imageURL) s3Delete(imageURL)
     console.error(error)
