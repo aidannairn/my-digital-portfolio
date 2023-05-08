@@ -1,6 +1,5 @@
 import { useState, useRef, useContext } from 'react'
 import { motion } from 'framer-motion'
-import axios from 'axios'
 import Tilt from 'react-parallax-tilt'
 
 import { styles } from '../styles'
@@ -10,13 +9,34 @@ import { fadeIn, textVariant } from '../utils/motion'
 import { UserContext } from '../contexts/UserContext'
 import { FormModal, OnConfirmModal } from './modals'
 
-const ProjectCard = ({ index, _id, name, description, tags, imageURL, links, userId: author, currentUser }) => {
+const ProjectCard = ({
+  index,
+  _id,
+  name,
+  description,
+  tags,
+  imageURL,
+  links,
+  recentlyAdded,
+  userId: author,
+  currentUser: { userId, userToken, authRequest },
+  setProjects
+}) => {
   const [isSrcListVisible, setIsSrcListVisible] = useState(false) 
   const [isDeleteModalExpanded, setIsDeleteModalExpanded] = useState(false)
 
   const removeAProject = async () => {
     try {
-      const res = await axios.delete(`${import.meta.env.VITE_SERVER_BASE_URL}/api/project/${_id}`)
+      const res = await authRequest.delete(
+        `${import.meta.env.VITE_SERVER_BASE_URL}/api/project/${_id}`, 
+        { headers: { Authorization: `Bearer ${userToken}` } }
+      )
+
+      setProjects(prevState =>
+        prevState.filter(project =>
+          project._id !== res.data.id
+        )  
+      )
     } catch (error) {
       console.error(error)
     }
@@ -30,7 +50,7 @@ const ProjectCard = ({ index, _id, name, description, tags, imageURL, links, use
 
   return (
     <>
-      { author === currentUser && 
+      { author === userId && 
         isDeleteModalExpanded &&
         <OnConfirmModal
           modal={{
@@ -44,7 +64,7 @@ const ProjectCard = ({ index, _id, name, description, tags, imageURL, links, use
       <Tilt className='sm:w-[360px] max-w-[90vw]'>
         <motion.div
           className='bg-tertiary h-full p-5 rounded-2xl'
-          variants={fadeIn('up', 'spring', (index * 0.5) + 1, 0.75)}
+          variants={recentlyAdded ? null : fadeIn('up', 'spring', (index * 0.5) + 1, 0.75)}
         >
           <div 
             options={{
@@ -72,7 +92,7 @@ const ProjectCard = ({ index, _id, name, description, tags, imageURL, links, use
                     className='w-full flex flex-col items-end'
                   >
                     <div className='flex gap-2 mr-2 mt-2'>
-                      { author === currentUser &&
+                      { author === userId &&
                         <button
                           className='w-10 h-10 p-2 flex items-center justify-center rounded-full  blue-dark-gradient text-[#DDE1E0] hover:text-[#8c0505]'
                           onClick={() => setIsDeleteModalExpanded(true)}
@@ -133,9 +153,12 @@ const ProjectCard = ({ index, _id, name, description, tags, imageURL, links, use
   )
 }
 
-const Projects = ({ projects }) => {
+const Projects = ({ projects, setProjects }) => {
   const formRef = useRef(null)
-  const { user: { id: userId } } = useContext(UserContext)
+  const {
+    user: { userId, userToken },
+    authRequest
+  } = useContext(UserContext)
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [loading, setLoading] = useState(false)
 
@@ -151,17 +174,27 @@ const Projects = ({ projects }) => {
       formData.append('description', form.description)
       formData.append('projectLinks', JSON.stringify(form.projectLinks))
       formData.append('projectTags', JSON.stringify(form.projectTags))
-      formData.append('userId', userId)
     
-      await axios.post(
+      const res = await authRequest.post(
         `${import.meta.env.VITE_SERVER_BASE_URL}/api/project/create`,
         formData,
         { 
           headers: {
+            Authorization: `Bearer ${userToken}`,
             'Content-Type': 'multipart/form-data'
           }
         }
       )
+
+      setProjects(prevState => [
+        ...prevState,
+        /*  - Spread the new project into a new object.
+            - Append "recentlyAdded" property.
+            
+            Doing so will void the initial "hidden" CSS property that projects have to achieve the "fade in" effect.
+        */
+        { ...res.data.project, recentlyAdded: true}
+      ])
     } catch (error) {
       console.error(error)
     } finally {
@@ -307,7 +340,13 @@ const Projects = ({ projects }) => {
         style={{ gridTemplateColumns: 'repeat(auto-fill, 360px)' }}
       >
         { projects.map((project, i) => (
-          <ProjectCard key={`project-${i}`} index={i} {...project} currentUser={userId || null} />
+          <ProjectCard
+            key={`project-${i}`}
+            index={i}
+            currentUser={{ userId, userToken, authRequest }}
+            setProjects={setProjects}
+            {...project}
+          />
         ))}
       </div>
     </div>

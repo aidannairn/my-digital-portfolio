@@ -1,7 +1,6 @@
 import { useState, Suspense } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { Decal, Float, useTexture, OrthographicCamera, Html, Preload } from '@react-three/drei'
-import axios from 'axios'
 
 import { OnConfirmModal, TechDetailModal } from '../modals'
 import CanvasLoader from '../Loader'

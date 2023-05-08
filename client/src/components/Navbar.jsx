@@ -11,7 +11,7 @@ import { UserContext } from '../contexts/UserContext'
 const Navbar = ({ isLoading }) => {
   const [active, setActive] = useState('')
   const [toggle, setToggle] = useState(false)
-  const { user: { id: userId }, userSignOut } = useContext(UserContext)
+  const { user: { userId }, userSignOut } = useContext(UserContext)
 
   return (
     <>

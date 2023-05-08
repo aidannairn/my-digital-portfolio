@@ -32,7 +32,7 @@ const techDeleteOne = async (req, res) => {
   try {
     const technology = await Technology.findOneAndDelete({ _id: techId, userId })
 
-    if (!technology) throw new Error(`Could not find a technology that matches technology ID and user ID.`)
+    if (!technology) throw new Error('Could not find a technology that matches the technology ID and user ID.')
     
     const techImage = await s3Delete(technology.imageURL)
     if (!techImage) throw new Error('Image was not removed from S3.')

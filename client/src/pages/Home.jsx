@@ -40,7 +40,7 @@ const Home = () => {
           {/* <About /> */}
           <Experience experiences={experiences} />
           <Technologies technologies={technologies} setTechnologies={setTechnologies} />
-          <Projects projects={projects} />
+          <Projects projects={projects} setProjects={setProjects} />
           {/* <Feedback /> */}
           {/* <div className='relative z-0'>
             <Contact />

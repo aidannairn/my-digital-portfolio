@@ -9,13 +9,13 @@ const UserProvider = ({ children }) => {
   const navigate = useNavigate()
 
   const [user, setUser] = useState({
-    id: '',
+    userId: '',
     email: '',
     firstName: '',
     lastName: '',
     imageURL: '',
     tokenExpiry: '',
-    token: ''
+    userToken: ''
   })
 
   const getRefreshToken = async () => {
@@ -26,8 +26,8 @@ const UserProvider = ({ children }) => {
       if (res.data.msg) return console.log(res.data.msg)
 
       const resDecoded = await decode(res.data.accessToken)
-      const { id, email, firstName, lastName, imageURL, exp: tokenExpiry } = resDecoded
-      setUser({ id, email, firstName, lastName, imageURL, tokenExpiry, token: res.data.accessToken })
+      const { userId, email, firstName, lastName, imageURL, exp: tokenExpiry } = resDecoded
+      setUser({ userId, email, firstName, lastName, imageURL, tokenExpiry, userToken: res.data.accessToken })
       console.log(`${firstName} is signed in.`)
     } catch (error) {
       console.error(error)
@@ -45,8 +45,8 @@ const UserProvider = ({ children }) => {
         const res = await axios.get(`${import.meta.env.VITE_SERVER_BASE_URL}/api/token`)
         config.headers.Authorization = `Bearer ${res.data.accessToken}`
         const resDecoded = await decode(res.data.accessToken)
-        const { id, email, firstName, lastName, imageURL, exp: tokenExpiry } = resDecoded
-        setUser({ id, email, firstName, lastName, imageURL, tokenExpiry,token: res.data.accessToken })
+        const { userId, email, firstName, lastName, imageURL, exp: tokenExpiry } = resDecoded
+        setUser({ userId, email, firstName, lastName, imageURL, tokenExpiry, userToken: res.data.accessToken })
       }
       return config
     } catch (error) {

@@ -20,7 +20,7 @@ const verifyToken = async (req, res, next) => {
     if (!decoded)
       throw new CustomError (403, 'Could not verify the user.')
       
-    req.userId = decoded.id
+    req.userId = decoded.userId
     next()
   } catch (error) {
     console.error(error)
@@ -28,4 +28,4 @@ const verifyToken = async (req, res, next) => {
   }
 }
 
-module.exports = { verifyToken }
+module.exports = verifyToken

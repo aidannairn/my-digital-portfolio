@@ -111,10 +111,7 @@ const Technologies = ({ technologies, setTechnologies }) => {
 
   const formRef = useRef(null)
   const {
-    user: { 
-      id: userId,
-      token: userToken
-    }, 
+    user: { userId, userToken }, 
     authRequest
   } = useContext(UserContext)
   const [isModalVisible, setIsModalVisible] = useState(false)
