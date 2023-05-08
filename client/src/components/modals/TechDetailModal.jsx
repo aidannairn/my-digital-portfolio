@@ -4,7 +4,14 @@ import { chainLink } from '../../constants'
 import Modal from '../../hoc/Modal' 
 import useWindowSize from '../../utils/useWindowSize'
 
-const TechDetailModal = ({ modal, id, name, image, docs, userIsAuthor }) => {
+const TechDetailModal = ({
+  modal,
+  name,
+  image,
+  docs,
+  userIsAuthor,
+  openTechDeleteModal
+}) => {
   const titleRef = useRef(null)
   const [titleWidth, setTitleWidth] = useState(0)
   const [maxImageHeight, setMaxImageHeight] = useState(0)
@@ -27,6 +34,11 @@ const TechDetailModal = ({ modal, id, name, image, docs, userIsAuthor }) => {
     } 
     : {}
 
+  const handleRemoveBtnClick = () => {
+    openTechDeleteModal()
+    modal.close()
+  }
+
   return (
     <div className={`${modal?.className || ''} w-[90vw] sm:w-fit max-h-[60vh] pt-5 pb-3 px-6`}>
       <div className={`flex ${!docs && !userIsAuthor ? 'flex-col items-center' : 'flex-col sm:flex-row'}`}>
@@ -46,7 +58,10 @@ const TechDetailModal = ({ modal, id, name, image, docs, userIsAuthor }) => {
             </a>
           }
           { userIsAuthor &&
-            <button className='hover:text-[#8c0505] w-fit'>
+            <button
+              className='hover:text-[#8c0505] w-fit'
+              onClick={handleRemoveBtnClick}
+            >
               <i className='fa fa-trash-o text-lg mr-2 w-4' aria-hidden='true'></i>
               <span>Remove</span>
             </button>

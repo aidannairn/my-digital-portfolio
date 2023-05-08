@@ -2,7 +2,7 @@ import { useContext, useEffect, useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 import axios from 'axios'
 
-import { BallCanvas } from './canvas'
+import { TechCanvas } from './canvas'
 import { textVariant } from '../utils/motion'
 import { SectionWrapper } from '../hoc'
 import { styles } from '../styles'
@@ -223,11 +223,12 @@ const Technologies = ({ technologies }) => {
                 width: '100%'
               }}
               >
-              <BallCanvas
+              <TechCanvas
                 technologies={technologies}
                 positions={technologyPositions}
                 canvasGridDimensions={canvasGridDimensions}
                 scale={scale}
+                currentUserId={userId}
               />
             </motion.div>
           }

@@ -1,11 +1,12 @@
 import { useState, Suspense } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { Decal, Float, useTexture, OrthographicCamera, Html, Preload } from '@react-three/drei'
+import axios from 'axios'
 
-import { TechDetailModal } from '../modals'
+import { OnConfirmModal, TechDetailModal } from '../modals'
 import CanvasLoader from '../Loader'
 
-const Ball = ({
+const TechItem = ({
   gridDimensions: gd,
   index,
   handleTechItemClick,
@@ -79,19 +80,36 @@ const Ball = ({
   )
 }
 
-const BallCanvas = ({
+const TechCanvas = ({
   technologies,
   positions,
   canvasGridDimensions,
-  scale
+  scale,
+  currentUserId
 }) => {
   const [activeTechIndex, setActiveTechIndex] = useState(0)
   const [isTechModalExpanded, setIsTechModalExpanded] = useState(false)
+  const [isDeleteModalExpanded, setIsDeleteModalExpanded] = useState(false)
 
   const handleTechItemClick = index => {
     setActiveTechIndex(index)
     setIsTechModalExpanded(true)
   }
+
+  const removeATechnology = async () => {
+    try {
+      console.log(technologies[activeTechIndex]._id)
+      const res = await axios.delete(`${import.meta.env.VITE_SERVER_BASE_URL}/api/tech/${technologies[activeTechIndex]._id}`)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const displayDeleteMessage = () => (
+    <h2 className='my-4 font-extralight'>
+      You are about to remove <span className='font-normal'>{technologies[activeTechIndex].name}</span> from your technologies.
+    </h2>
+  )
 
   return (
     <>
@@ -105,7 +123,19 @@ const BallCanvas = ({
           name={technologies[activeTechIndex].name}
           docs={technologies[activeTechIndex].docsURL}
           image={`${import.meta.env.VITE_MEDIA_BUCKET}/${technologies[activeTechIndex].imageURL}`}
+          userIsAuthor={currentUserId === technologies[activeTechIndex].userId}
+          openTechDeleteModal={() => setIsDeleteModalExpanded(true)}
         />
+      }
+      { isDeleteModalExpanded &&
+        <OnConfirmModal
+        modal={{
+          visibility: isDeleteModalExpanded,
+          close: () => setIsDeleteModalExpanded(false)
+        }}
+        message={displayDeleteMessage}
+        action={removeATechnology}
+      />
       }
       <Canvas>
         <ambientLight intensity={0.033} />
@@ -132,8 +162,8 @@ const BallCanvas = ({
         <Suspense fallback={<CanvasLoader />}>
           { positions.length === technologies.length &&
             technologies.map((technology, i) => (
-              <Ball
-                key={`ball-${technology._id}`}
+              <TechItem
+                key={`tech-${technology._id}`}
                 index={i}
                 gridDimensions={canvasGridDimensions}
                 position={positions[i]}
@@ -150,4 +180,4 @@ const BallCanvas = ({
   )
 }
 
-export default BallCanvas
+export default TechCanvas

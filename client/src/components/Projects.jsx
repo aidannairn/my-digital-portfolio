@@ -24,7 +24,7 @@ const ProjectCard = ({ index, _id, name, description, tags, imageURL, links, use
 
   const displayDeleteMessage = () => (
     <h2 className='my-4 font-extralight'>
-      You are about to remove <span className='italic'>{name}</span> from your projects.
+      You are about to remove <span className='font-normal'>{name}</span> from your projects.
     </h2>
   )
 
