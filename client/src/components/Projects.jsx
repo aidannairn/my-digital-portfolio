@@ -74,10 +74,10 @@ const ProjectCard = ({ index, _id, name, description, tags, imageURL, links, use
                     <div className='flex gap-2 mr-2 mt-2'>
                       { author === currentUser &&
                         <button
-                          className='w-10 h-10 p-2 flex items-center justify-center rounded-full  blue-dark-gradient'
+                          className='w-10 h-10 p-2 flex items-center justify-center rounded-full  blue-dark-gradient text-[#DDE1E0] hover:text-[#8c0505]'
                           onClick={() => setIsDeleteModalExpanded(true)}
                         >
-                          <i className='fa fa-trash-o text-lg' aria-hidden='true'></i>
+                          <i className='fa fa-trash-o text-2xl' aria-hidden='true'></i>
                         </button>
                       }
                       { !!links.length && (

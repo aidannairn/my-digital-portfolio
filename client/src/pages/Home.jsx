@@ -38,8 +38,8 @@ const Home = () => {
       { !isLoading && 
         <>
           {/* <About /> */}
-          <Experience experiences={experiences} />
           <Technologies technologies={technologies} />
+          <Experience experiences={experiences} />
           <Projects projects={projects} />
           {/* <Feedback /> */}
           {/* <div className='relative z-0'>

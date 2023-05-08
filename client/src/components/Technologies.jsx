@@ -207,17 +207,10 @@ const Technologies = ({ technologies }) => {
             variants={fadeIn('', '', 1, 1)}
             className='flex gap-5 mt-5 sm:px-16 px-6'
           >
-            <div className='flex gap-4'>
-              <div className='green-blue-gradient hover:green-blue-gradient--hover rounded-lg p-px'>
-                <button className='bg-primary hover:bg-tertiary rounded-lg p-2' onClick={() => setIsModalVisible(true)}>
-                  Add A Technology
-                </button>
-              </div>
-              <div className='white-grey-gradient hover:white-grey-gradient--hover rounded-lg p-px'>
-                <button className='bg-primary hover:bg-tertiary rounded-lg p-2' onClick={() => setIsModalVisible(true)}>
-                  Remove A Technology
-                </button>
-              </div>
+            <div className='green-blue-gradient hover:green-blue-gradient--hover rounded-lg p-px'>
+              <button className='bg-primary hover:bg-tertiary rounded-lg p-2' onClick={() => setIsModalVisible(true)}>
+                Add A Technology
+              </button>
             </div>
           </motion.div>
         }

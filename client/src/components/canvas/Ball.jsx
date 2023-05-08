@@ -1,10 +1,18 @@
 import { useState, Suspense } from 'react'
 import { Canvas } from '@react-three/fiber'
-import { Decal, Float, useTexture, OrthographicCamera, PerformanceMonitor, Preload } from '@react-three/drei'
+import { Decal, Float, useTexture, OrthographicCamera, Html, Preload } from '@react-three/drei'
 
+import { TechDetailModal } from '../modals'
 import CanvasLoader from '../Loader'
 
-const Ball = ({ gridDimensions: gd, icon, position, scale }) => {
+const Ball = ({
+  gridDimensions: gd,
+  index,
+  handleTechItemClick,
+  imageURL,
+  position,
+  scale
+}) => {
   /*
     - The default behavior of floatingRange is for objects to have less range the closer they are to the center.
     - setFloatingRange is designed to make each object have the same amount of floatingRange regardless of their position.
@@ -31,44 +39,43 @@ const Ball = ({ gridDimensions: gd, icon, position, scale }) => {
     return floatRange
   }
 
-  const [ decal ] = useTexture([ icon ])
+  const [ decal ] = useTexture([ imageURL ])
   
   const [isHovered, setIsHovered] = useState(false)
   const [floatRange, setFloatRange] = useState(setFloatingRange)
-  
+
   return (
-    <>
-      <Float 
-        speed={(Math.random() * (1.8 - 1.7) + 1.7).toFixed(2)}
-        rotationIntensity={1}
-        floatIntensity={1}
-        floatingRange={floatRange} // default [-0.1, 0.1]
+    <Float 
+      speed={isHovered ? 0 : (Math.random() * (1.8 - 1.7) + 1.7).toFixed(2)}
+      rotationIntensity={1}
+      floatIntensity={1}
+      floatingRange={floatRange} // default [-0.1, 0.1]
+    >
+      <mesh
+        castShadow
+        receiveShadow
+        position={position}
+        scale={isHovered ? 1.25 * scale : scale}
+        onClick={() => handleTechItemClick(index)}
+        onPointerEnter={() => setIsHovered(true)}
+        onPointerLeave={() => setIsHovered(false)}
       >
-        <mesh
-          castShadow
-          receiveShadow
-          position={position}
-          scale={isHovered ? 1.25 * scale : scale}
-          // onPointerEnter={() => setIsHovered(true)}
-          // onPointerLeave={() => setIsHovered(false)}
-        >
-          <icosahedronGeometry args={[1, 1]} />
-          <meshStandardMaterial 
-            color='#FFF8EB'
-            polygonOffset
-            polygonOffsetFactor={-5}
-            flatShading
-          />
-          <Decal
-            position={[0, 0, 1]}
-            rotation={[ 2 * Math.PI, 0, 6.25 ]}
-            scale={1.25}
-            flatShading
-            map={decal}
-          />
-        </mesh>
-      </Float>
-    </>
+        <icosahedronGeometry args={[1, 1]} />
+        <meshStandardMaterial 
+          color='#FFF8EB'
+          polygonOffset
+          polygonOffsetFactor={-5}
+          flatShading
+        />
+        <Decal
+          position={[0, 0, 1]}
+          rotation={[ 2 * Math.PI, 0, 6.25 ]}
+          scale={1.25}
+          flatShading
+          map={decal}
+        />
+      </mesh>
+    </Float>
   )
 }
 
@@ -78,44 +85,68 @@ const BallCanvas = ({
   canvasGridDimensions,
   scale
 }) => {
+  const [activeTechIndex, setActiveTechIndex] = useState(0)
+  const [isTechModalExpanded, setIsTechModalExpanded] = useState(false)
+
+  const handleTechItemClick = index => {
+    setActiveTechIndex(index)
+    setIsTechModalExpanded(true)
+  }
+
   return (
-    <Canvas>
-      <ambientLight intensity={0.033} />
-      <directionalLight
-        position={[0, 0, 1]}
-        intensity={.8}
-      />
-      <pointLight
-        intensity={0.25}
-        position={[0, 0, 0]}
-      />
-      {/* <axesHelper args={[5]} /> */}
-      <OrthographicCamera
-        makeDefault
-        zoom={90}
-        top={200}
-        bottom={-200}
-        left={200}
-        right={-200}
-        near={1}
-        far={2000}
-        position={[0, 0, 200]}
-      />
-      <Suspense fallback={<CanvasLoader />}>
-        { positions.length === technologies.length &&
-          technologies.map((technology, i) => (
-            <Ball
-              key={`ball-${technology._id}`}
-              gridDimensions={canvasGridDimensions}
-              position={positions[i]}
-              icon={`${import.meta.env.VITE_MEDIA_BUCKET}/${technology.imageURL}`}
-              scale={scale}
-            />
-          ))
-        }
-      </Suspense>
-      <Preload all />
-    </Canvas>
+    <>
+      { isTechModalExpanded &&
+        <TechDetailModal
+          modal={{
+            visibility: isTechModalExpanded,
+            close: () => setIsTechModalExpanded(false)
+          }}
+          id={technologies[activeTechIndex]._id}
+          name={technologies[activeTechIndex].name}
+          docs={technologies[activeTechIndex].docsURL}
+          image={`${import.meta.env.VITE_MEDIA_BUCKET}/${technologies[activeTechIndex].imageURL}`}
+        />
+      }
+      <Canvas>
+        <ambientLight intensity={0.033} />
+        <directionalLight
+          position={[0, 0, 1]}
+          intensity={.8}
+        />
+        <pointLight
+          intensity={0.25}
+          position={[0, 0, 0]}
+        />
+        {/* <axesHelper args={[5]} /> */}
+        <OrthographicCamera
+          makeDefault
+          zoom={90}
+          top={200}
+          bottom={-200}
+          left={200}
+          right={-200}
+          near={1}
+          far={2000}
+          position={[0, 0, 200]}
+        />
+        <Suspense fallback={<CanvasLoader />}>
+          { positions.length === technologies.length &&
+            technologies.map((technology, i) => (
+              <Ball
+                key={`ball-${technology._id}`}
+                index={i}
+                gridDimensions={canvasGridDimensions}
+                position={positions[i]}
+                scale={scale}
+                imageURL={`${import.meta.env.VITE_MEDIA_BUCKET}/${technology.imageURL}`}
+                handleTechItemClick={handleTechItemClick}
+              />
+            ))
+          }
+        </Suspense>
+        <Preload all />
+      </Canvas>
+    </>
   )
 }
 
