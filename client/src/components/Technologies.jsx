@@ -11,7 +11,7 @@ import { fadeIn } from '../utils/motion'
 import useWindowSize from '../utils/useWindowSize'
 import { FormModal } from './modals'
 
-const Technologies = ({ technologies }) => {
+const Technologies = ({ technologies, setTechnologies }) => {
   const windowWidth = useWindowSize('x')
   const techContainerRef = useRef(null)
   const [canvasPixelDimensions, setCanvasPixelDimensions] = useState({ x: 0, y: 0 })
@@ -61,7 +61,7 @@ const Technologies = ({ technologies }) => {
     setCanvasColumns(columns)
     setCanvasRows(Math.ceil(techLength / columns))
     setScale(currentScale)
-  }, [windowWidth])
+  }, [windowWidth, technologies])
   
   useEffect(() => {
     if (!canvasRows && !scale) return
@@ -107,7 +107,7 @@ const Technologies = ({ technologies }) => {
     })
     // Update the technologyPositions state to include each of the new positions we declared above.
     setTechnologyPositions(techPos)
-  }, [canvasRows, scale])
+  }, [canvasRows, scale, technologies])
 
   const formRef = useRef(null)
   const { user: { id: userId } } = useContext(UserContext)
@@ -214,25 +214,26 @@ const Technologies = ({ technologies }) => {
             </div>
           </motion.div>
         }
-          { !!technologies?.length &&
-            <motion.div 
-              variants={fadeIn('', '', 1, 1)}
-              className={`mt-10 mx-auto`}
-              style={{ 
-                height: `${canvasPixelDimensions.y}px`,
-                width: '100%'
-              }}
-              >
-              <TechCanvas
-                technologies={technologies}
-                positions={technologyPositions}
-                canvasGridDimensions={canvasGridDimensions}
-                scale={scale}
-                currentUserId={userId}
-              />
-            </motion.div>
-          }
-        </div>
+        { !!technologies?.length &&
+          <motion.div 
+            variants={fadeIn('', '', 1, 1)}
+            className={`mt-10 mx-auto`}
+            style={{ 
+              height: `${canvasPixelDimensions.y}px`,
+              width: '100%'
+            }}
+            >
+            <TechCanvas
+              technologies={technologies}
+              setTechnologies={setTechnologies}
+              positions={technologyPositions}
+              canvasGridDimensions={canvasGridDimensions}
+              scale={scale}
+              currentUserId={userId}
+            />
+          </motion.div>
+        }
+      </div>
     </>
   )
 }

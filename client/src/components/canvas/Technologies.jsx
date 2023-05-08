@@ -82,6 +82,7 @@ const TechItem = ({
 
 const TechCanvas = ({
   technologies,
+  setTechnologies,
   positions,
   canvasGridDimensions,
   scale,
@@ -98,8 +99,15 @@ const TechCanvas = ({
 
   const removeATechnology = async () => {
     try {
-      console.log(technologies[activeTechIndex]._id)
       const res = await axios.delete(`${import.meta.env.VITE_SERVER_BASE_URL}/api/tech/${technologies[activeTechIndex]._id}`)
+
+      if (res.data.type === 'success') {
+        setTechnologies(prevState => 
+          prevState.filter(tech => 
+            technologies[activeTechIndex]._id !== tech._id
+          )
+        )
+      }
     } catch (error) {
       console.error(error)
     }
