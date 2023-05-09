@@ -1,4 +1,4 @@
-import { useState, Suspense } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { Decal, Float, useTexture, OrthographicCamera, Html, Preload } from '@react-three/drei'
 
@@ -17,7 +17,7 @@ const TechItem = ({
     - The default behavior of floatingRange is for objects to have less range the closer they are to the center.
     - setFloatingRange is designed to make each object have the same amount of floatingRange regardless of their position.
   */
-  const setFloatingRange = () => {
+  const getFloatingRange = () => {
     // Set the maximum distance from the center.
     const maxDist= Math.ceil(gd.x + gd.y)
     
@@ -40,9 +40,10 @@ const TechItem = ({
   }
 
   const [ decal ] = useTexture([ imageURL ])
-  
   const [isHovered, setIsHovered] = useState(false)
-  const [floatRange, setFloatRange] = useState(setFloatingRange)
+  const [floatRange, setFloatRange] = useState(0)
+
+  useEffect(() => { setFloatRange(getFloatingRange) }, [])
 
   return (
     <Float 

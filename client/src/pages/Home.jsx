@@ -38,7 +38,7 @@ const Home = () => {
       { !isLoading && 
         <>
           {/* <About /> */}
-          <Experience experiences={experiences} />
+          <Experience experiences={experiences} setExperiences={setExperiences} />
           <Technologies technologies={technologies} setTechnologies={setTechnologies} />
           <Projects projects={projects} setProjects={setProjects} />
           {/* <Feedback /> */}

@@ -18,7 +18,7 @@ const ProjectCard = ({
   imageURL,
   links,
   recentlyAdded,
-  userId: author,
+  userId: authorId,
   currentUser: { userId, userToken, authRequest },
   setProjects
 }) => {
@@ -50,7 +50,7 @@ const ProjectCard = ({
 
   return (
     <>
-      { author === userId && 
+      { authorId === userId && 
         isDeleteModalExpanded &&
         <OnConfirmModal
           modal={{
@@ -92,7 +92,7 @@ const ProjectCard = ({
                     className='w-full flex flex-col items-end'
                   >
                     <div className='flex gap-2 mr-2 mt-2'>
-                      { author === userId &&
+                      { authorId === userId &&
                         <button
                           className='w-10 h-10 p-2 flex items-center justify-center rounded-full  blue-dark-gradient text-[#DDE1E0] hover:text-[#8c0505]'
                           onClick={() => setIsDeleteModalExpanded(true)}

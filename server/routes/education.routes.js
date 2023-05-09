@@ -3,6 +3,7 @@ const multer = require('multer')
 
 const { storage, imageFilter } = require('../config/multer.config')
 const { educationCreate, educationDeleteOne } = require('../controllers/education.controller')
+const verifyToken = require('../middleware/VerifyToken')
 
 const educationRouter = express.Router()
 
@@ -13,9 +14,10 @@ const multerFields = [
 
 educationRouter.post(
   '/api/education/create',
+  verifyToken,
   multer({ storage, fileFilter: imageFilter }).fields(multerFields),
   educationCreate
 )
-educationRouter.delete('/api/education/:id', educationDeleteOne)
+educationRouter.delete('/api/education/:id', verifyToken, educationDeleteOne)
 
 module.exports = educationRouter

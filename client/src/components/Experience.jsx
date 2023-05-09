@@ -21,8 +21,9 @@ const ExperienceCard = ({
   dateFrom: timestampFrom,
   dateTo: timestampTo,
   bullets,
-  userId: author,
-  currentUser
+  userId: authorId,
+  currentUser: { userId, userToken, authRequest },
+  setExperiences
 }) => {
   const [isImageExpanded, setIsImageExpanded] = useState(false)
   const [isDeleteModalExpanded, setIsDeleteModalExpanded] = useState(false)
@@ -30,7 +31,7 @@ const ExperienceCard = ({
   const getDateFromTimeStamp = (timestamp, format) =>
     new Date(timestamp).toLocaleDateString('en-NZ', format)
   
-  const dateOptions = { month: 'short', year: '2-digit' }
+  const dateOptions = { month: 'short', year: 'numeric' }
   const dateFrom = getDateFromTimeStamp(timestampFrom, dateOptions)
   const dateTo = timestampTo
     ? getDateFromTimeStamp(timestampTo, dateOptions)
@@ -38,7 +39,16 @@ const ExperienceCard = ({
 
   const removeAnExperience = async () => {
     try {
-      const res = await axios.delete(`${import.meta.env.VITE_SERVER_BASE_URL}/api/education/${_id}`)
+      const res = await authRequest.delete(
+        `${import.meta.env.VITE_SERVER_BASE_URL}/api/education/${_id}`,
+        { headers: { Authorization: `Bearer ${userToken}` } }
+      )
+
+      setExperiences(prevState => 
+        prevState.filter(experience => 
+          experience._id !== res.data.id
+        )
+      )
     } catch (error) {
       console.error(error)
     }
@@ -65,7 +75,7 @@ const ExperienceCard = ({
         noScroll={true}
       />
     }
-    { author === currentUser && 
+    { authorId === userId && 
       isDeleteModalExpanded &&
       <OnConfirmModal
         modal={{
@@ -76,7 +86,7 @@ const ExperienceCard = ({
         action={removeAnExperience}
       />
     }
-    { author === currentUser &&
+    { authorId === userId &&
       <div className='relative z-20'>
         <div className='p-px'>
           <button
@@ -134,9 +144,9 @@ const ExperienceCard = ({
   </>
 )}
 
-const Experience = ({ experiences }) => {
+const Experience = ({ experiences, setExperiences }) => {
   const formRef = useRef(null)
-  const { user: { id: userId } } = useContext(UserContext)
+  const { user: { userId, userToken }, authRequest } = useContext(UserContext)
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [loading, setLoading] = useState(false)
 
@@ -158,15 +168,18 @@ const Experience = ({ experiences }) => {
       formData.append('bullets', JSON.stringify(bullets))
       formData.append('userId', userId)
     
-      await axios.post(
+      const res = await authRequest.post(
         `${import.meta.env.VITE_SERVER_BASE_URL}/api/education/create`,
         formData,
         { 
           headers: {
+            Authorization: `Bearer ${userToken}`,
             'Content-Type': 'multipart/form-data'
           }
         }
       )
+
+      setExperiences(prevState => [...prevState, res.data.experience])
     } catch (error) {
       console.error(error)
     } finally {
@@ -320,7 +333,12 @@ const Experience = ({ experiences }) => {
       >
         <VerticalTimeline>
           {experiences.map((experience, i) => (
-            <ExperienceCard key={i} { ...experience } currentUser={userId || null} />
+            <ExperienceCard
+            key={i}
+            currentUser={{ userId, userToken, authRequest }}
+            setExperiences={setExperiences}
+            { ...experience }
+          />
           ))}
         </VerticalTimeline>
       </motion.div>
