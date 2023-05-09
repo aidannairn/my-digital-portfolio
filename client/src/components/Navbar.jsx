@@ -4,7 +4,6 @@ import { motion } from 'framer-motion'
 
 import { slideIn } from '../utils/motion'
 import { styles } from '../styles'
-import { navLinks } from '../constants'
 import { logo, menu, close } from '../assets'
 import { UserContext } from '../contexts/UserContext'
 
@@ -12,6 +11,12 @@ const Navbar = ({ isLoading }) => {
   const [active, setActive] = useState('')
   const [toggle, setToggle] = useState(false)
   const { user: { userId }, userSignOut } = useContext(UserContext)
+
+  const navLinks = [
+    { id: 'about', title: 'About' },
+    { id: 'projects', title: 'Projects' },
+    { id: 'contact', title: 'Contact' }
+  ]
 
   return (
     <>

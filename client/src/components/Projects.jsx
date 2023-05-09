@@ -4,7 +4,6 @@ import Tilt from 'react-parallax-tilt'
 
 import { styles } from '../styles'
 import { SectionWrapper } from '../hoc'
-import { chainLink } from '../constants'
 import { fadeIn, textVariant } from '../utils/motion'
 import { UserContext } from '../contexts/UserContext'
 import { FormModal, OnConfirmModal } from './modals'
@@ -107,7 +106,7 @@ const ProjectCard = ({
                         >
                           <img
                             className='invert'
-                            src={chainLink} alt='Show links icon'
+                            src={`${import.meta.env.VITE_MEDIA_BUCKET}/icons/chain_link.svg`} alt='Show links icon'
                           />
                         </button>
                       )}
@@ -180,7 +179,7 @@ const Projects = ({ projects, setProjects }) => {
         }
       }
     )
-    
+
     setProjects(prevState => [
       ...prevState,
       /*  - Spread the new project into a new object.
