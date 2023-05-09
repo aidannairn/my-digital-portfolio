@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useRef } from 'react'
 import { motion } from 'framer-motion'
 import emailjs from '@emailjs/browser'
 
@@ -10,36 +10,31 @@ import Form from './form/Form'
 
 const Contact = () => {
   const formRef = useRef(null)
-  const [loading, setLoading] = useState(false)
 
   const handleSubmit = async () => {
-    try {
-      setLoading(true)
-      const form = formRef.current.getFormState()
-      const { 
-        VITE_EMAILJS_SERVICE_ID: serviceId,
-        VITE_EMAILJS_TEMPLATE_ID: templateId,
-        VITE_EMAILJS_PUBLIC_KEY: publicKey,
-        VITE_MY_EMAIL: myEmail
-      } = import.meta.env
-  
-      await emailjs.send(
-        serviceId,
-        templateId,
-        {
-          from_name: form.name,
-          to_name: 'Aidan',
-          from_email: form.email,
-          to_email: myEmail,
-          message: form.message
-        },
-        publicKey
-      )
-    } catch (error) {
-      console.error(error)
-    } finally {
-      setLoading(false)
-    }
+    const { name, email, message } = formRef.current.getFormState()
+    
+    if (!(name && email && message)) throw new Error('All fields should be filled in before a submission is made.')
+    
+    const { 
+      VITE_EMAILJS_SERVICE_ID: serviceId,
+      VITE_EMAILJS_TEMPLATE_ID: templateId,
+      VITE_EMAILJS_PUBLIC_KEY: publicKey,
+      VITE_MY_EMAIL: myEmail
+    } = import.meta.env
+
+    await emailjs.send(
+      serviceId,
+      templateId,
+      {
+        from_name: name,
+        to_name: 'Aidan',
+        from_email: email,
+        to_email: myEmail,
+        message
+      },
+      publicKey
+    )
   }
 
   const formSettings = {
@@ -78,7 +73,10 @@ const Contact = () => {
     ],
     submit: {
       action: handleSubmit,
-      text: loading ? 'Sending...' : 'Send'
+      btnText: {
+        idle: 'Send',
+        loading: 'Sending...'
+      }
     }
   }
 
@@ -92,12 +90,12 @@ const Contact = () => {
         <h3 className={styles.sectionHeadText}>Contact.</h3>
         <Form ref={formRef} {...formSettings} />
       </motion.div>
-      <motion.div
+      {/* <motion.div
         variants={slideIn('left', 'tween', 0.2, 1)}
         className='xl:flex-1 xl:h-auto md:h-[550px] h-[350px]'
       >
         <EarthCanvas />
-      </motion.div>
+      </motion.div> */}
     </div>
   )
 }

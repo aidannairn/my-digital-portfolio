@@ -160,45 +160,36 @@ const Projects = ({ projects, setProjects }) => {
     authRequest
   } = useContext(UserContext)
   const [isModalVisible, setIsModalVisible] = useState(false)
-  const [loading, setLoading] = useState(false)
 
   const handleSubmit = async () => {
-    try {
-      const form = formRef.current.getFormState()
-      setLoading(true)
-
-      const formData = new FormData()
-      formData.append('image', form.image)
-      formData.append('name', form.projectTitle)
-      formData.append('description', form.description)
-      formData.append('projectLinks', JSON.stringify(form.projectLinks))
-      formData.append('projectTags', JSON.stringify(form.projectTags))
-    
-      const res = await authRequest.post(
-        `${import.meta.env.VITE_SERVER_BASE_URL}/api/project/create`,
-        formData,
-        { 
-          headers: {
-            Authorization: `Bearer ${userToken}`,
-            'Content-Type': 'multipart/form-data'
-          }
+    const form = formRef.current.getFormState()
+    const formData = new FormData()
+    formData.append('image', form.image)
+    formData.append('name', form.projectTitle)
+    formData.append('description', form.description)
+    formData.append('projectLinks', JSON.stringify(form.projectLinks))
+    formData.append('projectTags', JSON.stringify(form.projectTags))
+  
+    const res = await authRequest.post(
+      `${import.meta.env.VITE_SERVER_BASE_URL}/api/project/create`,
+      formData,
+      { 
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+          'Content-Type': 'multipart/form-data'
         }
-      )
-
-      setProjects(prevState => [
-        ...prevState,
-        /*  - Spread the new project into a new object.
-            - Append "recentlyAdded" property.
-            
-            Doing so will void the initial "hidden" CSS property that projects have to achieve the "fade in" effect.
-        */
-        { ...res.data.project, recentlyAdded: true}
-      ])
-    } catch (error) {
-      console.error(error)
-    } finally {
-      setLoading(false)
-    }
+      }
+    )
+    
+    setProjects(prevState => [
+      ...prevState,
+      /*  - Spread the new project into a new object.
+          - Append "recentlyAdded" property.
+          
+          Doing so will void the initial "hidden" CSS property that projects have to achieve the "fade in" effect.
+      */
+      { ...res.data.project, recentlyAdded: true}
+    ])
   }
 
   const formSettings = {
@@ -296,7 +287,10 @@ const Projects = ({ projects, setProjects }) => {
     ],
     submit: {
       action: handleSubmit,
-      text: loading ? 'Submitting Project...' : 'Submit Project'
+      btnText: {
+        idle: 'Add Project',
+        loading: 'Please wait...'
+      }
     }
   }
 

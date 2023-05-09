@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState, useRef } from 'react'
 import { motion } from 'framer-motion'
-import axios from 'axios'
 
 import { TechCanvas } from './canvas'
 import { textVariant } from '../utils/motion'
@@ -8,8 +7,8 @@ import { SectionWrapper } from '../hoc'
 import { styles } from '../styles'
 import { UserContext } from '../contexts/UserContext'
 import { fadeIn } from '../utils/motion'
-import useWindowSize from '../utils/useWindowSize'
 import { FormModal } from './modals'
+import useWindowSize from '../utils/useWindowSize'
 
 const Technologies = ({ technologies, setTechnologies }) => {
   const windowWidth = useWindowSize('x')
@@ -115,35 +114,26 @@ const Technologies = ({ technologies, setTechnologies }) => {
     authRequest
   } = useContext(UserContext)
   const [isModalVisible, setIsModalVisible] = useState(false)
-  const [loading, setLoading] = useState(false)
 
   const handleSubmit = async () => {
-    try {
-      const form = formRef.current.getFormState()
-      setLoading(true)
-
-      const formData = new FormData()
-      formData.append('image', form.logo)
-      formData.append('name', form.name)
-      formData.append('docsURL', form.docsURL)
-    
-      const res = await authRequest.post(
-        `${import.meta.env.VITE_SERVER_BASE_URL}/api/tech/create`,
-        formData,
-        { 
-          headers: {
-            Authorization: `Bearer ${userToken}`,
-            'Content-Type': 'multipart/form-data'
-          }
+    const form = formRef.current.getFormState()
+    const formData = new FormData()
+    formData.append('image', form.logo)
+    formData.append('name', form.name)
+    formData.append('docsURL', form.docsURL)
+  
+    const res = await authRequest.post(
+      `${import.meta.env.VITE_SERVER_BASE_URL}/api/tech/create`,
+      formData,
+      { 
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+          'Content-Type': 'multipart/form-data'
         }
-      )
+      }
+    )
 
-      setTechnologies(prevState => [...prevState, res.data.technology])
-    } catch (error) {
-      console.error(error)
-    } finally {
-      setLoading(false)
-    }
+    setTechnologies(prevState => [...prevState, res.data.technology])
   }
 
   const formSettings = {
@@ -182,7 +172,10 @@ const Technologies = ({ technologies, setTechnologies }) => {
     ],
     submit: {
       action: handleSubmit,
-      text: loading ? 'Submitting Technology...' : 'Submit Technology'
+      btnText: {
+        idle: 'Add Technology',
+        loading: 'Please wait...'
+      }
     }
   }
 

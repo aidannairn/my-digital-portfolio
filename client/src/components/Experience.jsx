@@ -1,7 +1,6 @@
 import { useContext, useRef, useState } from 'react'
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component'
 import { motion } from 'framer-motion'
-import axios from 'axios'
 
 import { styles } from '../styles'
 import { SectionWrapper } from '../hoc'
@@ -148,42 +147,32 @@ const Experience = ({ experiences, setExperiences }) => {
   const formRef = useRef(null)
   const { user: { userId, userToken }, authRequest } = useContext(UserContext)
   const [isModalVisible, setIsModalVisible] = useState(false)
-  const [loading, setLoading] = useState(false)
 
   const handleSubmit = async () => {
-    try {
-      const form = formRef.current.getFormState()
-      setLoading(true)
-
-      const bullets = await form.bullets.map(bullet => bullet.skill)
-
-      const formData = new FormData()
-      formData.append('provider', form.provider)
-      formData.append('logo', form.logo)
-      formData.append('qualification', form.qualification)
-      formData.append('certificate', form.certificate)
-      formData.append('dateFrom', form.dateFrom)
-      formData.append('dateTo', form.activelyLearning ? '' : form.dateTo)
-      formData.append('bullets', JSON.stringify(bullets))
-      formData.append('userId', userId)
-    
-      const res = await authRequest.post(
-        `${import.meta.env.VITE_SERVER_BASE_URL}/api/education/create`,
-        formData,
-        { 
-          headers: {
-            Authorization: `Bearer ${userToken}`,
-            'Content-Type': 'multipart/form-data'
-          }
+    const form = formRef.current.getFormState()
+    const bullets = await form.bullets.map(bullet => bullet.skill)
+    const formData = new FormData()
+    formData.append('provider', form.provider)
+    formData.append('logo', form.logo)
+    formData.append('qualification', form.qualification)
+    formData.append('certificate', form.certificate)
+    formData.append('dateFrom', form.dateFrom)
+    formData.append('dateTo', form.activelyLearning ? '' : form.dateTo)
+    formData.append('bullets', JSON.stringify(bullets))
+    formData.append('userId', userId)
+  
+    const res = await authRequest.post(
+      `${import.meta.env.VITE_SERVER_BASE_URL}/api/education/create`,
+      formData,
+      { 
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+          'Content-Type': 'multipart/form-data'
         }
-      )
+      }
+    )
 
-      setExperiences(prevState => [...prevState, res.data.experience])
-    } catch (error) {
-      console.error(error)
-    } finally {
-      setLoading(false)
-    }
+    setExperiences(prevState => [...prevState, res.data.experience])
   }
 
   const formSettings = {
@@ -294,7 +283,10 @@ const Experience = ({ experiences, setExperiences }) => {
     ],
     submit: {
       action: handleSubmit,
-      text: loading ? 'Submitting Experience...' : 'Submit Experience'
+      btnText: {
+        idle: 'Add Experience',
+        loading: 'Please wait...'
+      }
     }
   }
 

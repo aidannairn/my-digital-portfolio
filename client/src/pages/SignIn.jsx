@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
@@ -9,20 +9,11 @@ const SignIn = () => {
   const redirect = useNavigate()
   const formRef = useRef(null)
 
-  const [loading, setLoading] = useState(false)
-
   const handleSubmit = async () => {
-    try {
-      const form = formRef.current.getFormState()
-      setLoading(true)
-      await axios.post(`${import.meta.env.VITE_SERVER_BASE_URL}/api/signin`, { ...form })
-      redirect('/', { replace: true })
-      window.location.reload()
-    } catch (error) {
-      console.error(error)
-    } finally {
-      setLoading(false)
-    }
+    const form = formRef.current.getFormState()
+    await axios.post(`${import.meta.env.VITE_SERVER_BASE_URL}/api/signin`, { ...form })
+    redirect('/', { replace: true })
+    window.location.reload()
   }
 
   const formSettings = {
@@ -47,7 +38,10 @@ const SignIn = () => {
     }],
     submit: {
       action: handleSubmit,
-      text: loading ? 'Signing in...' : 'Sign in'
+      btnText: {
+        idle: 'Sign In',
+        loading: 'Signing In...'
+      }
     }
   }
 

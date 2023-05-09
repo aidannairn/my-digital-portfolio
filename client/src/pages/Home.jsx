@@ -38,9 +38,9 @@ const Home = () => {
       { !isLoading && 
         <>
           {/* <About /> */}
-          {/* <Experience experiences={experiences} setExperiences={setExperiences} /> */}
-          {/* <Technologies technologies={technologies} setTechnologies={setTechnologies} /> */}
-          {/* <Projects projects={projects} setProjects={setProjects} /> */}
+          <Experience experiences={experiences} setExperiences={setExperiences} />
+          <Technologies technologies={technologies} setTechnologies={setTechnologies} />
+          <Projects projects={projects} setProjects={setProjects} />
           {/* <Feedback /> */}
           <div className='relative z-0'>
             <Contact />
