@@ -8,6 +8,7 @@ import { SectionWrapper } from '../hoc'
 import { fadeIn, textVariant } from '../utils/motion'
 import { UserContext } from '../contexts/UserContext'
 import { ExpandedImageModal, FormModal, OnConfirmModal } from './modals'
+import formSettings from './form/data/experiences.form'
 
 import 'react-vertical-timeline-component/style.min.css'
 
@@ -165,7 +166,6 @@ const Experience = ({ experiences, setExperiences }) => {
     setSortedExperiences([...incompleteSorted, ...completeSorted])
   }, [experiences])
   
-
   const handleSubmit = async () => {
     const form = formRef.current.getFormState()
     const bullets = await form.bullets.map(bullet => bullet.skill)
@@ -191,120 +191,13 @@ const Experience = ({ experiences, setExperiences }) => {
     )
 
     setExperiences(prevState => [...prevState, res.data.experience])
-  }
+  }  
 
-  const formSettings = {
-    title: 'Add A Learning Experience',
-    subtitle: 'Where did you get qualified?',
-    inputGroups: [
-      {
-        settings: {
-          heading: 'General'
-        },
-        inputs: [
-          {
-            component: 'LabelTextInput',
-            properties: {
-              label: 'Education Provider',
-              name: 'provider',
-              placeholder: 'Where did/do you study?',
-              required: true
-            }
-          },
-          {
-            component: 'LabelImageInput',
-            properties: {
-              label: 'Logo',
-              name: 'logo',
-            }
-          },
-          {
-            component: 'LabelColorInput',
-            properties: {
-              label: 'Logo Background Colour',
-              name: 'logoBgColor'
-            }
-          },
-          {
-            component: 'LabelTextInput',
-            properties: {
-              label: 'Qualification',
-              name: 'qualification',
-              placeholder: 'What is the name of your qualification?',
-              required: true
-            },
-          },
-          {
-            component: 'LabelImageInput',
-            properties: {
-              label: 'Certificate',
-              name: 'certificate',
-            }
-          }
-        ]
-      },
-      {
-        settings: {
-          heading: 'Dates',
-        },
-        inputs: [
-          {
-            component: 'LabelCalendar',
-            properties: {
-              label: 'From',
-              name: 'dateFrom',
-              required: true,
-              untilNow: true
-            },
-          },
-          {
-            component: 'LabelCalendar',
-            properties: {
-              label: 'To',
-              name: 'dateTo'
-            },
-          },
-          {
-            component: 'LabelMultiChoice',
-            properties: {
-              label: 'Are you still working towards this qualification?',
-              name: 'activelyLearning',
-              options: [
-                { name: 'No', value: false },
-                { name: 'Yes', value: true }
-              ],
-              required: true
-            },
-          },
-        ]
-      },
-      {
-        settings: {
-          heading: 'Add your skills',
-          array: {
-            name: 'bullets',
-            dependencies: []
-          }
-        },
-        inputs: [
-          {
-            component: 'LabelTextArea',
-            properties: {
-              label: 'Skill',
-              rows: 5,
-              name: 'skill',
-              placeholder: 'What did this course teach you?'
-            }
-          }
-        ]
-      }
-    ],
-    submit: {
-      action: handleSubmit,
-      btnText: {
-        idle: 'Add Experience',
-        loading: 'Please wait...'
-      }
+  formSettings.submit = {
+    action: handleSubmit,
+    btnText: {
+      idle: 'Add Experience',
+      loading: 'Please wait...'
     }
   }
 

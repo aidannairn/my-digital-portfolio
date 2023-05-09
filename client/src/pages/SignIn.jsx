@@ -4,6 +4,7 @@ import axios from 'axios'
 
 import { styles } from '../styles'
 import Form from '../components/form/Form'
+import formSettings from '../components/form/data/signin.form'
 
 const SignIn = () => {
   const redirect = useNavigate()
@@ -16,32 +17,11 @@ const SignIn = () => {
     window.location.reload()
   }
 
-  const formSettings = {
-    inputGroups: [{
-      inputs: [{
-        component: 'LabelTextInput',
-        properties: {
-          label: 'Email',
-          name: 'email',
-          placeholder: 'What is your email?',
-        }
-      },
-      {
-        component: 'LabelTextInput',
-        properties: {
-          label: 'Password',
-          type: 'password',
-          name: 'password',
-          placeholder: '********',
-        }
-      }]
-    }],
-    submit: {
-      action: handleSubmit,
-      btnText: {
-        idle: 'Sign In',
-        loading: 'Signing In...'
-      }
+  formSettings.submit = {
+    action: handleSubmit,
+    btnText: {
+      idle: 'Sign In',
+      loading: 'Signing In...'
     }
   }
 

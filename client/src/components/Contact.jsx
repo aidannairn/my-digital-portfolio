@@ -7,6 +7,7 @@ import { EarthCanvas } from './canvas'
 import { SectionWrapper } from '../hoc'
 import { slideIn } from '../utils/motion'
 import Form from './form/Form'
+import formSettings from './form/data/contact.form'
 
 const Contact = () => {
   const formRef = useRef(null)
@@ -37,46 +38,11 @@ const Contact = () => {
     )
   }
 
-  const formSettings = {
-    inputGroups: [
-      { inputs: [
-        {
-          component: 'LabelTextInput',
-          properties: {
-            label: 'Name',
-            name: 'name',
-            placeholder: 'What is your name?',
-            required: true
-          }
-        },
-        {
-          component: 'LabelTextInput',
-          properties: {
-            label: 'Email',
-            name: 'email',
-            type: 'email',
-            placeholder: 'What is your email address?',
-            required: true
-          }
-        },
-        {
-          component: 'LabelTextArea',
-          properties: {
-            label: 'Message',
-            rows: 5,
-            name: 'message',
-            placeholder: 'What would you like to say?',
-            required: true
-          }
-        }
-      ]}
-    ],
-    submit: {
-      action: handleSubmit,
-      btnText: {
-        idle: 'Send',
-        loading: 'Sending...'
-      }
+  formSettings.submit = {
+    action: handleSubmit,
+    btnText: {
+      idle: 'Send',
+      loading: 'Sending...'
     }
   }
 

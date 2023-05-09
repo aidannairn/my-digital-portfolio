@@ -8,6 +8,7 @@ import { styles } from '../styles'
 import { UserContext } from '../contexts/UserContext'
 import { fadeIn } from '../utils/motion'
 import { FormModal } from './modals'
+import formSettings from './form/data/technologies.form'
 import useWindowSize from '../utils/useWindowSize'
 
 const Technologies = ({ technologies, setTechnologies }) => {
@@ -136,46 +137,11 @@ const Technologies = ({ technologies, setTechnologies }) => {
     setTechnologies(prevState => [...prevState, res.data.technology])
   }
 
-  const formSettings = {
-    title: 'Add A Technology',
-    subtitle: "List some of the technologies you're confident with",
-    inputGroups: [
-      {
-        inputs: [
-          {
-            component: 'LabelTextInput',
-            properties: {
-              label: 'Name',
-              name: 'name',
-              placeholder: 'The name of the technology',
-              required: true
-            }
-          },
-          {
-            component: 'LabelImageInput',
-            properties: {
-              label: 'Logo',
-              name: 'logo',
-              required: true
-            }
-          },
-          {
-            component: 'LabelTextInput',
-            properties: {
-              label: 'Documentation Link',
-              name: 'docsURL',
-              placeholder: "Link to this technology's documentation",
-            }
-          }
-        ]
-      }
-    ],
-    submit: {
-      action: handleSubmit,
-      btnText: {
-        idle: 'Add Technology',
-        loading: 'Please wait...'
-      }
+  formSettings.submit = {
+    action: handleSubmit,
+    btnText: {
+      idle: 'Add Technology',
+      loading: 'Please wait...'
     }
   }
 
