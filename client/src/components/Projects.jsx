@@ -101,7 +101,7 @@ const ProjectCard = ({
                       }
                       { !!links.length && (
                         <button
-                          className={`w-10 h-10 p-2 ml-0 rounded-full  blue-dark-gradient ${isSrcListVisible ? 'border-2 border-[#000D26]' : ''}`}
+                          className={`w-10 h-10 p-2 ml-0 rounded-full  blue-dark-gradient hover:border-2 hover:border-[#000D26] ${isSrcListVisible ? 'border-2 border-[#000D26]' : ''}`}
                           onClick={() => setIsSrcListVisible(true)}
                         >
                           <img
