@@ -1,18 +1,18 @@
-import { useEffect, useState, Suspense } from 'react'
+import { forwardRef, useEffect, useRef, useState, Suspense } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { Decal, Float, useTexture, OrthographicCamera, Html, Preload } from '@react-three/drei'
 
 import { OnConfirmModal, TechDetailModal } from '../modals'
 import CanvasLoader from '../Loader'
 
-const TechItem = ({
+const TechItem = forwardRef(({
   gridDimensions: gd,
   index,
   handleTechItemClick,
   imageURL,
   position,
   scale
-}) => {
+}, ref) => {
   /*
     - The default behavior of floatingRange is for objects to have less range the closer they are to the center.
     - setFloatingRange is designed to make each object have the same amount of floatingRange regardless of their position.
@@ -44,6 +44,10 @@ const TechItem = ({
   const [floatRange, setFloatRange] = useState(0)
 
   useEffect(() => { setFloatRange(getFloatingRange) }, [])
+  useEffect(() => {
+    if (ref.current)
+      ref.current.style.cursor = isHovered ? 'pointer' : 'default'
+  }, [isHovered])
 
   return (
     <Float 
@@ -78,7 +82,7 @@ const TechItem = ({
       </mesh>
     </Float>
   )
-}
+})
 
 const TechCanvas = ({
   technologies,
@@ -88,6 +92,7 @@ const TechCanvas = ({
   scale,
   currentUser: { userId, userToken, authRequest }
 }) => {
+  const canvasRef = useRef(null)
   const [activeTechIndex, setActiveTechIndex] = useState(0)
   const [isTechModalExpanded, setIsTechModalExpanded] = useState(false)
   const [isDeleteModalExpanded, setIsDeleteModalExpanded] = useState(false)
@@ -146,7 +151,7 @@ const TechCanvas = ({
         action={removeATechnology}
       />
       }
-      <Canvas>
+      <Canvas ref={canvasRef} >
         <ambientLight intensity={0.033} />
         <directionalLight
           position={[0, 0, 1]}
@@ -172,6 +177,7 @@ const TechCanvas = ({
           { positions.length === technologies.length &&
             technologies.map((technology, i) => (
               <TechItem
+                ref={canvasRef}
                 key={`tech-${technology._id}`}
                 index={i}
                 gridDimensions={canvasGridDimensions}
