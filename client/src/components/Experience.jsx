@@ -1,7 +1,8 @@
-import { useContext, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component'
 import { motion } from 'framer-motion'
 
+import { sort } from '../utils/sort'
 import { styles } from '../styles'
 import { SectionWrapper } from '../hoc'
 import { fadeIn, textVariant } from '../utils/motion'
@@ -147,6 +148,23 @@ const Experience = ({ experiences, setExperiences }) => {
   const formRef = useRef(null)
   const { user: { userId, userToken }, authRequest } = useContext(UserContext)
   const [isModalVisible, setIsModalVisible] = useState(false)
+  const [sortedExperiences, setSortedExperiences] = useState([])
+
+  useEffect(() => {
+    const incompleteExperiences = []
+    const completeExperiences = []
+    
+    experiences.map(experience => {
+      if (!experience.dateTo) incompleteExperiences.push(experience)
+      else completeExperiences.push(experience)
+    })
+
+    const incompleteSorted = sort([...incompleteExperiences], 'dateFrom')
+    const completeSorted = sort([...completeExperiences], '-dateFrom', '-dateTo')
+
+    setSortedExperiences([...incompleteSorted, ...completeSorted])
+  }, [experiences])
+  
 
   const handleSubmit = async () => {
     const form = formRef.current.getFormState()
@@ -323,7 +341,7 @@ const Experience = ({ experiences, setExperiences }) => {
         className='mt-20 flex flex-col'
       >
         <VerticalTimeline>
-          {experiences.map((experience, i) => (
+          {sortedExperiences.map((experience, i) => (
             <ExperienceCard
             key={i}
             currentUser={{ userId, userToken, authRequest }}
