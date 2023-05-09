@@ -6,59 +6,80 @@ import { styles } from '../styles'
 import { EarthCanvas } from './canvas'
 import { SectionWrapper } from '../hoc'
 import { slideIn } from '../utils/motion'
+import Form from './form/Form'
 
 const Contact = () => {
-  const formRef = useRef()
-
-  const [form, setForm] = useState({
-    name: '',
-    email: '',
-    message: ''
-  })
+  const formRef = useRef(null)
   const [loading, setLoading] = useState(false)
 
-  const handleChange = e => {
-    const { name, value } = e.target
-
-    setForm({ ...form, [name]: value })
+  const handleSubmit = async () => {
+    try {
+      setLoading(true)
+      const form = formRef.current.getFormState()
+      const { 
+        VITE_EMAILJS_SERVICE_ID: serviceId,
+        VITE_EMAILJS_TEMPLATE_ID: templateId,
+        VITE_EMAILJS_PUBLIC_KEY: publicKey,
+        VITE_MY_EMAIL: myEmail
+      } = import.meta.env
+  
+      await emailjs.send(
+        serviceId,
+        templateId,
+        {
+          from_name: form.name,
+          to_name: 'Aidan',
+          from_email: form.email,
+          to_email: myEmail,
+          message: form.message
+        },
+        publicKey
+      )
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const handleSubmit = e => {
-    e.preventDefault()
-    setLoading(true)
-
-    const { 
-      VITE_EMAILJS_SERVICE_ID: serviceId,
-      VITE_EMAILJS_TEMPLATE_ID: templateId,
-      VITE_EMAILJS_PUBLIC_KEY: publicKey,
-      VITE_MY_EMAIL: myEmail
-    } = import.meta.env
-
-    emailjs.send(
-      serviceId,
-      templateId,
-      {
-        from_name: form.name,
-        to_name: 'Aidan',
-        from_email: form.email,
-        to_email: myEmail,
-        message: form.message
-      },
-      publicKey
-    )
-    .then(() => {
-      setLoading(false)
-      alert('Thank you! I will get back to you as soon as possible.')
-      setForm({
-        name: '',
-        email: '',
-        message: ''
-      })
-    }, (error) => {
-      setLoading(false)
-      console.error(error)
-      alert('Something went wrong.')
-    })
+  const formSettings = {
+    inputGroups: [
+      { inputs: [
+        {
+          component: 'LabelTextInput',
+          properties: {
+            label: 'Name',
+            name: 'name',
+            placeholder: 'What is your name?',
+            required: true
+          }
+        },
+        {
+          component: 'LabelTextInput',
+          properties: {
+            label: 'Email',
+            name: 'email',
+            type: 'email',
+            placeholder: 'What is your email address?',
+            required: true
+          }
+        },
+        {
+          component: 'LabelTextArea',
+          properties: {
+            label: 'Message',
+            rows: 5,
+            name: 'message',
+            placeholder: 'What would you like to say?',
+            required: true
+          }
+        }
+      ]}
+    ],
+    submit: {
+      action: handleSubmit,
+      text: loading ? 'Sending...' : 'Send'
+    }
   }
 
   return (
@@ -69,51 +90,7 @@ const Contact = () => {
       >
         <p className={styles.sectionSubText}>Get in touch</p>
         <h3 className={styles.sectionHeadText}>Contact.</h3>
-        <form
-          ref={formRef}
-          onSubmit={handleSubmit}
-          className='mt-12 flex flex-col gap-8'
-        >
-          <label className='flex flex-col'>
-            <span className='text-white font-medium mb-4'>Your Name</span>
-            <input
-              type='text'
-              name='name'
-              value={form.name}
-              onChange={handleChange}
-              placeholder="What's your name?"
-              className='bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outlined-none border-none font-medium'
-            />
-          </label>
-          <label className='flex flex-col'>
-            <span className='text-white font-medium mb-4'>Your Email</span>
-            <input
-              type='email'
-              name='email'
-              value={form.email}
-              onChange={handleChange}
-              placeholder="What's your email?"
-              className='bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outlined-none border-none font-medium'
-            />
-          </label>
-          <label className='flex flex-col'>
-            <span className='text-white font-medium mb-4'>Your Message</span>
-            <textarea
-              rows='7'
-              name='message'
-              value={form.message}
-              onChange={handleChange}
-              placeholder="What do you want to say?"
-              className='bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outlined-none border-none font-medium'
-            />
-          </label>
-          <button
-            type='submit'
-            className='bg-tertiary py-3 px-8 self-end sm:self-start outline-none w-fit text-white font-bold shadow-md shadow-primary rounded-xl'
-          >
-            {loading ? 'Sending...' : 'Send'}
-          </button>
-        </form>
+        <Form ref={formRef} {...formSettings} />
       </motion.div>
       <motion.div
         variants={slideIn('left', 'tween', 0.2, 1)}

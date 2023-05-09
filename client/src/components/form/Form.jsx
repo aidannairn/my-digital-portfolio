@@ -37,12 +37,7 @@ const Form = forwardRef(({
     LabelTextInput
   }
 
-  const handleChange = e => {
-    const { name, value, files } = e.target
-    setForm({ ...form, [name]: files?.[0] || value })
-  }
-
-  useEffect(() => {
+  const clearInputs = () => {
     const formDefaults = {}
     inputGroups.map(inputGroup => {
       if (inputGroup?.settings?.array)
@@ -51,7 +46,20 @@ const Form = forwardRef(({
         formDefaults[input.properties.name] = '')
     })
     setForm(formDefaults)
-  }, [])
+  }
+
+  const handleChange = e => {
+    const { name, value, files } = e.target
+    setForm({ ...form, [name]: files?.[0] || value })
+  }
+
+  const handleSubmit = async e => {
+    e.preventDefault()
+    await submit.action()
+    clearInputs()
+  }
+
+  useEffect(() => { clearInputs() }, [])
   
   return !isObjectEmpty(form) ? (
     <div className={`${modal?.className || ''} ${modal ? 'w-[80vw] sm:w-[30rem] py-5 px-6 sm:px-12' : ''}`}>
@@ -61,7 +69,7 @@ const Form = forwardRef(({
           <h2 className='text-white font-semibold xs:text-[30px] text-[20px]'>{title}</h2>
         </div>
       }
-      <form className='flex flex-col' onSubmit={submit?.action}>
+      <form className='flex flex-col' onSubmit={submit.action ? handleSubmit : null}>
         { inputGroups?.map((inputGroup, i) => {
           const { inputs, settings } = inputGroup
           return (

@@ -11,8 +11,7 @@ const SignIn = () => {
 
   const [loading, setLoading] = useState(false)
 
-  const handleSubmit = async e => {
-    e.preventDefault()
+  const handleSubmit = async () => {
     try {
       const form = formRef.current.getFormState()
       setLoading(true)
