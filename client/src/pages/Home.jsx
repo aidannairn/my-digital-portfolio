@@ -1,14 +1,17 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import axios from 'axios'
 
 import { About, Contact, Experience, Feedback, Hero, Navbar, Technologies, Projects } from '../components'
 import { StarsCanvas } from '../components/canvas'
+import { UserContext } from '../contexts/UserContext'
 
 const Home = () => {
   const [experiences, setExperiences] = useState([])
   const [technologies, setTechnologies] = useState([])
   const [projects, setProjects] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+
+  const { user: { userId } } = useContext(UserContext)
 
   const getUserContent = async () => {
     const {
@@ -34,18 +37,24 @@ const Home = () => {
   return (
     <div className='home bg-primary'>
       <Navbar isLoading={isLoading} />
-      {/* <Hero isLoading={isLoading} /> */}
+      <Hero isLoading={isLoading} />
       { !isLoading && 
         <>
-          {/* <About /> */}
-          <Experience experiences={experiences} />
-          <Technologies technologies={technologies} setTechnologies={setTechnologies} />
-          <Projects projects={projects} />
+          <About />
+          { (!!experiences.length || userId) &&
+            <Experience experiences={experiences} setExperiences={setExperiences} />
+          }
+          { (!!technologies.length || userId) &&
+            <Technologies technologies={technologies} setTechnologies={setTechnologies} />
+          }
+          { (!!projects.length || userId) &&
+            <Projects projects={projects} setProjects={setProjects} />
+          }
           {/* <Feedback /> */}
-          {/* <div className='relative z-0'>
+          <div className='relative z-0'>
             <Contact />
-            <StarsCanvas />
-          </div> */}
+            {/* <StarsCanvas /> */}
+          </div>
         </>
       }
     </div>

@@ -1,16 +1,16 @@
 const { s3Upload, s3Delete } = require('../config/aws.config')
 const Education = require('../models/Education')
 
-const educationCreate = async (req, res, next) => {
+const educationCreate = async (req, res) => {
   const {
     provider,
     qualification,
     logoBgHex,
     dateFrom,
     dateTo,
-    bullets: bulletsStr,
-    userId
+    bullets: bulletsStr
   } = req.body
+  const userId = req.userId
   const logo = req.files?.logo?.[0]
   const certificate = req.files?.certificate?.[0]
 
@@ -43,7 +43,7 @@ const educationCreate = async (req, res, next) => {
     })
     
     await education.save()
-    return res.status(200).json({ type: 'success', msg: 'You have added more learning experience!'})
+    return res.status(200).json({ type: 'success', msg: 'You have added more learning experience!', experience: education })
   } catch (error) {
     if (logoURL) s3Delete(logoURL)
     if (certificateURL) s3Delete(certificateURL)
@@ -54,12 +54,12 @@ const educationCreate = async (req, res, next) => {
 
 const educationDeleteOne = async (req, res) => {
   const { id: eduId } = req.params
-
-  // TODO: Get user ID and validate that the learning experience to be deleted belongs to the active user.
+  const userId = req.userId
 
   try {
-    const education = await Education.findByIdAndDelete(eduId)
-    if (!education) throw new Error('There was a problem removing this learning experience from the database.')
+    const education = await Education.findOneAndDelete({ _id: eduId, userId })
+
+    if (!education) throw new Error('Could not find a learning experience that matches the education ID and user ID.')
 
     const { logoURL, certificateURL } = education
     
@@ -73,7 +73,7 @@ const educationDeleteOne = async (req, res) => {
       if (!certificate) throw new Error('Certificate was not removed from S3.')
     }
 
-    return res.status(200).json({ type: 'success', msg: 'Learning experience was removed successfully.' })
+    return res.status(200).json({ type: 'success', msg: 'Learning experience was removed successfully.', id: education._id })
   } catch (error) {
     console.error(error)
     return res.status(400).json({ type: 'error', msg: 'Could not delete this learning experience.' })

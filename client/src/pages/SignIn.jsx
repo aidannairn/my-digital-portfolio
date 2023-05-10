@@ -1,54 +1,27 @@
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
-import { styles } from '../styles'
 import Form from '../components/form/Form'
+import formSettings from '../components/form/data/signin.form'
+import styles from '../styles'
 
 const SignIn = () => {
   const redirect = useNavigate()
   const formRef = useRef(null)
 
-  const [loading, setLoading] = useState(false)
-
-  const handleSubmit = async e => {
-    e.preventDefault()
-    try {
-      const form = formRef.current.getFormState()
-      setLoading(true)
-      await axios.post(`${import.meta.env.VITE_SERVER_BASE_URL}/api/signin`, { ...form })
-      redirect('/', { replace: true })
-      window.location.reload()
-    } catch (error) {
-      console.error(error)
-    } finally {
-      setLoading(false)
-    }
+  const handleSubmit = async () => {
+    const form = formRef.current.getFormState()
+    await axios.post(`${import.meta.env.VITE_SERVER_BASE_URL}/api/signin`, { ...form })
+    redirect('/', { replace: true })
+    window.location.reload()
   }
 
-  const formSettings = {
-    inputGroups: [{
-      inputs: [{
-        component: 'LabelTextInput',
-        properties: {
-          label: 'Email',
-          name: 'email',
-          placeholder: 'What is your email?',
-        }
-      },
-      {
-        component: 'LabelTextInput',
-        properties: {
-          label: 'Password',
-          type: 'password',
-          name: 'password',
-          placeholder: '********',
-        }
-      }]
-    }],
-    submit: {
-      action: handleSubmit,
-      text: loading ? 'Signing in...' : 'Sign in'
+  formSettings.submit = {
+    action: handleSubmit,
+    btnText: {
+      idle: 'Sign In',
+      loading: 'Signing In...'
     }
   }
 

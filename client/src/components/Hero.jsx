@@ -1,9 +1,9 @@
 import { useEffect, useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 
-import { styles } from '../styles'
 import { ComputerCanvas } from './canvas'
 import useWindowSize from '../utils/useWindowSize'
+import styles from '../styles'
 
 const Hero = ({ isLoading }) => {
   const heroMainRef = useRef(null)
@@ -38,8 +38,8 @@ const Hero = ({ isLoading }) => {
         </div>
         <div ref={heroTextRef}>
           <h1 className={`${styles.heroHeadText} mt-10 text-white`}>Hi, I'm <span className='text-quaternary'>Aidan</span></h1>
-          <p className={`${styles.heroSubText} mt-2 text-white-100`}>
-            Coding is my creative outlet.
+          <p className={`${styles.heroSubText} max-w-[32.5rem] mt-2 text-white-100`}>
+            I try to develop user-friendly websites and make them look pretty.
           </p>
         </div>
       </div>

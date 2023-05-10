@@ -9,12 +9,13 @@ const UserProvider = ({ children }) => {
   const navigate = useNavigate()
 
   const [user, setUser] = useState({
-    id: '',
+    userId: '',
     email: '',
     firstName: '',
     lastName: '',
     imageURL: '',
-    tokenExpiry: ''
+    tokenExpiry: '',
+    userToken: ''
   })
 
   const getRefreshToken = async () => {
@@ -25,8 +26,8 @@ const UserProvider = ({ children }) => {
       if (res.data.msg) return console.log(res.data.msg)
 
       const resDecoded = await decode(res.data.accessToken)
-      const { id, email, firstName, lastName, imageURL, exp: tokenExpiry } = resDecoded
-      setUser({ id, email, firstName, lastName, imageURL, tokenExpiry })
+      const { userId, email, firstName, lastName, imageURL, exp: tokenExpiry } = resDecoded
+      setUser({ userId, email, firstName, lastName, imageURL, tokenExpiry, userToken: res.data.accessToken })
       console.log(`${firstName} is signed in.`)
     } catch (error) {
       console.error(error)
@@ -35,17 +36,17 @@ const UserProvider = ({ children }) => {
 
   useEffect(() => { getRefreshToken() }, [])
 
-  const axiosJWT = axios.create()
+  const authRequest = axios.create()
 
-  axiosJWT.interceptors.request.use(async config => {
+  authRequest.interceptors.request.use(async config => {
     const currentDate = new Date()
     try {
       if (user.tokenExpiry * 1000 < currentDate.getTime()) {
         const res = await axios.get(`${import.meta.env.VITE_SERVER_BASE_URL}/api/token`)
         config.headers.Authorization = `Bearer ${res.data.accessToken}`
         const resDecoded = await decode(res.data.accessToken)
-        const { id, email, firstName, lastName, imageURL, exp: tokenExpiry } = resDecoded
-        setUser({ id, email, firstName, lastName, imageURL, tokenExpiry })
+        const { userId, email, firstName, lastName, imageURL, exp: tokenExpiry } = resDecoded
+        setUser({ userId, email, firstName, lastName, imageURL, tokenExpiry, userToken: res.data.accessToken })
       }
       return config
     } catch (error) {
@@ -64,7 +65,7 @@ const UserProvider = ({ children }) => {
   }
 
   return (
-    <UserContext.Provider value={{ user, userSignOut }}>
+    <UserContext.Provider value={{ user, userSignOut, authRequest }}>
       { children }
     </UserContext.Provider>
   )

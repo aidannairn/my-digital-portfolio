@@ -3,8 +3,9 @@ const path = require('path')
 const { s3Upload, s3Delete } = require('../config/aws.config')
 const Technology = require('../models/Technology')
 
-const techCreate = async (req, res, next) => {
-  const { name, docsURL, userId } = req.body
+const techCreate = async (req, res) => {
+  const { name, docsURL } = req.body
+  const userId = req.userId
   const image = req.file
 
   if (!(name && image && userId))
@@ -16,7 +17,7 @@ const techCreate = async (req, res, next) => {
     const technology = new Technology({ name, docsURL, imageURL, userId })
     
     await technology.save()
-    return res.status(200).json({ type: 'success', msg: `${name} has been added to your technologies!`})
+    return res.status(200).json({ type: 'success', msg: `${name} has been added to your technologies!`, technology })
   } catch (error) {
     if (imageURL) s3Delete(imageURL)
     console.error(error)
@@ -26,17 +27,17 @@ const techCreate = async (req, res, next) => {
 
 const techDeleteOne = async (req, res) => {
   const { id: techId } = req.params
-
-  // TODO: Get user ID and validate that the technology to be deleted belongs to the active user.
-
+  const userId = req.userId
+  
   try {
-    const technology = await Technology.findByIdAndDelete(techId)
-    if (!technology) throw new Error(`There was a problem removing ${technology.name} from the database.`)
+    const technology = await Technology.findOneAndDelete({ _id: techId, userId })
+
+    if (!technology) throw new Error('Could not find a technology that matches the technology ID and user ID.')
     
     const techImage = await s3Delete(technology.imageURL)
     if (!techImage) throw new Error('Image was not removed from S3.')
 
-    return res.status(200).json({ type: 'success', msg: `${technology.name} was removed successfully.` })
+    return res.status(200).json({ type: 'success', msg: `${technology.name} was removed successfully.`, id: technology._id })
   } catch (error) {
     console.error(error)
     return res.status(400).json({ type: 'error', msg: 'Could not delete technology.' })

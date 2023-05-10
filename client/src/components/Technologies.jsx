@@ -1,15 +1,15 @@
 import { useContext, useEffect, useState, useRef } from 'react'
 import { motion } from 'framer-motion'
-import axios from 'axios'
 
 import { TechCanvas } from './canvas'
 import { textVariant } from '../utils/motion'
 import { SectionWrapper } from '../hoc'
-import { styles } from '../styles'
 import { UserContext } from '../contexts/UserContext'
 import { fadeIn } from '../utils/motion'
-import useWindowSize from '../utils/useWindowSize'
 import { FormModal } from './modals'
+import formSettings from './form/data/technologies.form'
+import useWindowSize from '../utils/useWindowSize'
+import styles from '../styles'
 
 const Technologies = ({ technologies, setTechnologies }) => {
   const windowWidth = useWindowSize('x')
@@ -110,75 +110,38 @@ const Technologies = ({ technologies, setTechnologies }) => {
   }, [canvasRows, scale, technologies])
 
   const formRef = useRef(null)
-  const { user: { id: userId } } = useContext(UserContext)
+  const {
+    user: { userId, userToken }, 
+    authRequest
+  } = useContext(UserContext)
   const [isModalVisible, setIsModalVisible] = useState(false)
-  const [loading, setLoading] = useState(false)
 
-  const handleSubmit = async e => {
-    e.preventDefault()
-    try {
-      const form = formRef.current.getFormState()
-      setLoading(true)
-
-      const formData = new FormData()
-      formData.append('image', form.logo)
-      formData.append('name', form.name)
-      formData.append('docsURL', form.docsURL)
-      formData.append('userId', userId)
-    
-      await axios.post(
-        `${import.meta.env.VITE_SERVER_BASE_URL}/api/tech/create`,
-        formData,
-        { 
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
+  const handleSubmit = async () => {
+    const form = formRef.current.getFormState()
+    const formData = new FormData()
+    formData.append('image', form.logo)
+    formData.append('name', form.name)
+    formData.append('docsURL', form.docsURL)
+  
+    const res = await authRequest.post(
+      `${import.meta.env.VITE_SERVER_BASE_URL}/api/tech/create`,
+      formData,
+      { 
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+          'Content-Type': 'multipart/form-data'
         }
-      )
-    } catch (error) {
-      console.error(error)
-    } finally {
-      setLoading(false)
-    }
+      }
+    )
+
+    setTechnologies(prevState => [...prevState, res.data.technology])
   }
 
-  const formSettings = {
-    title: 'Add A Technology',
-    subtitle: "List some of the technologies you're confident with",
-    inputGroups: [
-      {
-        inputs: [
-          {
-            component: 'LabelTextInput',
-            properties: {
-              label: 'Name',
-              name: 'name',
-              placeholder: 'The name of the technology',
-              required: true
-            }
-          },
-          {
-            component: 'LabelImageInput',
-            properties: {
-              label: 'Logo',
-              name: 'logo',
-              required: true
-            }
-          },
-          {
-            component: 'LabelTextInput',
-            properties: {
-              label: 'Documentation Link',
-              name: 'docsURL',
-              placeholder: "Link to this technology's documentation",
-            }
-          }
-        ]
-      }
-    ],
-    submit: {
-      action: handleSubmit,
-      text: loading ? 'Submitting Technology...' : 'Submit Technology'
+  formSettings.submit = {
+    action: handleSubmit,
+    btnText: {
+      idle: 'Add Technology',
+      loading: 'Please wait...'
     }
   }
 
@@ -229,7 +192,7 @@ const Technologies = ({ technologies, setTechnologies }) => {
               positions={technologyPositions}
               canvasGridDimensions={canvasGridDimensions}
               scale={scale}
-              currentUserId={userId}
+              currentUser={{ userId, userToken, authRequest }}
             />
           </motion.div>
         }

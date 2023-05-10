@@ -1,6 +1,5 @@
 import { useRef, useEffect, useState } from 'react'
 
-import { chainLink } from '../../constants'
 import Modal from '../../hoc/Modal' 
 import useWindowSize from '../../utils/useWindowSize'
 
@@ -52,7 +51,7 @@ const TechDetailModal = ({
             <a href={docs} target='_blank' className='flex items-center w-fit hover:opacity-80'>
               <img
                 className='invert h-4 w-4 mr-2'
-                src={chainLink} alt='Show links icon'
+                src={`${import.meta.env.VITE_MEDIA_BUCKET}/icons/chain_link.svg`} alt='Show links icon'
               />
               <span>Read Documentation</span>
             </a>

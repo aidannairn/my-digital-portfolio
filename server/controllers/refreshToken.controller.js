@@ -13,8 +13,8 @@ const refreshToken = async (req, res) => {
     const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN_SECRET)
     if (!decoded) throw new Error('Could not decode refresh token.')
 
-    const { _id: id, email, firstName, lastName, imageURL } = user
-    const userData = { id, email, firstName, lastName, imageURL }
+    const { _id: userId, email, firstName, lastName, imageURL } = user
+    const userData = { userId, email, firstName, lastName, imageURL }
 
     const accessToken = jwt.sign(
       userData,

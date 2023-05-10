@@ -1,5 +1,4 @@
 import { forwardRef, useRef } from "react"
-import { close } from "../assets"
 
 const Modal = (Component) => forwardRef(
   function HOC(props, ref) {
@@ -23,7 +22,7 @@ const Modal = (Component) => forwardRef(
         <div className='green-blue-gradient w-fit rounded-2xl relative p-px'>
           <div className='w-6 h-6 absolute max-h-full -top-2 -right-2 rounded-full green-blue-gradient p-px' onClick={modal.close}>
             <div className='rounded-full w-full h-full bg-tertiary text-white text-center flex justify-center items-center p-1.5 hover:brightness-150 cursor-pointer'>
-              <img src={close} alt='Exit button' />
+              <p className='rotate-45 font-extralight text-xl'>+</p>
             </div>
           </div>
           <Component ref={ref} {...componentProps} />

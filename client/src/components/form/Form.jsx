@@ -1,6 +1,5 @@
 import { forwardRef, useEffect, useState, useImperativeHandle } from "react"
 
-import { styles } from "../../styles"
 import {
   InputGroupRepeat,
   LabelCalendar,
@@ -11,6 +10,7 @@ import {
   LabelTextInput
 } from "./index"
 import isObjectEmpty from "../../utils/isObjectEmpty"
+import styles from "../../styles"
 
 const Form = forwardRef(({
   modal,
@@ -20,6 +20,7 @@ const Form = forwardRef(({
   submit
 }, ref ) => {
   const [form, setForm] = useState({})
+  const [loading, setLoading] = useState(false)
 
   /*  Declare a function that can be called by the parent component.
       - In this case we want to send the form data to parent when the user submits the form.
@@ -37,12 +38,7 @@ const Form = forwardRef(({
     LabelTextInput
   }
 
-  const handleChange = e => {
-    const { name, value, files } = e.target
-    setForm({ ...form, [name]: files?.[0] || value })
-  }
-
-  useEffect(() => {
+  const writeBlankInputs = () => {
     const formDefaults = {}
     inputGroups.map(inputGroup => {
       if (inputGroup?.settings?.array)
@@ -51,7 +47,28 @@ const Form = forwardRef(({
         formDefaults[input.properties.name] = '')
     })
     setForm(formDefaults)
-  }, [])
+  }
+
+  const handleChange = e => {
+    const { name, value, files } = e.target
+    setForm({ ...form, [name]: files?.[0] || value })
+  }
+
+  const handleSubmit = async e => {
+    e.preventDefault()
+    try {
+      setLoading(true)
+      await submit.action()
+      writeBlankInputs()
+      modal?.close()
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => { writeBlankInputs() }, [])
   
   return !isObjectEmpty(form) ? (
     <div className={`${modal?.className || ''} ${modal ? 'w-[80vw] sm:w-[30rem] py-5 px-6 sm:px-12' : ''}`}>
@@ -61,7 +78,7 @@ const Form = forwardRef(({
           <h2 className='text-white font-semibold xs:text-[30px] text-[20px]'>{title}</h2>
         </div>
       }
-      <form className='flex flex-col' onSubmit={submit?.action}>
+      <form className='flex flex-col' onSubmit={submit.action ? handleSubmit : null}>
         { inputGroups?.map((inputGroup, i) => {
           const { inputs, settings } = inputGroup
           return (
@@ -109,9 +126,13 @@ const Form = forwardRef(({
         })}
         <button
           type='submit'
-          className='bg-tertiary py-3 self-end px-8 outline-none w-fit text-white font-bold shadow-md shadow-primary rounded-xl'
+          className={`bg-tertiary py-3 self-end px-8 outline-none w-fit text-white font-bold shadow-md shadow-primary rounded-xl ${loading ? 'cursor-wait' : 'cursor-pointer'}`}
+          disabled={loading}
         >
-          { submit?.text || 'Submit' }
+          { loading 
+            ? submit.btnText?.loading || 'Submitting...'
+            : submit.btnText?.idle || 'Submit'
+          }
         </button>
       </form>
     </div>
