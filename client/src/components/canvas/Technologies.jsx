@@ -73,46 +73,48 @@ const TechCanvas = ({
         action={removeATechnology}
       />
       }
-      <Canvas ref={canvasRef} >
-        <ambientLight intensity={0.033} />
-        <directionalLight
-          position={[0, 0, 1]}
-          intensity={.8}
-        />
-        <pointLight
-          intensity={0.25}
-          position={[0, 0, 0]}
-        />
-        {/* <axesHelper args={[5]} /> */}
-        <OrthographicCamera
-          makeDefault
-          zoom={90}
-          top={200}
-          bottom={-200}
-          left={200}
-          right={-200}
-          near={1}
-          far={2000}
-          position={[0, 0, 200]}
-        />
-        <Suspense fallback={<CanvasLoader />}>
-          { positions.length === technologies.length &&
-            technologies.map((technology, i) => (
-              <TechnologyCard
-                ref={canvasRef}
-                key={`tech-${technology._id}`}
-                index={i}
-                gridDimensions={canvasGridDimensions}
-                position={positions[i]}
-                scale={scale}
-                imageURL={`${import.meta.env.VITE_MEDIA_BUCKET}/${technology.imageURL}`}
-                handleTechItemClick={handleTechItemClick}
-              />
-            ))
-          }
-        </Suspense>
-        <Preload all />
-      </Canvas>
+      { !!technologies.length &&
+        <Canvas ref={canvasRef} >
+          <ambientLight intensity={0.033} />
+          <directionalLight
+            position={[0, 0, 1]}
+            intensity={.8}
+          />
+          <pointLight
+            intensity={0.25}
+            position={[0, 0, 0]}
+          />
+          {/* <axesHelper args={[5]} /> */}
+          <OrthographicCamera
+            makeDefault
+            zoom={90}
+            top={200}
+            bottom={-200}
+            left={200}
+            right={-200}
+            near={1}
+            far={2000}
+            position={[0, 0, 200]}
+          />
+          <Suspense fallback={<CanvasLoader />}>
+            { positions.length === technologies.length &&
+              technologies.map((technology, i) => (
+                <TechnologyCard
+                  ref={canvasRef}
+                  key={`tech-${technology._id}`}
+                  index={i}
+                  gridDimensions={canvasGridDimensions}
+                  position={positions[i]}
+                  scale={scale}
+                  imageURL={`${import.meta.env.VITE_MEDIA_BUCKET}/${technology.imageURL}`}
+                  handleTechItemClick={handleTechItemClick}
+                />
+              ))
+            }
+          </Suspense>
+          <Preload all />
+        </Canvas>
+      }
     </>
   )
 }

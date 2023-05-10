@@ -90,20 +90,22 @@ const Projects = ({ projects, setProjects }) => {
           </div>
         </motion.div>
       }
-      <div
-        className='mt-20 grid gap-7 w-full justify-center'
-        style={{ gridTemplateColumns: 'repeat(auto-fill, 360px)' }}
-      >
-        { projects.map((project, i) => (
-          <ProjectCard
-            key={`project-${i}`}
-            index={i}
-            currentUser={{ userId, userToken, authRequest }}
-            setProjects={setProjects}
-            {...project}
-          />
-        ))}
-      </div>
+      { !!projects.length &&
+        <div
+          className='mt-20 grid gap-7 w-full justify-center'
+          style={{ gridTemplateColumns: 'repeat(auto-fill, 360px)' }}
+        >
+          { projects.map((project, i) => (
+            <ProjectCard
+              key={`project-${i}`}
+              index={i}
+              currentUser={{ userId, userToken, authRequest }}
+              setProjects={setProjects}
+              {...project}
+            />
+          ))}
+        </div>
+      }
     </div>
   )
 }

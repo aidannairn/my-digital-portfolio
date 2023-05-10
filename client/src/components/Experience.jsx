@@ -96,21 +96,24 @@ const Experience = ({ experiences, setExperiences }) => {
           </div>
         </motion.div>
       }
-      <motion.div 
-        variants={fadeIn('', '', 1, 1)}
-        className='mt-20 flex flex-col'
-      >
-        <VerticalTimeline>
-          {sortedExperiences.map((experience, i) => (
-            <ExperienceCard
-            key={i}
-            currentUser={{ userId, userToken, authRequest }}
-            setExperiences={setExperiences}
-            { ...experience }
-          />
-          ))}
-        </VerticalTimeline>
-      </motion.div>
+      { !!sortedExperiences.length &&
+        <motion.div 
+          variants={fadeIn('', '', 1, 1)}
+          className='mt-20 flex flex-col'
+        >
+          <VerticalTimeline>
+            {sortedExperiences.map((experience, i) => (
+              <ExperienceCard
+              key={i}
+              currentUser={{ userId, userToken, authRequest }}
+              setExperiences={setExperiences}
+              { ...experience }
+            />
+            ))}
+          </VerticalTimeline>
+        </motion.div>
+      
+      }
     </>
   )
 }
