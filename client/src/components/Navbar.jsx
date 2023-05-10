@@ -1,10 +1,10 @@
 import { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
 
-import { styles } from '../styles'
-import { logo, menu, close } from '../assets'
 import { UserContext } from '../contexts/UserContext'
+import logo from '../assets/logo.png'
 import useWindowSize from '../utils/useWindowSize'
+import styles from '../styles'
 
 const Navbar = ({ isLoading }) => {
   const { user: { userId }, userSignOut } = useContext(UserContext)
@@ -35,16 +35,17 @@ const Navbar = ({ isLoading }) => {
             </div>
           </Link>
           { isHamburgerMenu &&
-            <div className='flex flex-1 justify-end items-center'>
-              <img 
-                src={isHamburgerOpen ? close : menu}
-                alt='Menu'
-                className='w-[28px] h-[28px] object-contain cursor-pointer'
+            <div className='flex flex-1 justify-end items-center mb-2'>
+              <div className={`${isHamburgerOpen ? 'active' : ''} hamburger`}
                 onClick={() => setIsHamburgerOpen(!isHamburgerOpen)}
-              />
+              >
+                <div className='top-bun'></div>
+                <div className='meat'></div>
+                <div className='bottom-bun'></div>
+              </div>
             </div>
           }
-          <div className={isHamburgerMenu && `${!isHamburgerOpen ? 'hidden' : 'flex'} p-6 bg-primary absolute top-20 right-0 w-full`}>
+          <div className={isHamburgerMenu ? `${isHamburgerOpen ? 'flex' : 'hidden'} p-6 bg-primary absolute top-20 right-0 w-full` : ''}>
             <ul className={`list-none flex justify-center items-center text-secondary ${isHamburgerMenu ? 'flex-col gap-3 w-full text-[1.5em] font-extralight' : 'h-10 top-5 flex-row gap-10'}`}>
               { !isLoading && navLinks.map(link => (
                 <li
@@ -67,7 +68,6 @@ const Navbar = ({ isLoading }) => {
           </div>
         </div>
       </nav>
-      
     </>
   )
 }

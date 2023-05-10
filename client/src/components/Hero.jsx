@@ -1,9 +1,9 @@
 import { useEffect, useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 
-import { styles } from '../styles'
 import { ComputerCanvas } from './canvas'
 import useWindowSize from '../utils/useWindowSize'
+import styles from '../styles'
 
 const Hero = ({ isLoading }) => {
   const heroMainRef = useRef(null)

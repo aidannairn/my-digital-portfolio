@@ -2,12 +2,12 @@ import { useRef } from 'react'
 import { motion } from 'framer-motion'
 import emailjs from '@emailjs/browser'
 
-import { styles } from '../styles'
 import { EarthCanvas } from './canvas'
 import { SectionWrapper } from '../hoc'
 import { slideIn } from '../utils/motion'
 import Form from './form/Form'
 import formSettings from './form/data/contact.form'
+import styles from '../styles'
 
 const Contact = () => {
   const formRef = useRef(null)

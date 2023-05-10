@@ -1,6 +1,5 @@
 import { forwardRef, useEffect, useState, useImperativeHandle } from "react"
 
-import { styles } from "../../styles"
 import {
   InputGroupRepeat,
   LabelCalendar,
@@ -11,6 +10,7 @@ import {
   LabelTextInput
 } from "./index"
 import isObjectEmpty from "../../utils/isObjectEmpty"
+import styles from "../../styles"
 
 const Form = forwardRef(({
   modal,

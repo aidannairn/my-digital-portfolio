@@ -2,9 +2,9 @@ import { useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
-import { styles } from '../styles'
 import Form from '../components/form/Form'
 import formSettings from '../components/form/data/signin.form'
+import styles from '../styles'
 
 const SignIn = () => {
   const redirect = useNavigate()

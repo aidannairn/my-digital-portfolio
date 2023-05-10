@@ -3,13 +3,13 @@ import { VerticalTimeline } from 'react-vertical-timeline-component'
 import { motion } from 'framer-motion'
 
 import { sort } from '../utils/sort'
-import { styles } from '../styles'
 import { SectionWrapper } from '../hoc'
 import { fadeIn, textVariant } from '../utils/motion'
 import { UserContext } from '../contexts/UserContext'
 import { FormModal } from './modals'
 import ExperienceCard from './ExperienceCard'
 import formSettings from './form/data/experiences.form'
+import styles from '../styles'
 import 'react-vertical-timeline-component/style.min.css'
 
 const Experience = ({ experiences, setExperiences }) => {

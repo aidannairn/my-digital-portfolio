@@ -1,13 +1,13 @@
 import { useState, useRef, useContext } from 'react'
 import { motion } from 'framer-motion'
 
-import { styles } from '../styles'
 import { SectionWrapper } from '../hoc'
 import { fadeIn, textVariant } from '../utils/motion'
 import { UserContext } from '../contexts/UserContext'
 import { FormModal } from './modals'
 import formSettings from './form/data/projects.form'
 import ProjectCard from './ProjectCard'
+import styles from '../styles'
 
 const Projects = ({ projects, setProjects }) => {
   const formRef = useRef(null)

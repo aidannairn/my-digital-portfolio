@@ -4,12 +4,12 @@ import { motion } from 'framer-motion'
 import { TechCanvas } from './canvas'
 import { textVariant } from '../utils/motion'
 import { SectionWrapper } from '../hoc'
-import { styles } from '../styles'
 import { UserContext } from '../contexts/UserContext'
 import { fadeIn } from '../utils/motion'
 import { FormModal } from './modals'
 import formSettings from './form/data/technologies.form'
 import useWindowSize from '../utils/useWindowSize'
+import styles from '../styles'
 
 const Technologies = ({ technologies, setTechnologies }) => {
   const windowWidth = useWindowSize('x')
