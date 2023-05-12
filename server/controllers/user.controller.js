@@ -7,11 +7,14 @@ const User = require('../models/User')
 const Experience = require('../models/Education')
 const Technology = require('../models/Technology')
 const Project = require('../models/Project')
+const StatusCodeError = require('../utils/statusCodeError')
 
 const getUserContent = async (req, res) => {
   const { id: userId } = req.params
 
   try {
+    if (!userId) throw new StatusCodeError(400, 'No user ID was specified for data retrieval.')
+
     const excludedFields = ['-__v', '-createdAt', '-updatedAt']
     const experiences = await Experience
       .find({ userId })
@@ -27,17 +30,22 @@ const getUserContent = async (req, res) => {
     return res.status(200).send(data)
   } catch (error) {
     console.error(error)
-    return res.status(400).json({ type: 'error', msg: 'Could not get user content.' })
+    return res.status(error?.statusCode || 400).json({
+      alert: { 
+        type: 'error',
+        msg: 'There was a problem retrieving some data for the page.'
+      }
+    })
   }
 }
 
 const userSignup = async (req, res, next) => {
-  const { email, password, firstName, lastName, directory } = req.body
-
-  if (!(email && password && firstName && lastName))
-    return res.status(400).json({ type: 'error', msg: 'Missing required parameters.'})
-
+  const { email, password, firstName, lastName } = req.body
+  
   try {
+    if (!(email && password && firstName && lastName))
+      throw new StatusCodeError(400, 'Missing required parameters.')
+
     const hashedPassword = bcrypt.hashSync(password, 10)
 
     /*  Prepare the image URL:
@@ -46,7 +54,7 @@ const userSignup = async (req, res, next) => {
         - If no image file exists - Set to "undefined" so column doesn't appear in database.
     */
     var imageURL = req.file
-      ? await s3Upload(`${firstName}_${lastName}` + path.extname(req.file.originalname), req.file.path, directory)
+      ? await s3Upload(`${firstName}_${lastName}` + path.extname(req.file.originalname), req.file.path, 'users')
       : undefined
 
     const user = new User({
@@ -58,25 +66,35 @@ const userSignup = async (req, res, next) => {
     })
 
     await user.save()
-    return res.status(200).json({ type: 'success', msg: `${firstName} has been signed up!`})
+    return res.status(200).json({
+      alert: {
+        type: 'success',
+        msg: 'You have been signed up!'
+      }
+    })
   } catch (error) {
     if (imageURL) s3Delete(imageURL)
     console.error(error)
-    return res.status(401).json({ type: 'error', msg: 'Could not sign up the user.' })
+    return res.status(error?.statusCode || 400).json({
+      alert: {
+        type: 'error',
+        msg: 'There was a problem while trying to sign you up.'
+      }
+    })
   }
 }
 
 const userSignin = async (req, res) => {
   const { email, password } = req.body
 
-  if (!(email && password))
-    return res.status(400).json({ type: 'error', msg: 'Missing required parameters.'})
-
   try {
+    if (!(email && password))
+      throw new StatusCodeError(400, 'Missing required parameters.')
+
     const user = await User.findOne({ email })
     
     const passwordsMatch = bcrypt.compareSync(password, user.password)
-    if (!passwordsMatch) throw new Error('Cannot find a user that matches email and password.')
+    if (!passwordsMatch) throw new StatusCodeError(401, 'Cannot find a user with those credentials.')
 
     const { _id: id, firstName, lastName, imageURL } = user
     const userData = { id, firstName, lastName, imageURL }
@@ -104,26 +122,43 @@ const userSignin = async (req, res) => {
     res.status(200).json({ accessToken })
   } catch (error) {
     console.error(error)
-    return res.status(401).json({ type: 'error', msg: 'User sign-in credentials were either incorrect or do not exist.' })
+    return res.status(error?.statusCode || 400).json({
+      alert: { 
+        type: 'error',
+        msg: 'User sign-in credentials were either incorrect or do not exist.'
+      }
+    })
   }
 }
 
 const userSignout = async (req, res) => {
   const refreshToken = req.cookies.refreshToken
 
-  if (!refreshToken) return res.sendStatus(204)
-
   try {
+    if (!refreshToken) throw new StatusCodeError(204, 'An active user token could not be retrieved.')
+
     const user = await User.findOne({ refreshToken })
-    if (!user) throw new Error('There was a problem while trying to sign the user out.')
+    if (!user) throw new StatusCodeError(
+      404, 'No active user could be found to initiate sign out.'
+    )
 
     user.refreshToken = undefined
     res.clearCookie('refreshToken')
     await user.save()
-    return res.status(200).json({ type: 'success', msg: 'You have been signed out.' })
+    return res.status(200).json({
+      alert: {
+        type: 'success',
+        msg: 'You have been signed out.'
+      }
+    })
   } catch (error) {
     console.error(error)
-    return res.status(401).json({ type: 'error', msg: 'There was a problem while trying to sign the user out.' })
+    return res.status(error?.statusCode || 400).json({
+      alert: {
+        type: 'error',
+        msg: error?.msg || 'There was a problem while trying to sign the user out.'
+      }
+    })
   }
 }
 
