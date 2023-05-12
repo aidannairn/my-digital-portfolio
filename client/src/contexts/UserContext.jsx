@@ -1,7 +1,9 @@
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import decode from 'jwt-decode'
 import axios from 'axios'
+
+import { AlertsContext } from './AlertsContext'
 
 const UserContext = createContext()
 
@@ -17,6 +19,8 @@ const UserProvider = ({ children }) => {
     tokenExpiry: '',
     userToken: ''
   })
+
+  const { addAlert } = useContext(AlertsContext)
 
   const getRefreshToken = async () => {
     try {

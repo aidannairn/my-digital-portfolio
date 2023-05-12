@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { TechCanvas } from './canvas'
 import { textVariant } from '../utils/motion'
 import { SectionWrapper } from '../hoc'
+import { AlertsContext } from '../contexts/AlertsContext'
 import { UserContext } from '../contexts/UserContext'
 import { fadeIn } from '../utils/motion'
 import { FormModal } from './modals'
@@ -14,6 +15,7 @@ import styles from '../styles'
 const Technologies = ({ technologies, setTechnologies }) => {
   const windowWidth = useWindowSize('x')
   const techContainerRef = useRef(null)
+  const { addAlert } = useContext(AlertsContext)
   const [canvasPixelDimensions, setCanvasPixelDimensions] = useState({ x: 0, y: 0 })
   const [canvasGridDimensions, setCanvasGridDimensions] = useState({ x: 0, y: 0 })
   const [canvasColumns, setCanvasColumns] = useState(0)
@@ -133,7 +135,8 @@ const Technologies = ({ technologies, setTechnologies }) => {
         }
       }
     )
-
+    const { type, msg } = res.data
+    addAlert({ type, msg })
     setTechnologies(prevState => [...prevState, res.data.technology])
   }
 

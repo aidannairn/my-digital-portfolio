@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import App from './App'
 import Home from './pages/Home'
 import SignIn from './pages/SignIn'
+import { AlertsProvider } from './contexts/AlertsContext'
 import { UserProvider } from './contexts/UserContext'
 import { ErrorBoundary } from './components'
 import './index.css'
@@ -14,10 +15,12 @@ axios.defaults.withCredentials = true
 
 const router = createBrowserRouter([
   {
-    element: 
-      <UserProvider>
-        <App />,
-      </UserProvider>,
+    element:
+      <AlertsProvider>
+        <UserProvider>
+          <App />
+        </UserProvider>
+      </AlertsProvider>,
     errorElement: <ErrorBoundary />,
     children: [
       {

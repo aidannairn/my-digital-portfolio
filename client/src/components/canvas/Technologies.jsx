@@ -1,8 +1,9 @@
-import { useRef, useState, Suspense } from 'react'
+import { useContext, useRef, useState, Suspense } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { OrthographicCamera, Preload } from '@react-three/drei'
 
 import { OnConfirmModal, TechDetailModal } from '../modals'
+import { AlertsContext } from '../../contexts/AlertsContext'
 import CanvasLoader from '../Loader'
 import TechnologyCard from './TechnologyCard'
 
@@ -15,6 +16,7 @@ const TechCanvas = ({
   currentUser: { userId, userToken, authRequest }
 }) => {
   const canvasRef = useRef(null)
+  const { addAlert } = useContext(AlertsContext)
   const [activeTechIndex, setActiveTechIndex] = useState(0)
   const [isTechModalExpanded, setIsTechModalExpanded] = useState(false)
   const [isDeleteModalExpanded, setIsDeleteModalExpanded] = useState(false)
@@ -30,6 +32,8 @@ const TechCanvas = ({
         `${import.meta.env.VITE_SERVER_BASE_URL}/api/tech/${technologies[activeTechIndex]._id}`, 
         { headers: { Authorization: `Bearer ${userToken}` } }
       )
+
+      addAlert({ type: res.data.type, msg: res.data.msg })
 
       setTechnologies(prevState => 
         prevState.filter(tech => 
