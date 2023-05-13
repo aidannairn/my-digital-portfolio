@@ -34,7 +34,7 @@ const Navbar = ({ isLoading }) => {
               <p className='hidden sm:block border-l-[2.5px] pl-2 ml-2'>Full Stack Developer</p>
             </div>
           </Link>
-          { isHamburgerMenu &&
+          { !isLoading && isHamburgerMenu &&
             <div className='flex flex-1 justify-end items-center mb-2'>
               <div className={`${isHamburgerOpen ? 'active' : ''} hamburger`}
                 onClick={() => setIsHamburgerOpen(!isHamburgerOpen)}

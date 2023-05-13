@@ -10,7 +10,7 @@
     - I found that the Technologies Items would jitter whenever the viewport changed.
     - The settings below alleviate this problem.
 */
-.home {
+.app {
   height: 100vh;
   height: 100dvh;
   width: 100vw;

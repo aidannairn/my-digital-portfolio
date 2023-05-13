@@ -35,7 +35,7 @@ const Home = () => {
   useEffect(() => { getUserContent() }, [])
   
   return (
-    <div className='home bg-primary'>
+    <div className='bg-primary'>
       <Navbar isLoading={isLoading} />
       <Hero isLoading={isLoading} />
       { !isLoading && 

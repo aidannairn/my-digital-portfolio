@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useState } from 'react'
+import { forwardRef, useEffect, memo, useState } from 'react'
 import { Decal, Float, useTexture } from '@react-three/drei'
 
 const TechnologyCard = forwardRef(({
@@ -80,4 +80,24 @@ const TechnologyCard = forwardRef(({
   )
 })
 
-export default TechnologyCard
+const arePropsEqual = (prevProps, nextProps) => {
+  const deepEqual = (x, y) => {
+    const ok = Object.keys, tx = typeof x, ty = typeof y;
+    return x && y && tx === 'object' && tx === ty ? (
+      ok(x).length === ok(y).length &&
+        ok(x).every(key => deepEqual(x[key], y[key]))
+    ) : (x === y);
+  }
+
+  const prev = { ...prevProps }
+  delete prev.handleTechItemClick
+
+  const next = { ...nextProps }
+  delete next.handleTechItemClick
+
+  if (deepEqual(prev, next))
+    return true
+  return false
+}
+
+export default memo(TechnologyCard, arePropsEqual)

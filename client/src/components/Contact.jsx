@@ -1,7 +1,8 @@
-import { useRef } from 'react'
+import { useContext, useRef } from 'react'
 import { motion } from 'framer-motion'
 import emailjs from '@emailjs/browser'
 
+import { AlertsContext } from '../contexts/AlertsContext'
 import { EarthCanvas } from './canvas'
 import { SectionWrapper } from '../hoc'
 import { slideIn } from '../utils/motion'
@@ -10,12 +11,25 @@ import formSettings from './form/data/contact.form'
 import styles from '../styles'
 
 const Contact = () => {
+  const { addAlert } = useContext(AlertsContext)
   const formRef = useRef(null)
 
   const handleSubmit = async () => {
     const { name, email, message } = formRef.current.getFormState()
     
-    if (!(name && email && message)) throw new Error('All fields should be filled in before a submission is made.')
+    if (!(name && email && message)) {
+      const msg = 'All fields should be filled in before a submission is made.'
+      addAlert({ type: 'error', msg })
+      throw new Error(msg)
+    }
+
+    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+
+    if (!email.match(emailRegex)) {
+      const msg = 'The email address that you entered is not a valid email format.'
+      addAlert({ type: 'error', msg })
+      throw new Error(msg)
+    }
     
     const { 
       VITE_EMAILJS_SERVICE_ID: serviceId,
@@ -36,6 +50,8 @@ const Contact = () => {
       },
       publicKey
     )
+
+    addAlert({ type: 'success', msg: 'Your email has been sent! Aidan will get back to you as soon as possible.' })
   }
 
   formSettings.submit = {

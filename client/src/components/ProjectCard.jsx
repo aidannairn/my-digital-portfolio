@@ -1,7 +1,9 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { motion } from 'framer-motion'
 import Tilt from 'react-parallax-tilt'
 
+import { AlertsContext } from '../contexts/AlertsContext'
+import { OnConfirmModal } from './modals'
 import { fadeIn } from '../utils/motion'
 
 const ProjectCard = ({
@@ -17,6 +19,7 @@ const ProjectCard = ({
   currentUser: { userId, userToken, authRequest },
   setProjects
 }) => {
+  const { addAlert } = useContext(AlertsContext)
   const [isSrcListVisible, setIsSrcListVisible] = useState(false) 
   const [isDeleteModalExpanded, setIsDeleteModalExpanded] = useState(false)
 
@@ -26,10 +29,13 @@ const ProjectCard = ({
         `${import.meta.env.VITE_SERVER_BASE_URL}/api/project/${_id}`, 
         { headers: { Authorization: `Bearer ${userToken}` } }
       )
+      
+      const { type, msg } = res.data.alert
+      addAlert({ type, msg })
 
       setProjects(prevState =>
         prevState.filter(project =>
-          project._id !== res.data.id
+          project._id !== res.data.projectId
         )  
       )
     } catch (error) {

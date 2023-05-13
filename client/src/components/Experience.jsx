@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { sort } from '../utils/sort'
 import { SectionWrapper } from '../hoc'
 import { fadeIn, textVariant } from '../utils/motion'
+import { AlertsContext } from '../contexts/AlertsContext'
 import { UserContext } from '../contexts/UserContext'
 import { FormModal } from './modals'
 import ExperienceCard from './ExperienceCard'
@@ -13,8 +14,9 @@ import styles from '../styles'
 import 'react-vertical-timeline-component/style.min.css'
 
 const Experience = ({ experiences, setExperiences }) => {
-  const formRef = useRef(null)
+  const { addAlert } = useContext(AlertsContext)
   const { user: { userId, userToken }, authRequest } = useContext(UserContext)
+  const formRef = useRef(null)
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [sortedExperiences, setSortedExperiences] = useState([])
 
@@ -56,7 +58,9 @@ const Experience = ({ experiences, setExperiences }) => {
         }
       }
     )
-
+    
+    const { type, msg } = res.data.alert
+    addAlert({ type, msg })
     setExperiences(prevState => [...prevState, res.data.experience])
   }  
 

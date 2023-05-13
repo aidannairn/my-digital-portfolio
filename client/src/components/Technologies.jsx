@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { TechCanvas } from './canvas'
 import { textVariant } from '../utils/motion'
 import { SectionWrapper } from '../hoc'
+import { AlertsContext } from '../contexts/AlertsContext'
 import { UserContext } from '../contexts/UserContext'
 import { fadeIn } from '../utils/motion'
 import { FormModal } from './modals'
@@ -14,6 +15,7 @@ import styles from '../styles'
 const Technologies = ({ technologies, setTechnologies }) => {
   const windowWidth = useWindowSize('x')
   const techContainerRef = useRef(null)
+  const { addAlert } = useContext(AlertsContext)
   const [canvasPixelDimensions, setCanvasPixelDimensions] = useState({ x: 0, y: 0 })
   const [canvasGridDimensions, setCanvasGridDimensions] = useState({ x: 0, y: 0 })
   const [canvasColumns, setCanvasColumns] = useState(0)
@@ -107,7 +109,7 @@ const Technologies = ({ technologies, setTechnologies }) => {
     })
     // Update the technologyPositions state to include each of the new positions we declared above.
     setTechnologyPositions(techPos)
-  }, [canvasRows, scale, technologies])
+  }, [windowWidth, canvasRows, scale, technologies])
 
   const formRef = useRef(null)
   const {
@@ -133,7 +135,8 @@ const Technologies = ({ technologies, setTechnologies }) => {
         }
       }
     )
-
+    const { type, msg } = res.data.alert
+    addAlert({ type, msg })
     setTechnologies(prevState => [...prevState, res.data.technology])
   }
 
@@ -146,7 +149,7 @@ const Technologies = ({ technologies, setTechnologies }) => {
   }
 
   return (
-    <>
+    <div>
       { userId === import.meta.env.VITE_INITIAL_USER_ID &&
         <FormModal
           ref={formRef}
@@ -178,26 +181,18 @@ const Technologies = ({ technologies, setTechnologies }) => {
           </motion.div>
         }
         { !!technologies?.length &&
-          <motion.div 
-            variants={fadeIn('', '', 1, 1)}
-            className={`mt-10 mx-auto`}
-            style={{ 
-              height: `${canvasPixelDimensions.y}px`,
-              width: '100%'
-            }}
-            >
-            <TechCanvas
-              technologies={technologies}
-              setTechnologies={setTechnologies}
-              positions={technologyPositions}
-              canvasGridDimensions={canvasGridDimensions}
-              scale={scale}
-              currentUser={{ userId, userToken, authRequest }}
-            />
-          </motion.div>
+          <TechCanvas
+            technologies={technologies}
+            setTechnologies={setTechnologies}
+            positions={technologyPositions}
+            canvasPixelDimensions={canvasPixelDimensions}
+            canvasGridDimensions={canvasGridDimensions}
+            scale={scale}
+            currentUser={{ userId, userToken, authRequest }}
+          />
         }
       </div>
-    </>
+    </div>
   )
 }
 

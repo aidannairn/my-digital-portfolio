@@ -12,6 +12,15 @@ const styles = {
     'text-white font-black md:text-[60px] sm:text-[50px] xs:text-[40px] text-[30px]',
   sectionSubText:
     'sm:text-[18px] text-[14px] text-secondary uppercase tracking-wider',
+  
+  alertInfo:
+    'bg-[#cce5ff] text-[#004085] border-[#b8daff]',
+  alertSuccess:
+    'bg-[#d4edda] text-[#155724] border-[#c3e6cb]',
+  alertWarning:
+    'bg-[#fff3cd] text-[#856404] border-[#ffeeba]',
+  alertError:
+    'bg-[#f8d7da] text-[#721c24] border-[#f5c6cb]',
 };
 
 export default styles

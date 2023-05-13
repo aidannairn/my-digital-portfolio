@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { VerticalTimelineElement } from 'react-vertical-timeline-component'
 
+import { AlertsContext } from '../contexts/AlertsContext'
 import { ExpandedImageModal, OnConfirmModal } from './modals'
 
 const ExperienceCard = ({
@@ -17,6 +18,7 @@ const ExperienceCard = ({
   currentUser: { userId, userToken, authRequest },
   setExperiences
 }) => {
+  const { addAlert } = useContext(AlertsContext)
   const [isImageExpanded, setIsImageExpanded] = useState(false)
   const [isDeleteModalExpanded, setIsDeleteModalExpanded] = useState(false)
 
@@ -36,9 +38,12 @@ const ExperienceCard = ({
         { headers: { Authorization: `Bearer ${userToken}` } }
       )
 
+      const { type, msg } = res.data.alert
+      addAlert({ type, msg })
+
       setExperiences(prevState => 
         prevState.filter(experience => 
-          experience._id !== res.data.id
+          experience._id !== res.data.expId
         )
       )
     } catch (error) {
