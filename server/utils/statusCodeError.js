@@ -5,4 +5,4 @@ class StatusCodeError extends Error {
   }
 }
 
-export default StatusCodeError
+module.exports = StatusCodeError

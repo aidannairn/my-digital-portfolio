@@ -23,7 +23,7 @@ const projectCreate = async (req, res) => {
     return res.status(200).json({
       alert: {
         type: 'success',
-        msg: `You have added "${name}" to your projects!`, 
+        msg: `You have added ${name} to your projects!`, 
       },
       project
     })
@@ -52,7 +52,7 @@ const projectDeleteOne = async (req, res) => {
     if (!project) throw new StatusCodeError(404, 'Could not find a project that matches the project ID and user ID.')
     
     const projectImage = await s3Delete(project.imageURL)
-    if (!projectImage) throw new Error('Image was not removed from S3.')
+    if (!projectImage) throw new Error('Image was not removed from the cloud.')
 
     return res.status(200).json({
       alert: { 

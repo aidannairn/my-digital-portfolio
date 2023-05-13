@@ -94,7 +94,7 @@ const userSignin = async (req, res) => {
     const user = await User.findOne({ email })
     
     const passwordsMatch = bcrypt.compareSync(password, user.password)
-    if (!passwordsMatch) throw new StatusCodeError(401, 'Cannot find a user with those credentials.')
+    if (!passwordsMatch) throw new StatusCodeError(404, 'Cannot find a user with those credentials.')
 
     const { _id: id, firstName, lastName, imageURL } = user
     const userData = { id, firstName, lastName, imageURL }
