@@ -109,7 +109,7 @@ const Technologies = ({ technologies, setTechnologies }) => {
     })
     // Update the technologyPositions state to include each of the new positions we declared above.
     setTechnologyPositions(techPos)
-  }, [canvasRows, scale, technologies])
+  }, [windowWidth, canvasRows, scale, technologies])
 
   const formRef = useRef(null)
   const {
@@ -181,23 +181,15 @@ const Technologies = ({ technologies, setTechnologies }) => {
           </motion.div>
         }
         { !!technologies?.length &&
-          <motion.div 
-            variants={fadeIn('', '', 1, 1)}
-            className={`mt-10 mx-auto`}
-            style={{ 
-              height: `${canvasPixelDimensions.y}px`,
-              width: '100%'
-            }}
-            >
-            <TechCanvas
-              technologies={technologies}
-              setTechnologies={setTechnologies}
-              positions={technologyPositions}
-              canvasGridDimensions={canvasGridDimensions}
-              scale={scale}
-              currentUser={{ userId, userToken, authRequest }}
-            />
-          </motion.div>
+          <TechCanvas
+            technologies={technologies}
+            setTechnologies={setTechnologies}
+            positions={technologyPositions}
+            canvasPixelDimensions={canvasPixelDimensions}
+            canvasGridDimensions={canvasGridDimensions}
+            scale={scale}
+            currentUser={{ userId, userToken, authRequest }}
+          />
         }
       </div>
     </div>

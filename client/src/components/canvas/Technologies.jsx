@@ -1,16 +1,19 @@
-import { useContext, useRef, useState, Suspense } from 'react'
+import { useContext, useRef, useState, memo, Suspense } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { OrthographicCamera, Preload } from '@react-three/drei'
+import { motion } from 'framer-motion'
 
 import { OnConfirmModal, TechDetailModal } from '../modals'
 import { AlertsContext } from '../../contexts/AlertsContext'
 import CanvasLoader from '../Loader'
 import TechnologyCard from './TechnologyCard'
+import { fadeIn } from '../../utils/motion'
 
 const TechCanvas = ({
   technologies,
   setTechnologies,
   positions,
+  canvasPixelDimensions,
   canvasGridDimensions,
   scale,
   currentUser: { userId, userToken, authRequest }
@@ -53,7 +56,14 @@ const TechCanvas = ({
   )
 
   return (
-    <>
+    <motion.div 
+      variants={fadeIn('', '', 1, 1)}
+      className={`mt-10 mx-auto`}
+      style={{ 
+        height: `${canvasPixelDimensions.y}px`,
+        width: '100%'
+      }}
+    >
       { isTechModalExpanded &&
         <TechDetailModal
           modal={{
@@ -120,8 +130,22 @@ const TechCanvas = ({
           <Preload all />
         </Canvas>
       }
-    </>
+    </motion.div>
   )
 }
 
-export default TechCanvas
+const arePropsEqual = (prevProps, nextProps) => {
+  const deepEqual = (x, y) => {
+    const ok = Object.keys, tx = typeof x, ty = typeof y;
+    return x && y && tx === 'object' && tx === ty ? (
+      ok(x).length === ok(y).length &&
+        ok(x).every(key => deepEqual(x[key], y[key]))
+    ) : (x === y);
+  }
+
+  if (deepEqual(prevProps, nextProps))
+    return true
+  return false
+}
+
+export default memo(TechCanvas, arePropsEqual)
