@@ -8,11 +8,11 @@ const FlashAlertCard = ({ alert: { id, type, msg, component: Component }}) => {
   const alertItemRef = useRef(null)
 
   const allowedTypes = ['info', 'success', 'warning', 'error']
+
   const alertSubClass = 
     allowedTypes.includes(type.toLowerCase())
-      ? `alert${type.slice(0, 1).toUpperCase() 
-        + type.slice(1).toLowerCase()}`
-      : alertSubClass = 'alertInfo'
+      ? `alert${type.slice(0, 1).toUpperCase() + type.slice(1).toLowerCase()}`
+      : 'alertInfo'
   
   return (
     <div 

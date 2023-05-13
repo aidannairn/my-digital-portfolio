@@ -33,11 +33,12 @@ const TechCanvas = ({
         { headers: { Authorization: `Bearer ${userToken}` } }
       )
 
-      addAlert({ type: res.data.type, msg: res.data.msg })
+      const { type, msg } = res.data.alert
+      addAlert({ type, msg })
 
       setTechnologies(prevState => 
         prevState.filter(tech => 
-          tech._id !== res.data.id
+          tech._id !== res.data.techId
         )
       )
     } catch (error) {

@@ -1,4 +1,10 @@
-import { forwardRef, useEffect, useState, useImperativeHandle } from "react"
+import {
+  forwardRef,
+  useContext,
+  useEffect,
+  useState,
+  useImperativeHandle
+} from 'react'
 
 import {
   InputGroupRepeat,
@@ -8,9 +14,10 @@ import {
   LabelMultiChoice,
   LabelTextArea,
   LabelTextInput
-} from "./index"
-import isObjectEmpty from "../../utils/isObjectEmpty"
-import styles from "../../styles"
+} from './index'
+import { AlertsContext } from '../../contexts/AlertsContext'
+import isObjectEmpty from '../../utils/isObjectEmpty'
+import styles from '../../styles'
 
 const Form = forwardRef(({
   modal,
@@ -19,6 +26,7 @@ const Form = forwardRef(({
   inputGroups,
   submit
 }, ref ) => {
+  const { addAlert } = useContext(AlertsContext)
   const [form, setForm] = useState({})
   const [loading, setLoading] = useState(false)
 
@@ -63,6 +71,10 @@ const Form = forwardRef(({
       modal?.close()
     } catch (error) {
       console.error(error)
+      if (error?.response?.data.alert) {
+        const { type, msg } = error.response.data.alert
+        addAlert({ type, msg })
+      }
     } finally {
       setLoading(false)
     }

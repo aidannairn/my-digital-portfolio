@@ -135,7 +135,7 @@ const Technologies = ({ technologies, setTechnologies }) => {
         }
       }
     )
-    const { type, msg } = res.data
+    const { type, msg } = res.data.alert
     addAlert({ type, msg })
     setTechnologies(prevState => [...prevState, res.data.technology])
   }
@@ -149,7 +149,7 @@ const Technologies = ({ technologies, setTechnologies }) => {
   }
 
   return (
-    <>
+    <div>
       { userId === import.meta.env.VITE_INITIAL_USER_ID &&
         <FormModal
           ref={formRef}
@@ -200,7 +200,7 @@ const Technologies = ({ technologies, setTechnologies }) => {
           </motion.div>
         }
       </div>
-    </>
+    </div>
   )
 }
 

@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 
 import { SectionWrapper } from '../hoc'
 import { fadeIn, textVariant } from '../utils/motion'
+import { AlertsContext } from '../contexts/AlertsContext'
 import { UserContext } from '../contexts/UserContext'
 import { FormModal } from './modals'
 import formSettings from './form/data/projects.form'
@@ -10,6 +11,7 @@ import ProjectCard from './ProjectCard'
 import styles from '../styles'
 
 const Projects = ({ projects, setProjects }) => {
+  const { addAlert } = useContext(AlertsContext)
   const formRef = useRef(null)
   const {
     user: { userId, userToken },
@@ -36,6 +38,9 @@ const Projects = ({ projects, setProjects }) => {
         }
       }
     )
+
+    const { type, msg } = res.data.alert
+    addAlert({ type, msg })
 
     setProjects(prevState => [
       ...prevState,

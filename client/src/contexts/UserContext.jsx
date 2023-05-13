@@ -8,6 +8,7 @@ import { AlertsContext } from './AlertsContext'
 const UserContext = createContext()
 
 const UserProvider = ({ children }) => {
+  const { addAlert } = useContext(AlertsContext)
   const navigate = useNavigate()
 
   const [user, setUser] = useState({
@@ -19,9 +20,24 @@ const UserProvider = ({ children }) => {
     tokenExpiry: '',
     userToken: ''
   })
+  const [userSignedOut, setUserSignedOut] = useState(false)
 
-  const { addAlert } = useContext(AlertsContext)
+  useEffect(() => {
+    if (userSignedOut) {
+      addAlert({
+        type: 'success',
+        msg: 'You have been signed out.',
+        duration: 3
+      })
+      const timeout = setTimeout(() => {
+        navigate('/', { replace: true })
+        navigate(0)
+      }, 3500)
 
+      return () => clearTimeout(timeout)
+    }
+  }, [userSignedOut])
+  
   const getRefreshToken = async () => {
     try {
       const res = await axios.get(`${import.meta.env.VITE_SERVER_BASE_URL}/api/token`)
@@ -61,8 +77,7 @@ const UserProvider = ({ children }) => {
   const userSignOut = async () => {
     try {
       await axios.delete(`${import.meta.env.VITE_SERVER_BASE_URL}/api/signout`)
-      navigate('/', { replace: true })
-      navigate(0)
+      setUserSignedOut(true)
     } catch (error) {
       console.error(error)
     }
