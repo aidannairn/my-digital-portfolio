@@ -46,6 +46,12 @@ const userSignup = async (req, res, next) => {
     if (!(email && password && firstName && lastName))
       throw new StatusCodeError(400, 'Missing required parameters.')
 
+    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+
+    if (!email.match(emailRegex)) {
+      throw new StatusCodeError(400, 'The email address that you entered is not a valid email format.')
+    }
+
     const hashedPassword = bcrypt.hashSync(password, 10)
 
     /*  Prepare the image URL:
