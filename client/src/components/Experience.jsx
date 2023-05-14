@@ -19,6 +19,7 @@ const Experience = ({ experiences, setExperiences }) => {
   const formRef = useRef(null)
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [sortedExperiences, setSortedExperiences] = useState([])
+  const [shouldFadeIn, setShouldFadeIn] = useState(true)
 
   useEffect(() => {
     const incompleteExperiences = []
@@ -58,6 +59,8 @@ const Experience = ({ experiences, setExperiences }) => {
         }
       }
     )
+
+    if (!experiences.length) setShouldFadeIn(false)
     
     const { type, msg } = res.data.alert
     addAlert({ type, msg })
@@ -102,7 +105,7 @@ const Experience = ({ experiences, setExperiences }) => {
       }
       { !!sortedExperiences.length &&
         <motion.div 
-          variants={fadeIn('', '', 1, 1)}
+          variants={shouldFadeIn ? fadeIn('', '', 1, 1) : null}
           className='mt-20 flex flex-col'
         >
           <VerticalTimeline>

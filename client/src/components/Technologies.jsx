@@ -22,6 +22,7 @@ const Technologies = ({ technologies, setTechnologies }) => {
   const [canvasRows, setCanvasRows] = useState(0)
   const [scale, setScale] = useState(0)
   const [technologyPositions, setTechnologyPositions] = useState([])
+  const [shouldFadeIn, setShouldFadeIn] = useState(true)
   
   useEffect(() => {
     let currentScale
@@ -135,6 +136,9 @@ const Technologies = ({ technologies, setTechnologies }) => {
         }
       }
     )
+    
+    if (!technologies.length) setShouldFadeIn(false)
+    
     const { type, msg } = res.data.alert
     addAlert({ type, msg })
     setTechnologies(prevState => [...prevState, res.data.technology])
@@ -181,15 +185,24 @@ const Technologies = ({ technologies, setTechnologies }) => {
           </motion.div>
         }
         { !!technologies?.length &&
-          <TechCanvas
-            technologies={technologies}
-            setTechnologies={setTechnologies}
-            positions={technologyPositions}
-            canvasPixelDimensions={canvasPixelDimensions}
-            canvasGridDimensions={canvasGridDimensions}
-            scale={scale}
-            currentUser={{ userId, userToken, authRequest }}
-          />
+          <motion.div 
+          variants={shouldFadeIn ? fadeIn('', '', 1, 1) : null}
+          className={`mt-10 mx-auto`}
+          style={{ 
+            height: `${canvasPixelDimensions.y}px`,
+            width: '100%'
+          }}
+          >
+            <TechCanvas
+              technologies={technologies}
+              setTechnologies={setTechnologies}
+              positions={technologyPositions}
+              canvasPixelDimensions={canvasPixelDimensions}
+              canvasGridDimensions={canvasGridDimensions}
+              scale={scale}
+              currentUser={{ userId, userToken, authRequest }}
+            />
+          </motion.div>
         }
       </div>
     </div>

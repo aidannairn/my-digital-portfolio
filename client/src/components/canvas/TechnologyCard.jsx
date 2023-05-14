@@ -44,9 +44,10 @@ const TechnologyCard = forwardRef(({
   useEffect(() => {
     if (isHovered && ref.current) {
       ref.current.title = name
-      ref.current.style.cursor = isHovered ? 'pointer' : 'default'
+      ref.current.style.cursor = 'pointer'
     } else {
       ref.current.title = ''
+      ref.current.style.cursor = 'default'
     }
   }, [isHovered])
 

@@ -56,14 +56,7 @@ const TechCanvas = ({
   )
 
   return (
-    <motion.div 
-      variants={fadeIn('', '', 1, 1)}
-      className={`mt-10 mx-auto`}
-      style={{ 
-        height: `${canvasPixelDimensions.y}px`,
-        width: '100%'
-      }}
-    >
+    <>
       { isTechModalExpanded &&
         <TechDetailModal
           modal={{
@@ -131,7 +124,7 @@ const TechCanvas = ({
           <Preload all />
         </Canvas>
       }
-    </motion.div>
+    </>
   )
 }
 
