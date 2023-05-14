@@ -8,7 +8,7 @@ import styles from '../styles'
 
 const Navbar = ({ isLoading }) => {
   const { user: { userId }, userSignOut } = useContext(UserContext)
-  const isHamburgerMenu = useWindowSize('x') < 885 ? true : false
+  const isHamburgerMenu = useWindowSize('x') < 860 ? true : false
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false)
 
   const navLinks = [
@@ -29,9 +29,11 @@ const Navbar = ({ isLoading }) => {
             onClick={() => { window.scrollTo(0, 0) }}
           >
             <img src={logo} alt='Logo' className='w-9 h-9 object-contain' />
-            <div className='flex whitespace-nowrap text-white text=[18px] font-bold curson-pointer'>
+            <div className={`flex whitespace-nowrap text-white ${isHamburgerMenu ? 'text-[2em] font-normal' : 'text-[1em]'} font-bold curson-pointer`}>
               <p>Aidan Nairn</p>
-              <p className='hidden sm:block border-l-[2.5px] pl-2 ml-2'>Full Stack Developer</p>
+              { !isHamburgerMenu &&
+                <p className='hidden sm:block border-l-[2.5px] pl-2 ml-2'>Full Stack Developer</p>
+              }
             </div>
           </Link>
           { !isLoading && isHamburgerMenu &&
