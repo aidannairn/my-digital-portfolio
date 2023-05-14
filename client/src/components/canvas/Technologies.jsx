@@ -119,8 +119,9 @@ const TechCanvas = ({
                   key={`tech-${technology._id}`}
                   index={i}
                   gridDimensions={canvasGridDimensions}
-                  position={positions[i]}
                   scale={scale}
+                  position={positions[i]}
+                  name={technology.name}
                   imageURL={`${import.meta.env.VITE_MEDIA_BUCKET}/${technology.imageURL}`}
                   handleTechItemClick={handleTechItemClick}
                 />
