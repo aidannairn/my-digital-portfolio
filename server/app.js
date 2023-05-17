@@ -22,7 +22,6 @@ const origin = process.env.NODE_ENV === 'production'
 
 app.use(express.urlencoded({ extended: true }))
 
-app.options('*', cors())
 if (process.env.NODE_ENV === 'production') {
   const corsOptions = {
     credentials: true,
@@ -32,6 +31,7 @@ if (process.env.NODE_ENV === 'production') {
     methods: 'OPTIONS,DELETE,GET,HEAD,PATCH,POST,PUT',
     allowedHeaders: 'Accept,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id,Set-Cookie'
   }
+  app.options('*', cors())
   app.use(cors(corsOptions))
 } else {
   app.use(cors({ credentials: true, origin }))
