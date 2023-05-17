@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const path = require('path')
 
@@ -120,7 +120,9 @@ const userSignin = async (req, res) => {
     user.refreshToken = refreshToken
 
     res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: false,
+      sameSite: 'lax',
       maxAge: 24 * 60 * 60 * 1000 // One day
     })
 

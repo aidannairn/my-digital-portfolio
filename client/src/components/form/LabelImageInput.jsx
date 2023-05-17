@@ -30,7 +30,9 @@ const LabelImageInput = ({
         </div>
       </div>
       { file &&
-        <img src={URL.createObjectURL(file)} alt='A screenshot of the working project.' className='mt-4' />
+        <div className='flex w-full justify-center'>
+          <img src={URL.createObjectURL(file)} alt='A screenshot of the working project.' className='mt-4 max-h-[200px]' />
+        </div>
       }
     </div>
   )

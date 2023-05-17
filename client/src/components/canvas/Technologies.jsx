@@ -1,19 +1,17 @@
 import { useContext, useRef, useState, memo, Suspense } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { OrthographicCamera, Preload } from '@react-three/drei'
-import { motion } from 'framer-motion'
 
 import { OnConfirmModal, TechDetailModal } from '../modals'
 import { AlertsContext } from '../../contexts/AlertsContext'
 import CanvasLoader from '../Loader'
 import TechnologyCard from './TechnologyCard'
-import { fadeIn } from '../../utils/motion'
+import getBaseURL from '../../utils/getBaseURL'
 
 const TechCanvas = ({
   technologies,
   setTechnologies,
   positions,
-  canvasPixelDimensions,
   canvasGridDimensions,
   scale,
   currentUser: { userId, userToken, authRequest }
@@ -32,16 +30,16 @@ const TechCanvas = ({
   const removeATechnology = async () => {
     try {
       const res = await authRequest.delete(
-        `${import.meta.env.VITE_SERVER_BASE_URL}/api/tech/${technologies[activeTechIndex]._id}`, 
+        `${getBaseURL()}/tech/${technologies[activeTechIndex]._id}`, 
         { headers: { Authorization: `Bearer ${userToken}` } }
       )
 
-      const { type, msg } = res.data.alert
+      const { alert: { type, msg }, techId } = await res.data
       addAlert({ type, msg })
 
       setTechnologies(prevState => 
         prevState.filter(tech => 
-          tech._id !== res.data.techId
+          tech._id !== techId
         )
       )
     } catch (error) {

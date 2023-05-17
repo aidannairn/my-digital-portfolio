@@ -5,6 +5,8 @@ import Tilt from 'react-parallax-tilt'
 import { AlertsContext } from '../contexts/AlertsContext'
 import { OnConfirmModal } from './modals'
 import { fadeIn } from '../utils/motion'
+import getBaseURL from '../utils/getBaseURL'
+import useWindowSize from '../utils/useWindowSize'
 
 const ProjectCard = ({
   index,
@@ -22,20 +24,21 @@ const ProjectCard = ({
   const { addAlert } = useContext(AlertsContext)
   const [isSrcListVisible, setIsSrcListVisible] = useState(false) 
   const [isDeleteModalExpanded, setIsDeleteModalExpanded] = useState(false)
+  const windowWidth = useWindowSize('x')
 
   const removeAProject = async () => {
     try {
       const res = await authRequest.delete(
-        `${import.meta.env.VITE_SERVER_BASE_URL}/api/project/${_id}`, 
+        `${getBaseURL()}/project/${_id}`, 
         { headers: { Authorization: `Bearer ${userToken}` } }
       )
       
-      const { type, msg } = res.data.alert
+      const { alert: { type, msg }, projectId } = await res.data
       addAlert({ type, msg })
 
       setProjects(prevState =>
         prevState.filter(project =>
-          project._id !== res.data.projectId
+          project._id !== projectId
         )  
       )
     } catch (error) {
@@ -62,7 +65,10 @@ const ProjectCard = ({
           action={removeAProject}
         />
       }
-      <Tilt className='sm:w-[360px] max-w-[90vw]'>
+      <Tilt
+        className='sm:w-[360px] max-w-[90vw] justify-self-center'
+        tiltEnable={windowWidth > 768}
+      >
         <motion.div
           className='bg-tertiary h-full p-5 rounded-2xl'
           variants={recentlyAdded ? null : fadeIn('up', 'spring', (index * 0.5) + 1, 0.75)}
@@ -120,7 +126,7 @@ const ProjectCard = ({
                             key={i}
                             href={link.linkURL}
                             target='_blank'
-                            className='text-right py-1 mr-2 capitalize w-fit'
+                            className='text-right py-1 mr-2 capitalize w-fit hover:opacity-80'
                           >
                             { link.linkName }
                           </a>

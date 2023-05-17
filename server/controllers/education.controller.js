@@ -94,7 +94,7 @@ const educationDeleteOne = async (req, res) => {
     })
   } catch (error) {
     console.error(error)
-    return res.status(error?.errorCode || 400).json({
+    return res.status(error?.statusCode || 400).json({
       alert: {
         type: 'error',
         msg: error?.msg || 'Could not delete this learning experience.'

@@ -7,9 +7,9 @@ const refreshToken = require('../controllers/refreshToken.controller')
 const userRouter = express.Router()
 
 // userRouter.post('/signup', multerImage, userSignup)
-userRouter.post('/api/signin', userSignin)
-userRouter.delete('/api/signout', userSignout)
-userRouter.get('/api/token', refreshToken)
-userRouter.get('/api/user_content/:id', getUserContent)
+userRouter.post('/signin', userSignin)
+userRouter.delete('/signout', userSignout)
+userRouter.get('/token', refreshToken)
+userRouter.get('/user_content/:id', getUserContent)
 
 module.exports = userRouter

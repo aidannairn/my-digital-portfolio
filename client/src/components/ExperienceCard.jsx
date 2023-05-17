@@ -3,6 +3,7 @@ import { VerticalTimelineElement } from 'react-vertical-timeline-component'
 
 import { AlertsContext } from '../contexts/AlertsContext'
 import { ExpandedImageModal, OnConfirmModal } from './modals'
+import getBaseURL from '../utils/getBaseURL'
 
 const ExperienceCard = ({
   _id,
@@ -34,16 +35,16 @@ const ExperienceCard = ({
   const removeAnExperience = async () => {
     try {
       const res = await authRequest.delete(
-        `${import.meta.env.VITE_SERVER_BASE_URL}/api/education/${_id}`,
+        `${getBaseURL()}/education/${_id}`,
         { headers: { Authorization: `Bearer ${userToken}` } }
       )
 
-      const { type, msg } = res.data.alert
+      const { alert: { type, msg }, expId } = await res.data
       addAlert({ type, msg })
 
       setExperiences(prevState => 
         prevState.filter(experience => 
-          experience._id !== res.data.expId
+          experience._id !== expId
         )
       )
     } catch (error) {

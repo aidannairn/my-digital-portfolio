@@ -4,15 +4,17 @@ import axios from 'axios'
 
 import Form from '../components/form/Form'
 import formSettings from '../components/form/data/signin.form'
+import getBaseURL from '../utils/getBaseURL'
 import styles from '../styles'
 
 const SignIn = () => {
   const redirect = useNavigate()
   const formRef = useRef(null)
+  const baseURL = getBaseURL()
 
   const handleSubmit = async () => {
     const form = formRef.current.getFormState()
-    await axios.post(`${import.meta.env.VITE_SERVER_BASE_URL}/api/signin`, { ...form })
+    await axios.post(`${baseURL}/signin`, { ...form })
     redirect('/', { replace: true })
     window.location.reload()
   }

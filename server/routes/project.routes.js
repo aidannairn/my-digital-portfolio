@@ -6,7 +6,7 @@ const verifyToken = require('../middleware/VerifyToken')
 
 const projectRouter = express.Router()
 
-projectRouter.post('/api/project/create', verifyToken, multerImage, projectCreate)
-projectRouter.delete('/api/project/:id', verifyToken, projectDeleteOne)
+projectRouter.post('/project/create', verifyToken, multerImage, projectCreate)
+projectRouter.delete('/project/:id', verifyToken, projectDeleteOne)
 
 module.exports = projectRouter
