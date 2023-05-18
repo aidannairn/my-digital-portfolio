@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser')
 
 const connectDatabase = require('./config/database.config')
 const {
+  aboutWebsiteRouter,
   userRouter,
   educationRouter,
   technologyRouter,
@@ -58,6 +59,7 @@ app.get('/info', async (req, res) => {
   }
 })
 
+app.use(aboutWebsiteRouter)
 app.use(userRouter)
 app.use(educationRouter)
 app.use(technologyRouter)
