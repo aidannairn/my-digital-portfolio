@@ -87,7 +87,7 @@ const ProjectCard = ({
             >
               <div className='bg-tertiary rounded-2xl h-[178px]'>
                 <img
-                  src={`${import.meta.env.VITE_MEDIA_BUCKET}/${imageURL}`}
+                  src={imageURL}
                   alt={name}
                   className={`w-full h-full object-cover rounded-2xl ${isSrcListVisible ? 'invisible' : 'visible'}`}
                 />

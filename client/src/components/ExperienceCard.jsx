@@ -52,8 +52,6 @@ const ExperienceCard = ({
     }
   }
   
-  const mediaBucket = import.meta.env.VITE_MEDIA_BUCKET
-
   const displayDeleteMessage = () => (
     <h2 className='my-4 font-extralight'>
       You are about to remove <span className='italic'>{qualification}</span> at <span className='font-normal'>{provider}</span> from your learning experiences.
@@ -68,7 +66,7 @@ const ExperienceCard = ({
           visibility: isImageExpanded,
           close: () => setIsImageExpanded(false)
         }}
-        imageURL={`${mediaBucket}/${certificateURL}`}
+        imageURL={certificateURL}
         imageAlt={`${qualification} certificate`}
         noScroll={true}
       />
@@ -106,7 +104,7 @@ const ExperienceCard = ({
         <div className='flex justify-center items-center w-full h-full'>
           { logoURL
             ? <img
-              src={`${mediaBucket}/${logoURL}`}
+              src={logoURL}
               alt={`${provider} logo`}
               className='w-[60%] h-[60%] object-contain'
             />
@@ -133,7 +131,7 @@ const ExperienceCard = ({
       { certificateURL &&
         <img
           className='mt-5 w-full sm:max-w-[200px] cursor-pointer'
-          src={`${mediaBucket}/${certificateURL}`}
+          src={certificateURL}
           alt={`${qualification} certificate`}
           onClick={() => setIsImageExpanded(true)}
         />

@@ -64,7 +64,7 @@ const TechCanvas = ({
           id={technologies[activeTechIndex]._id}
           name={technologies[activeTechIndex].name}
           docs={technologies[activeTechIndex].docsURL}
-          image={`${import.meta.env.VITE_MEDIA_BUCKET}/${technologies[activeTechIndex].imageURL}`}
+          image={technologies[activeTechIndex].imageURL}
           userIsAuthor={userId === technologies[activeTechIndex].userId}
           openTechDeleteModal={() => setIsDeleteModalExpanded(true)}
         />
@@ -113,7 +113,7 @@ const TechCanvas = ({
                   scale={scale}
                   position={positions[i]}
                   name={technology.name}
-                  imageURL={`${import.meta.env.VITE_MEDIA_BUCKET}/${technology.imageURL}`}
+                  imageURL={technology.imageURL}
                   handleTechItemClick={handleTechItemClick}
                 />
               ))

@@ -52,7 +52,7 @@ const Experience = ({ experiences, setExperiences }) => {
     formData.append('userId', userId)
   
     const res = await authRequest.post(
-      `${getBaseURL()}/api/education/create`,
+      `${getBaseURL()}/education/create`,
       formData,
       { 
         headers: {

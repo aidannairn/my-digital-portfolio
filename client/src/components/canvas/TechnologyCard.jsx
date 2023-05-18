@@ -1,8 +1,6 @@
 import { forwardRef, useEffect, useState, memo } from 'react'
 import { Decal, Float, useTexture } from '@react-three/drei'
 
-import defaultTexture from '../../assets/blank_image.png'
-
 const TechnologyCard = forwardRef(({
   gridDimensions: gd,
   index,
