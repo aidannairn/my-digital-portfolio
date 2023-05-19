@@ -52,10 +52,36 @@ const webDemoCreate = async (req, res) => {
 }
 
 const webDemoDeleteOne = async (req, res) => {
+  const { webDemoId } = req.params
+  const userId = req.userId
+
   try {
-    
+    if (!userId) throw new StatusCodeError(401, 'The user is not authenticated to make this request.')
+
+    if (!webDemoId) throw new StatusCodeError(404, 'An ID for the web demo block to be deleted was not provided.')
+
+    const webDemo = await WebDemo.findOneAndDelete({ _id: webDemoId, userId })
+
+    if (!webDemo) throw new StatusCodeError(404, 'Could not find a web demo block that matches the web demo ID and user ID.')
+
+    const webDemoImage = await s3Delete(webDemo.demoURL)
+    if (!webDemoImage) throw new Error('Image was not removed from the cloud.')
+
+    return res.status(200).json({
+      alert: {
+        type: 'success',
+        msg: `${webDemo.title} was removed successfully!`
+      },
+      webDemoId: webDemo._id
+    })
   } catch (error) {
-    
+    console.error(error)
+    return res.status(error?.statusCode || 400).json({
+      alert: {
+        type: 'error',
+        msg: error?.msg || 'A problem occured while trying to remove this website demo block.'
+      }
+    })
   }
 }
 
