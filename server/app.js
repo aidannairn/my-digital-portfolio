@@ -4,6 +4,8 @@ const dotenv = require('dotenv')
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
 
+dotenv.config()
+
 const connectDatabase = require('./config/database.config')
 const {
   aboutWebsiteRouter,
@@ -14,7 +16,6 @@ const {
 } = require('./routes')
 
 const app = express()
-dotenv.config()
 connectDatabase()
 
 const origin = process.env.NODE_ENV === 'production'

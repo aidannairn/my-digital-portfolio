@@ -1,4 +1,4 @@
-const { s3Upload, s3Delete } = require('../config/aws.config')
+const { s3UploadFile, s3DeleteFile, s3GetSignedURL } = require('../config/aws.config')
 const WebDemo = require('../models/WebsiteDemo')
 const StatusCodeError = require('../utils/statusCodeError')
 
@@ -14,7 +14,7 @@ const webDemoCreate = async (req, res) => {
     throw new StatusCodeError(400, 'A new website demo block should include a title, some key points about the website and an image')
 
     var demoURL = image
-      ? await s3Upload(image.originalname, image.path, 'website_demo')
+      ? await s3UploadFile(image.originalname, image.path, 'website_demo')
       : undefined
 
     const bullets = bulletsStr
@@ -31,6 +31,9 @@ const webDemoCreate = async (req, res) => {
     })
 
     await webDemo.save()
+
+    webDemo.demoURL = await s3GetSignedURL(demoURL)
+
     return res.status(200).json({
       alert: {
         type: 'success',
@@ -40,7 +43,7 @@ const webDemoCreate = async (req, res) => {
     })
 
   } catch (error) {
-    if (demoURL) s3Delete(demoURL)
+    if (demoURL) s3DeleteFile(demoURL)
     console.error(error)
     return res.status(error?.errorCode || 400).json({
       alert: {
@@ -64,7 +67,7 @@ const webDemoDeleteOne = async (req, res) => {
 
     if (!webDemo) throw new StatusCodeError(404, 'Could not find a web demo block that matches the web demo ID and user ID.')
 
-    const webDemoImage = await s3Delete(webDemo.demoURL)
+    const webDemoImage = await s3DeleteFile(webDemo.demoURL)
     if (!webDemoImage) throw new Error('Image was not removed from the cloud.')
 
     return res.status(200).json({
