@@ -11,10 +11,9 @@ const StatusCodeError = require('../utils/statusCodeError')
 
 const getUserContent = async (req, res) => {
   const { id: userId } = req.params
-  const excludedFields = ['-__v', '-createdAt', '-updatedAt']
-
+  
   const getUserAssets = async (model, filePaths) => {
-    console.log(filePaths)
+    const excludedFields = ['-__v', '-createdAt', '-updatedAt']
     const assets = await model.find({ userId }).select(excludedFields)
     for (let asset of assets) {
       for (let path of filePaths) {

@@ -9,6 +9,7 @@ dotenv.config()
 const connectDatabase = require('./config/database.config')
 const {
   aboutWebsiteRouter,
+  homeRouter,
   userRouter,
   educationRouter,
   technologyRouter,
@@ -61,6 +62,7 @@ app.get('/info', async (req, res) => {
 })
 
 app.use(aboutWebsiteRouter)
+app.use(homeRouter)
 app.use(userRouter)
 app.use(educationRouter)
 app.use(technologyRouter)
