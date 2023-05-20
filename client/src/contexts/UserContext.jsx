@@ -4,12 +4,14 @@ import decode from 'jwt-decode'
 import axios from 'axios'
 
 import { AlertsContext } from './AlertsContext'
+import getBaseURL from '../utils/getBaseURL'
 
 const UserContext = createContext()
 
 const UserProvider = ({ children }) => {
   const { addAlert } = useContext(AlertsContext)
   const navigate = useNavigate()
+  const baseURL = getBaseURL()
 
   const [user, setUser] = useState({
     userId: '',
@@ -40,7 +42,7 @@ const UserProvider = ({ children }) => {
   
   const getRefreshToken = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_SERVER_BASE_URL}/api/token`)
+      const res = await axios.get(`${baseURL}/token`)
 
       // If no user is currently signed in - Log the response message and exit the function.
       if (res.data.msg) return console.log(res.data.msg)
@@ -62,7 +64,7 @@ const UserProvider = ({ children }) => {
     const currentDate = new Date()
     try {
       if (user.tokenExpiry * 1000 < currentDate.getTime()) {
-        const res = await axios.get(`${import.meta.env.VITE_SERVER_BASE_URL}/api/token`)
+        const res = await axios.get(`${baseURL}/token`)
         config.headers.Authorization = `Bearer ${res.data.accessToken}`
         const resDecoded = await decode(res.data.accessToken)
         const { userId, email, firstName, lastName, imageURL, exp: tokenExpiry } = resDecoded
@@ -76,7 +78,7 @@ const UserProvider = ({ children }) => {
 
   const userSignOut = async () => {
     try {
-      await axios.delete(`${import.meta.env.VITE_SERVER_BASE_URL}/api/signout`)
+      await axios.delete(`${baseURL}/signout`)
       setUserSignedOut(true)
     } catch (error) {
       console.error(error)

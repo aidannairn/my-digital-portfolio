@@ -1,10 +1,11 @@
-import { forwardRef, useEffect, memo, useState } from 'react'
+import { forwardRef, useEffect, useState, memo } from 'react'
 import { Decal, Float, useTexture } from '@react-three/drei'
 
 const TechnologyCard = forwardRef(({
   gridDimensions: gd,
   index,
   handleTechItemClick,
+  name,
   imageURL,
   position,
   scale
@@ -41,8 +42,13 @@ const TechnologyCard = forwardRef(({
 
   useEffect(() => { setFloatRange(getFloatingRange) }, [])
   useEffect(() => {
-    if (ref.current)
-      ref.current.style.cursor = isHovered ? 'pointer' : 'default'
+    if (isHovered && ref.current) {
+      ref.current.title = name
+      ref.current.style.cursor = 'pointer'
+    } else {
+      ref.current.title = ''
+      ref.current.style.cursor = 'default'
+    }
   }, [isHovered])
 
   return (

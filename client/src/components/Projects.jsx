@@ -9,6 +9,8 @@ import { FormModal } from './modals'
 import formSettings from './form/data/projects.form'
 import ProjectCard from './ProjectCard'
 import styles from '../styles'
+import getBaseURL from '../utils/getBaseURL'
+import getInitialUserId from '../utils/getInitialUser'
 
 const Projects = ({ projects, setProjects }) => {
   const { addAlert } = useContext(AlertsContext)
@@ -29,7 +31,7 @@ const Projects = ({ projects, setProjects }) => {
     formData.append('projectTags', JSON.stringify(form.projectTags))
   
     const res = await authRequest.post(
-      `${import.meta.env.VITE_SERVER_BASE_URL}/api/project/create`,
+      `${getBaseURL()}/project/create`,
       formData,
       { 
         headers: {
@@ -61,9 +63,11 @@ const Projects = ({ projects, setProjects }) => {
     }
   }
 
+  const initialUserId = getInitialUserId()
+
   return (
     <div className='flex flex-col'>
-      { userId === import.meta.env.VITE_INITIAL_USER_ID &&
+      { userId === initialUserId &&
         <FormModal
           ref={formRef}
           modal={{
@@ -83,7 +87,7 @@ const Projects = ({ projects, setProjects }) => {
       >
         The following projects showcase my skills and experience through real-world examples of my work. They reflect my ability to solve complex problems, work with different technologies and manage projects efficiently and effectively.
       </motion.p>
-      { userId === import.meta.env.VITE_INITIAL_USER_ID &&
+      { userId === initialUserId &&
         <motion.div
           variants={fadeIn('', '', 1, 1)}
           className='flex gap-5 mt-5'

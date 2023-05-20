@@ -1,7 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 
-import { slideIn, textVariant } from '../utils/motion'
+import { slideIn } from '../utils/motion'
 import { SectionWrapper } from '../hoc'
 import styles from '../styles'
 
@@ -12,6 +12,7 @@ const ImageCard = () => {
       className='w-full sm:w-[50%] flex items-center justify-center sm:justify-end py-5'
     >
       <img
+        title='Aidan Nairn'
         src={`${import.meta.env.VITE_MEDIA_BUCKET}/users/aidan_nairn.png`}
         alt={'A profile shot of Aidan'}
         className='rounded-full max-h-[22.5rem]'

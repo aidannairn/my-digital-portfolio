@@ -13,11 +13,11 @@ const multerFields = [
 ]
 
 educationRouter.post(
-  '/api/education/create',
+  '/education/create',
   verifyToken,
   multer({ storage, fileFilter: imageFilter }).fields(multerFields),
   educationCreate
 )
-educationRouter.delete('/api/education/:id', verifyToken, educationDeleteOne)
+educationRouter.delete('/education/:id', verifyToken, educationDeleteOne)
 
 module.exports = educationRouter

@@ -39,14 +39,14 @@ const Hero = ({ isLoading }) => {
         <div ref={heroTextRef}>
           <h1 className={`${styles.heroHeadText} mt-10 text-white`}>Hi, I'm <span className='text-quaternary'>Aidan</span></h1>
           <p className={`${styles.heroSubText} max-w-[32.5rem] mt-2 text-white-100`}>
-            I try to develop user-friendly websites and make them look pretty.
+            I develop websites that are user-friendly, efficient and scalable.
           </p>
         </div>
       </div>
-      {/* <ComputerCanvas
+      <ComputerCanvas
         canvasHeight={canvasHeight} 
         marginTop={-canvasNegativeTopY}
-      /> */}
+      />
       { !isLoading &&
         <div ref={scrollButtonRef} className='absolute w-full h-fit mb-10 bottom-0 flex justify-center'>
           <a className='h-fit' href='#about'>

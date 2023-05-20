@@ -4,6 +4,8 @@ import axios from 'axios'
 import { About, Contact, Experience, Feedback, Hero, Navbar, Technologies, Projects } from '../components'
 import { StarsCanvas } from '../components/canvas'
 import { UserContext } from '../contexts/UserContext'
+import getBaseURL from '../utils/getBaseURL'
+import getInitialUserId from '../utils/getInitialUser'
 
 const Home = () => {
   const [experiences, setExperiences] = useState([])
@@ -14,14 +16,9 @@ const Home = () => {
   const { user: { userId } } = useContext(UserContext)
 
   const getUserContent = async () => {
-    const {
-      VITE_SERVER_BASE_URL: baseURL,
-      VITE_INITIAL_USER_ID: userId
-    } = import.meta.env
-
     try {
       setIsLoading(true)
-      const res = await axios.get(`${baseURL}/api/user_content/${userId}`)
+      const res = await axios.get(`${getBaseURL()}/user_content/${getInitialUserId()}`)
       setExperiences(res.data.experiences)
       setTechnologies(res.data.technologies)
       setProjects(res.data.projects)
@@ -53,7 +50,7 @@ const Home = () => {
           {/* <Feedback /> */}
           <div className='relative z-0'>
             <Contact />
-            {/* <StarsCanvas /> */}
+            <StarsCanvas />
           </div>
         </>
       }

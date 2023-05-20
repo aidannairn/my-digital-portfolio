@@ -22,7 +22,7 @@ const FlashAlerts = forwardRef(( { alerts: alertList }, ref ) => {
       if (alertList.length && alerts.length) {
         removeOldestAlert()
       }
-    }, (alerts[0]?.duration || 5) * 1000)
+    }, (alerts[0]?.duration || 7.5) * 1000)
     
     return () => clearInterval(interval);
 }, [alertList, alerts])

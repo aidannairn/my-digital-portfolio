@@ -1,8 +1,8 @@
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const path = require('path')
 
-const { s3Upload } = require('../config/aws.config')
+const { s3Upload, s3GetSignedURL } = require('../config/aws.config')
 const User = require('../models/User')
 const Experience = require('../models/Education')
 const Technology = require('../models/Technology')
@@ -11,20 +11,24 @@ const StatusCodeError = require('../utils/statusCodeError')
 
 const getUserContent = async (req, res) => {
   const { id: userId } = req.params
+  
+  const getUserAssets = async (model, filePaths) => {
+    const excludedFields = ['-__v', '-createdAt', '-updatedAt']
+    const assets = await model.find({ userId }).select(excludedFields)
+    for (let asset of assets) {
+      for (let path of filePaths) {
+        asset[path] = await s3GetSignedURL(asset[path])
+      }
+    }
+    return assets
+  }
 
   try {
     if (!userId) throw new StatusCodeError(400, 'No user ID was specified for data retrieval.')
 
-    const excludedFields = ['-__v', '-createdAt', '-updatedAt']
-    const experiences = await Experience
-      .find({ userId })
-      .select(excludedFields)
-    const technologies = await Technology
-      .find({ userId })
-      .select(excludedFields)
-    const projects = await Project
-      .find({ userId })
-      .select(excludedFields)
+    const experiences = await getUserAssets(Experience, ['certificateURL', 'logoURL'])
+    const technologies = await getUserAssets(Technology, ['imageURL'])
+    const projects = await getUserAssets(Project, ['imageURL'])
 
     const data = { experiences, technologies, projects }
     return res.status(200).send(data)
@@ -120,7 +124,9 @@ const userSignin = async (req, res) => {
     user.refreshToken = refreshToken
 
     res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: false,
+      sameSite: 'lax',
       maxAge: 24 * 60 * 60 * 1000 // One day
     })
 

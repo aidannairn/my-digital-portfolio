@@ -11,7 +11,9 @@ import { FormModal } from './modals'
 import ExperienceCard from './ExperienceCard'
 import formSettings from './form/data/experiences.form'
 import styles from '../styles'
+import getBaseURL from '../utils/getBaseURL'
 import 'react-vertical-timeline-component/style.min.css'
+import getInitialUserId from '../utils/getInitialUser'
 
 const Experience = ({ experiences, setExperiences }) => {
   const { addAlert } = useContext(AlertsContext)
@@ -19,6 +21,7 @@ const Experience = ({ experiences, setExperiences }) => {
   const formRef = useRef(null)
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [sortedExperiences, setSortedExperiences] = useState([])
+  const [shouldFadeIn, setShouldFadeIn] = useState(true)
 
   useEffect(() => {
     const incompleteExperiences = []
@@ -49,7 +52,7 @@ const Experience = ({ experiences, setExperiences }) => {
     formData.append('userId', userId)
   
     const res = await authRequest.post(
-      `${import.meta.env.VITE_SERVER_BASE_URL}/api/education/create`,
+      `${getBaseURL()}/education/create`,
       formData,
       { 
         headers: {
@@ -58,6 +61,8 @@ const Experience = ({ experiences, setExperiences }) => {
         }
       }
     )
+
+    if (!experiences.length) setShouldFadeIn(false)
     
     const { type, msg } = res.data.alert
     addAlert({ type, msg })
@@ -72,9 +77,11 @@ const Experience = ({ experiences, setExperiences }) => {
     }
   }
 
+  const initialUserId = getInitialUserId()
+
   return (
     <>
-      { userId === import.meta.env.VITE_INITIAL_USER_ID &&
+      { userId === initialUserId &&
         <FormModal
           ref={formRef}
           modal={{
@@ -88,7 +95,7 @@ const Experience = ({ experiences, setExperiences }) => {
         <p className={styles.sectionSubText}>What I have done so far</p>
         <h2 className={styles.sectionHeadText}>Experience.</h2>
       </motion.div>
-      { userId === import.meta.env.VITE_INITIAL_USER_ID &&
+      { userId === initialUserId &&
         <motion.div
           variants={fadeIn('', '', 1, 1)}
           className='flex gap-5 mt-5'
@@ -102,7 +109,7 @@ const Experience = ({ experiences, setExperiences }) => {
       }
       { !!sortedExperiences.length &&
         <motion.div 
-          variants={fadeIn('', '', 1, 1)}
+          variants={shouldFadeIn ? fadeIn('', '', 1, 1) : null}
           className='mt-20 flex flex-col'
         >
           <VerticalTimeline>

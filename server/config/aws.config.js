@@ -1,42 +1,62 @@
-const AWS = require('aws-sdk')
+const { Upload } = require('@aws-sdk/lib-storage')
+const { S3Client, DeleteObjectCommand, GetObjectCommand } = require('@aws-sdk/client-s3')
+const { getSignedUrl } = require('@aws-sdk/s3-request-presigner')
 const fs = require('fs')
 
 const {
+  S3_BUCKET_NAME: bucketName,
+  S3_REGION: region,
   S3_ACCESS_KEY_ID: accessKeyId,
   S3_SECRET_ACCESS_KEY: secretAccessKey
- } = process.env
+} = process.env
 
-const s3 = new AWS.S3({ accessKeyId, secretAccessKey })
+const client = new S3Client({
+  region,
+  credentials: {
+    accessKeyId,
+    secretAccessKey
+  }
+})
 
-const s3Upload = async (name, path, directory) => {
-  const {
-    S3_BUCKET_NAME: bucketName,
-    S3_BUCKET_ROOT: bucketRoot
-  } = process.env
-  
-  const destination = directory ? `${bucketName}/${directory}` : bucketName
-
-  const uploadedFile = await s3.upload({
-    Bucket: destination,
-    Body: fs.createReadStream(path),
-    /*  S3 stores " " as "+". MongoDB stores " " as "%20"
-        - Use Regex to globally replace " " w/ "_".
-        - Date gives filenames "uniqueness".
-    */
-    Key: `${Date.now()}-${name.replace(/ +/g, '_')}`
-  }).promise()
-
-  return uploadedFile.Location.replace(bucketRoot, '')
-}
-
-const s3Delete = async key => {
-  const bucketName = process.env.S3_BUCKET_NAME
-  const deletedImage = await s3.deleteObject({
+const s3DeleteFile = async key => {
+  const params = {
     Bucket: bucketName,
     Key: key
-  }).promise()
+  }
 
-  return deletedImage
+  return client.send(new DeleteObjectCommand(params))
 }
 
-module.exports = {s3, s3Upload, s3Delete}
+const s3GetSignedURL = async key => {
+  const params = {
+    Bucket: bucketName,
+    Key: key
+  }
+
+  const command = new GetObjectCommand(params)
+  const seconds = 3600
+  const url = await getSignedUrl(client, command, { expiresIn: seconds })
+
+  return url
+}
+
+const s3UploadFile = async (name, filePath, s3Path = '') => {
+  const key = (s3Path ? s3Path + '/' : '')
+    + Date.now() + '-' + name.replace(/ +/g, '_')
+    
+    const params = {
+      Bucket: bucketName,
+      Body: fs.createReadStream(filePath),
+      /*  S3 stores " " as "+". MongoDB stores " " as "%20"
+          - Use Regex to globally replace " " w/ "_".
+          - Date gives filenames "uniqueness".
+      */
+      Key: key,
+    }
+    
+    await new Upload({ client, params }).done()
+  
+    return params.Key
+}
+
+module.exports = { s3DeleteFile, s3GetSignedURL, s3UploadFile  }

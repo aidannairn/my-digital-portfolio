@@ -11,6 +11,8 @@ import { FormModal } from './modals'
 import formSettings from './form/data/technologies.form'
 import useWindowSize from '../utils/useWindowSize'
 import styles from '../styles'
+import getBaseURL from '../utils/getBaseURL'
+import getInitialUserId from '../utils/getInitialUser'
 
 const Technologies = ({ technologies, setTechnologies }) => {
   const windowWidth = useWindowSize('x')
@@ -22,6 +24,7 @@ const Technologies = ({ technologies, setTechnologies }) => {
   const [canvasRows, setCanvasRows] = useState(0)
   const [scale, setScale] = useState(0)
   const [technologyPositions, setTechnologyPositions] = useState([])
+  const [shouldFadeIn, setShouldFadeIn] = useState(true)
   
   useEffect(() => {
     let currentScale
@@ -126,7 +129,7 @@ const Technologies = ({ technologies, setTechnologies }) => {
     formData.append('docsURL', form.docsURL)
   
     const res = await authRequest.post(
-      `${import.meta.env.VITE_SERVER_BASE_URL}/api/tech/create`,
+      `${getBaseURL()}/tech/create`,
       formData,
       { 
         headers: {
@@ -135,6 +138,9 @@ const Technologies = ({ technologies, setTechnologies }) => {
         }
       }
     )
+    
+    if (!technologies.length) setShouldFadeIn(false)
+
     const { type, msg } = res.data.alert
     addAlert({ type, msg })
     setTechnologies(prevState => [...prevState, res.data.technology])
@@ -148,9 +154,11 @@ const Technologies = ({ technologies, setTechnologies }) => {
     }
   }
 
+  const initialUserId = getInitialUserId()
+
   return (
     <div>
-      { userId === import.meta.env.VITE_INITIAL_USER_ID &&
+      { userId === initialUserId &&
         <FormModal
           ref={formRef}
           modal={{
@@ -168,7 +176,7 @@ const Technologies = ({ technologies, setTechnologies }) => {
           <p className={styles.sectionSubText}>Some of the languages, libraries, frameworks and packages I use</p>
           <h2 className={styles.sectionHeadText}>Technologies.</h2>
         </motion.div>
-        { userId === import.meta.env.VITE_INITIAL_USER_ID &&
+        { userId === initialUserId &&
           <motion.div
             variants={fadeIn('', '', 1, 1)}
             className='flex gap-5 mt-5 sm:px-16 px-6'
@@ -181,15 +189,24 @@ const Technologies = ({ technologies, setTechnologies }) => {
           </motion.div>
         }
         { !!technologies?.length &&
-          <TechCanvas
-            technologies={technologies}
-            setTechnologies={setTechnologies}
-            positions={technologyPositions}
-            canvasPixelDimensions={canvasPixelDimensions}
-            canvasGridDimensions={canvasGridDimensions}
-            scale={scale}
-            currentUser={{ userId, userToken, authRequest }}
-          />
+          <motion.div 
+          variants={shouldFadeIn ? fadeIn('', '', 1, 1) : null}
+          className={`mt-10 mx-auto`}
+          style={{ 
+            height: `${canvasPixelDimensions.y}px`,
+            width: '100%'
+          }}
+          >
+            <TechCanvas
+              technologies={technologies}
+              setTechnologies={setTechnologies}
+              positions={technologyPositions}
+              canvasPixelDimensions={canvasPixelDimensions}
+              canvasGridDimensions={canvasGridDimensions}
+              scale={scale}
+              currentUser={{ userId, userToken, authRequest }}
+            />
+          </motion.div>
         }
       </div>
     </div>

@@ -3,6 +3,7 @@ import { VerticalTimelineElement } from 'react-vertical-timeline-component'
 
 import { AlertsContext } from '../contexts/AlertsContext'
 import { ExpandedImageModal, OnConfirmModal } from './modals'
+import getBaseURL from '../utils/getBaseURL'
 
 const ExperienceCard = ({
   _id,
@@ -34,16 +35,16 @@ const ExperienceCard = ({
   const removeAnExperience = async () => {
     try {
       const res = await authRequest.delete(
-        `${import.meta.env.VITE_SERVER_BASE_URL}/api/education/${_id}`,
+        `${getBaseURL()}/education/${_id}`,
         { headers: { Authorization: `Bearer ${userToken}` } }
       )
 
-      const { type, msg } = res.data.alert
+      const { alert: { type, msg }, expId } = await res.data
       addAlert({ type, msg })
 
       setExperiences(prevState => 
         prevState.filter(experience => 
-          experience._id !== res.data.expId
+          experience._id !== expId
         )
       )
     } catch (error) {
@@ -51,8 +52,6 @@ const ExperienceCard = ({
     }
   }
   
-  const mediaBucket = import.meta.env.VITE_MEDIA_BUCKET
-
   const displayDeleteMessage = () => (
     <h2 className='my-4 font-extralight'>
       You are about to remove <span className='italic'>{qualification}</span> at <span className='font-normal'>{provider}</span> from your learning experiences.
@@ -67,7 +66,7 @@ const ExperienceCard = ({
           visibility: isImageExpanded,
           close: () => setIsImageExpanded(false)
         }}
-        imageURL={`${mediaBucket}/${certificateURL}`}
+        imageURL={certificateURL}
         imageAlt={`${qualification} certificate`}
         noScroll={true}
       />
@@ -105,7 +104,7 @@ const ExperienceCard = ({
         <div className='flex justify-center items-center w-full h-full'>
           { logoURL
             ? <img
-              src={`${mediaBucket}/${logoURL}`}
+              src={logoURL}
               alt={`${provider} logo`}
               className='w-[60%] h-[60%] object-contain'
             />
@@ -132,7 +131,7 @@ const ExperienceCard = ({
       { certificateURL &&
         <img
           className='mt-5 w-full sm:max-w-[200px] cursor-pointer'
-          src={`${mediaBucket}/${certificateURL}`}
+          src={certificateURL}
           alt={`${qualification} certificate`}
           onClick={() => setIsImageExpanded(true)}
         />

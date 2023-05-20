@@ -24,7 +24,7 @@ const refreshToken = async (req, res) => {
     res.json({ accessToken })
   } catch (error) {
     console.error(error)
-    return res.status(403).json({ type: 'error', msg: 'Could not use refresh token.' })
+    return res.status(403).json({ type: 'error', msg: error?.msg || 'Could not use refresh token.' })
   }
 }
 

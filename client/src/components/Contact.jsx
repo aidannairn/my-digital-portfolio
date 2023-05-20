@@ -72,12 +72,12 @@ const Contact = () => {
         <h3 className={styles.sectionHeadText}>Contact.</h3>
         <Form ref={formRef} {...formSettings} />
       </motion.div>
-      {/* <motion.div
+      <motion.div
         variants={slideIn('left', 'tween', 0.2, 1)}
-        className='xl:flex-1 xl:h-auto md:h-[550px] h-[350px]'
+        className='xl:flex-1 xl:h-auto md:h-[550px] h-[350px] max-h-[50%] md:max-h-[90vh]'
       >
         <EarthCanvas />
-      </motion.div> */}
+      </motion.div>
     </div>
   )
 }
