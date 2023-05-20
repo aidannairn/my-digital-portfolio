@@ -1,6 +1,8 @@
 import { forwardRef, useEffect, useState, memo } from 'react'
 import { Decal, Float, useTexture } from '@react-three/drei'
 
+import defaultTexture from '../../assets/blank_image.png'
+
 const TechnologyCard = forwardRef(({
   gridDimensions: gd,
   index,
@@ -36,7 +38,9 @@ const TechnologyCard = forwardRef(({
     return floatRange
   }
 
-  const [ decal ] = useTexture([ imageURL ])
+  const [ decal ] = imageURL
+    ? useTexture([ imageURL ])
+    : useTexture([ defaultTexture ])
   const [isHovered, setIsHovered] = useState(false)
   const [floatRange, setFloatRange] = useState(0)
 

@@ -14,6 +14,7 @@ const ProjectCard = ({
   name,
   description,
   tags,
+  chainLinkURL,
   imageURL,
   links,
   recentlyAdded,
@@ -114,7 +115,7 @@ const ProjectCard = ({
                         >
                           <img
                             className='invert'
-                            src={`${import.meta.env.VITE_MEDIA_BUCKET}/icons/chain_link.svg`} alt='Show links icon'
+                            src={chainLinkURL} alt='Show links icon'
                           />
                         </button>
                       )}

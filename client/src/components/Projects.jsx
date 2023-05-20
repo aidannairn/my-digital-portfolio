@@ -12,7 +12,7 @@ import styles from '../styles'
 import getBaseURL from '../utils/getBaseURL'
 import getInitialUserId from '../utils/getInitialUser'
 
-const Projects = ({ projects, setProjects }) => {
+const Projects = ({ projects, setProjects, chainLinkURL }) => {
   const { addAlert } = useContext(AlertsContext)
   const formRef = useRef(null)
   const {
@@ -110,6 +110,7 @@ const Projects = ({ projects, setProjects }) => {
               index={i}
               currentUser={{ userId, userToken, authRequest }}
               setProjects={setProjects}
+              chainLinkURL={chainLinkURL}
               {...project}
             />
           ))}
