@@ -2,7 +2,16 @@ import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
-import { About, Contact, Experience, Hero, Navbar, Technologies, Projects } from '../components'
+import {
+  About,
+  Contact,
+  Experience,
+  Hero,
+  Navbar,
+  Technologies,
+  WebsiteShowcase,
+  Projects
+} from '../components'
 import { StarsCanvas } from '../components/canvas'
 import { UserContext } from '../contexts/UserContext'
 import { AlertsContext } from '../contexts/AlertsContext'
@@ -68,28 +77,29 @@ const Home = () => {
     }
   }
 
-  useEffect(() => { getUserContent() }, [])
+  // useEffect(() => { getUserContent() }, [])
   
   return (
     <div className='bg-primary'>
       <Navbar isLoading={isLoading} />
-      <Hero isLoading={isLoading} />
+      <WebsiteShowcase />
+      {/* <Hero isLoading={isLoading} /> */}
       { !isLoading && 
         <>
-          <About profileImageURL={profileImageURL} />
-          { (!!experiences.length || userId) &&
+          {/* <About profileImageURL={profileImageURL} /> */}
+          {/* { (!!experiences.length || userId) &&
             <Experience experiences={experiences} setExperiences={setExperiences} />
-          }
-          { (!!technologies.length || userId) &&
+          } */}
+          {/* { (!!technologies.length || userId) &&
             <Technologies technologies={technologies} setTechnologies={setTechnologies} />
-          }
-          { (!!projects.length || userId) &&
+          } */}
+          {/* { (!!projects.length || userId) &&
             <Projects projects={projects} setProjects={setProjects} />
-          }
-          <div className='relative z-0'>
+          } */}
+          {/* <div className='relative z-0'>
             <Contact />
             <StarsCanvas />
-          </div>
+          </div> */}
         </>
       }
     </div>
