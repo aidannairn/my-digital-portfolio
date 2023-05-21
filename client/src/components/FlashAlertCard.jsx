@@ -18,7 +18,7 @@ const FlashAlertCard = ({ alert: { id, type, msg, component: Component }}) => {
     <div 
       ref={alertItemRef}
       id={`${id}`}
-      className={`rounded-sm mb-2 py-1 px-2 max-w-[90%] sm:max-w-[27rem] shadow-alert flex justify-between gap-2 ${styles[alertSubClass]}`}
+      className={`rounded-sm mb-2 py-1 px-2 max-w-[90%] sm:max-w-[27rem] shadow-alert flex justify-between gap-2 border ${styles[alertSubClass]}`}
     >
       <div>
         { Component && <Component /> }

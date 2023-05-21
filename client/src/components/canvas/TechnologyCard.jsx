@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useState, memo } from 'react'
-import { Decal, Float, useTexture } from '@react-three/drei'
+import { Decal, Float, useTexture, Html } from '@react-three/drei'
 
 import defaultTexture from '../../assets/blank_image.png'
 
@@ -42,18 +42,22 @@ const TechnologyCard = forwardRef(({
     ? useTexture([ imageURL ])
     : useTexture([ defaultTexture ])
   const [isHovered, setIsHovered] = useState(false)
+  const [isHtmlHovered, setIsHtmlHovered] = useState(false)
+  const [isPolygonHovered, setIsPolygonHovered] = useState(false)
   const [floatRange, setFloatRange] = useState(0)
 
   useEffect(() => { setFloatRange(getFloatingRange) }, [])
   useEffect(() => {
-    if (isHovered && ref.current) {
+    if ((isPolygonHovered || isHtmlHovered) && ref.current) {
+      setIsHovered(true)
       ref.current.title = name
       ref.current.style.cursor = 'pointer'
     } else {
+      setIsHovered(false)
       ref.current.title = ''
       ref.current.style.cursor = 'default'
     }
-  }, [isHovered])
+  }, [isHtmlHovered, isPolygonHovered])
 
   return (
     <Float 
@@ -68,8 +72,8 @@ const TechnologyCard = forwardRef(({
         position={position}
         scale={isHovered ? 1.25 * scale : scale}
         onClick={() => handleTechItemClick(index)}
-        onPointerEnter={() => setIsHovered(true)}
-        onPointerLeave={() => setIsHovered(false)}
+        onPointerEnter={() => setIsPolygonHovered(true)}
+        onPointerLeave={() => setIsPolygonHovered(false)}
       >
         <icosahedronGeometry args={[1, 1]} />
         <meshStandardMaterial 
@@ -85,6 +89,20 @@ const TechnologyCard = forwardRef(({
           flatShading
           map={decal}
         />
+        { !imageURL &&
+          <Html zIndexRange={[0, 0]} center>
+            <div
+              className='green-blue-gradient rounded-lg p-px opacity-90 cursor-pointer'
+              onClick={() => handleTechItemClick(index)}
+              onMouseEnter={() => setIsHtmlHovered(true)}
+              onMouseLeave={() => setIsHtmlHovered(false)}
+            >
+              <div className='bg-primary rounded-lg p-1 opacity-90'>
+                <h3>{name}</h3>
+              </div>
+            </div>
+          </Html>
+        }
       </mesh>
     </Float>
   )

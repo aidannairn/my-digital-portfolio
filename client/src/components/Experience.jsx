@@ -12,8 +12,9 @@ import ExperienceCard from './ExperienceCard'
 import formSettings from './form/data/experiences.form'
 import styles from '../styles'
 import getBaseURL from '../utils/getBaseURL'
-import 'react-vertical-timeline-component/style.min.css'
 import getInitialUserId from '../utils/getInitialUser'
+import useWindowSize from '../utils/useWindowSize'
+import 'react-vertical-timeline-component/style.min.css'
 
 const Experience = ({ experiences, setExperiences }) => {
   const { addAlert } = useContext(AlertsContext)
@@ -22,6 +23,7 @@ const Experience = ({ experiences, setExperiences }) => {
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [sortedExperiences, setSortedExperiences] = useState([])
   const [shouldFadeIn, setShouldFadeIn] = useState(true)
+  const windowWidth = useWindowSize('x')
 
   useEffect(() => {
     const incompleteExperiences = []
@@ -112,7 +114,7 @@ const Experience = ({ experiences, setExperiences }) => {
           variants={shouldFadeIn ? fadeIn('', '', 1, 1) : null}
           className='mt-20 flex flex-col'
         >
-          <VerticalTimeline>
+          <VerticalTimeline animate={windowWidth > 768}>
             {sortedExperiences.map((experience, i) => (
               <ExperienceCard
               key={i}

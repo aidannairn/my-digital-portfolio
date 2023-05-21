@@ -12,7 +12,6 @@ const TechCanvas = ({
   technologies,
   setTechnologies,
   positions,
-  chainLinkURL,
   canvasGridDimensions,
   scale,
   currentUser: { userId, userToken, authRequest }
@@ -67,7 +66,6 @@ const TechCanvas = ({
           docs={technologies[activeTechIndex].docsURL}
           image={technologies[activeTechIndex].imageURL}
           userIsAuthor={userId === technologies[activeTechIndex].userId}
-          chainLinkURL={chainLinkURL}
           openTechDeleteModal={() => setIsDeleteModalExpanded(true)}
         />
       }

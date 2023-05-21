@@ -23,6 +23,31 @@
   cursor: pointer!important;
 }
 
+.loading-dots,
+.loading-dots:before,
+.loading-dots:after {
+  width: 2.5px; /* Dot size */
+  height: fit-content;
+  aspect-ratio: .5;
+  display: grid;
+  background: radial-gradient(#004085 68%,#004085 72%) center/100% 50% no-repeat;
+  animation: loadDots 1.2s infinite linear calc(var(--_s,0)*.4s);
+  transform: translate(calc(var(--_s,0)*150%));
+}
+.loading-dots:before,
+.loading-dots:after {
+  content: "";
+  grid-area: 1/1;
+}
+.loading-dots:before {--_s: -1}
+.loading-dots:after  {--_s:  1}
+
+@keyframes loadDots {
+  20% {background-position: top   }
+  40% {background-position: bottom}
+  60% {background-position: center}
+}
+
 .modal {
   height: 100vh;
   height: 100dvh;

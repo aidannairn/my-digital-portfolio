@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 
 import { slideIn } from '../utils/motion'
 import { SectionWrapper } from '../hoc'
+import Image from './Image'
 import styles from '../styles'
 
 const ImageCard = ({ profileImageURL }) => {
@@ -11,7 +12,7 @@ const ImageCard = ({ profileImageURL }) => {
       variants={slideIn('left', 'tween', 0.2, 1)} 
       className='w-full sm:w-[50%] flex items-center justify-center sm:justify-end py-5'
     >
-      <img
+      <Image
         title='Aidan Nairn'
         src={profileImageURL}
         alt={'A profile shot of Aidan'}

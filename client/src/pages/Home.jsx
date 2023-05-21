@@ -1,14 +1,42 @@
 import { useContext, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
-import { About, Contact, Experience, Feedback, Hero, Navbar, Technologies, Projects } from '../components'
+import { About, Contact, Experience, Hero, Navbar, Technologies, Projects } from '../components'
 import { StarsCanvas } from '../components/canvas'
 import { UserContext } from '../contexts/UserContext'
+import { AlertsContext } from '../contexts/AlertsContext'
 import getBaseURL from '../utils/getBaseURL'
 import getInitialUserId from '../utils/getInitialUser'
 
+const LoadingContent = () => {
+  return (
+    <div className='flex items-end'>
+      <p>Loading the page content</p>
+      <div className='ml-[0.35rem] mb-[0.35rem]'>
+        <div className='loading-dots'/>
+      </div>
+    </div>
+  )
+}
+
+const NoContentLoaded = () => {
+  const navigate = useNavigate()
+  return (
+    <div className='flex flex-col'>
+      <p>Some of the page content could not be loaded.</p>
+      <button
+        type='button'
+        onClick={() => navigate(0)}
+        className='rounded bg-[#f5c6cb] hover:bg-[#721c24] text-[#721c24] hover:text-[#f5c6cb] border-[#721c24] border w-fit px-2 pb-[0.15rem]'
+      >
+        Try again
+      </button>
+    </div>
+  )
+}
+
 const Home = () => {
-  const [chainLinkURL, setChainLinkURL] = useState('')
   const [profileImageURL, setProfileImageURL] = useState('')
   const [experiences, setExperiences] = useState([])
   const [technologies, setTechnologies] = useState([])
@@ -16,15 +44,15 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(true)
 
   const { user: { userId } } = useContext(UserContext)
+  const { addAlert, removeAlertById } = useContext(AlertsContext)
 
   const baseURL = getBaseURL()
 
   const getUserContent = async () => {
     try {
       setIsLoading(true)
-
+      var alertId = addAlert({ type: 'info', component: LoadingContent, duration: 300 })
       const globalAssetsRes = await axios.get(`${baseURL}/home`)
-      setChainLinkURL(globalAssetsRes.data.chainLinkURL)
       setProfileImageURL(globalAssetsRes.data.profileImageURL)
 
       const userRes = await axios.get(`${baseURL}/user_content/${getInitialUserId()}`)
@@ -33,7 +61,9 @@ const Home = () => {
       setProjects(userRes.data.projects)
     } catch (error) {
       console.error(error)
+      addAlert({ type: 'error', component: NoContentLoaded, duration: 300 })
     } finally {
+      removeAlertById(alertId)
       setIsLoading(false)
     }
   }
@@ -51,12 +81,11 @@ const Home = () => {
             <Experience experiences={experiences} setExperiences={setExperiences} />
           }
           { (!!technologies.length || userId) &&
-            <Technologies technologies={technologies} setTechnologies={setTechnologies} chainLinkURL={chainLinkURL} />
+            <Technologies technologies={technologies} setTechnologies={setTechnologies} />
           }
           { (!!projects.length || userId) &&
-            <Projects projects={projects} setProjects={setProjects} chainLinkURL={chainLinkURL} />
+            <Projects projects={projects} setProjects={setProjects} />
           }
-          {/* <Feedback /> */}
           <div className='relative z-0'>
             <Contact />
             <StarsCanvas />

@@ -7,6 +7,8 @@ import { OnConfirmModal } from './modals'
 import { fadeIn } from '../utils/motion'
 import getBaseURL from '../utils/getBaseURL'
 import useWindowSize from '../utils/useWindowSize'
+import chainLink from '../assets/chain_link.svg'
+import Image from './Image'
 
 const ProjectCard = ({
   index,
@@ -14,7 +16,6 @@ const ProjectCard = ({
   name,
   description,
   tags,
-  chainLinkURL,
   imageURL,
   links,
   recentlyAdded,
@@ -87,9 +88,9 @@ const ProjectCard = ({
               ${isSrcListVisible ? 'green-blue-gradient' : ''}`}
             >
               <div className='bg-tertiary rounded-2xl h-[178px]'>
-                <img
+                <Image
                   src={imageURL}
-                  alt={name}
+                  alt={`A screenshot of the "${name}" project.`}
                   className={`w-full h-full object-cover rounded-2xl ${isSrcListVisible ? 'invisible' : 'visible'}`}
                 />
                 <div
@@ -115,7 +116,7 @@ const ProjectCard = ({
                         >
                           <img
                             className='invert'
-                            src={chainLinkURL} alt='Show links icon'
+                            src={chainLink} alt='Show links icon'
                           />
                         </button>
                       )}

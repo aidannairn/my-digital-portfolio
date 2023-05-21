@@ -14,7 +14,7 @@ import styles from '../styles'
 import getBaseURL from '../utils/getBaseURL'
 import getInitialUserId from '../utils/getInitialUser'
 
-const Technologies = ({ technologies, setTechnologies, chainLinkURL }) => {
+const Technologies = ({ technologies, setTechnologies }) => {
   const windowWidth = useWindowSize('x')
   const techContainerRef = useRef(null)
   const { addAlert } = useContext(AlertsContext)
@@ -203,7 +203,6 @@ const Technologies = ({ technologies, setTechnologies, chainLinkURL }) => {
               positions={technologyPositions}
               canvasPixelDimensions={canvasPixelDimensions}
               canvasGridDimensions={canvasGridDimensions}
-              chainLinkURL={chainLinkURL}
               scale={scale}
               currentUser={{ userId, userToken, authRequest }}
             />
