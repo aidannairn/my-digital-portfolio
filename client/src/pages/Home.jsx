@@ -90,7 +90,7 @@ const Home = () => {
       { !isLoading && 
         <>
           { (!!websiteFeatures.length || userId) &&
-            <WebsiteShowcase features={websiteFeatures} />
+            <WebsiteShowcase features={websiteFeatures} setFeatures={setWebsiteFeatures} />
           }
           {/* <About profileImageURL={profileImageURL} /> */}
           {/* { (!!experiences.length || userId) &&

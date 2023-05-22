@@ -138,9 +138,7 @@ const Technologies = ({ technologies, setTechnologies }) => {
       }
     )
     
-    useEffect(() => {
-      if (!technologies.length) setShouldFadeIn(false)
-    }, [])
+    if (!technologies.length) setShouldFadeIn(false)
     
     const { type, msg } = res.data.alert
     addAlert({ type, msg })

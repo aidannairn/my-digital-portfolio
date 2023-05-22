@@ -51,7 +51,6 @@ const Experience = ({ experiences, setExperiences }) => {
     formData.append('dateFrom', form.dateFrom)
     formData.append('dateTo', form.activelyLearning ? '' : form.dateTo)
     formData.append('bullets', JSON.stringify(bullets))
-    formData.append('userId', userId)
   
     const res = await authRequest.post(
       `${getBaseURL()}/education/create`,
@@ -64,11 +63,7 @@ const Experience = ({ experiences, setExperiences }) => {
       }
     )
 
-    useEffect(() => {
-      if (!experiences.length) setShouldFadeIn(false)
-    }, [])
-    
-
+    if (!experiences.length) setShouldFadeIn(false)
     
     const { type, msg } = res.data.alert
     addAlert({ type, msg })
