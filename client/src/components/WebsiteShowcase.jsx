@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { motion } from 'framer-motion'
 
@@ -6,7 +6,7 @@ import { SectionWrapper } from '../hoc'
 import { fadeIn, textVariant } from '../utils/motion'
 import { AlertsContext } from '../contexts/AlertsContext'
 import { UserContext } from '../contexts/UserContext'
-import { FormModal } from './modals'
+import { FormModal, OnConfirmModal } from './modals'
 import getBaseURL from '../utils/getBaseURL'
 import formSettings from './form/data/website-features.form'
 import WebShowCaseCard from './WebsiteShowcaseCard'
@@ -24,6 +24,8 @@ const WebsiteShowcase = ({ features, setFeatures }) => {
   const formRef = useRef(null)
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [shouldFadeIn, setShouldFadeIn] = useState(true)
+  const [isDeleteModalExpanded, setIsDeleteModalExpanded] = useState(false)
+  const [featToBeRemoved, setFeatToBeRemoved] = useState({})
 
   const handleSubmit = async () => {
     const form = formRef.current.getFormState()
@@ -60,6 +62,45 @@ const WebsiteShowcase = ({ features, setFeatures }) => {
     }
   }
 
+  const removeAFeature = async () => {
+    try {
+      const res = await authRequest.delete(
+        `${getBaseURL()}/website_feature/${featToBeRemoved.id}`,
+        { headers: { Authorization: `Bearer ${userToken}` } }
+      )
+
+      const { alert: { type, msg }, websiteFeatureId } = await res.data
+      addAlert({ type, msg })
+
+      setFeatures(prevState => 
+        prevState.filter(feat => 
+          feat._id !== websiteFeatureId
+        )
+      )
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const displayDeleteMessage = () => {
+    return (
+      <h2 className='my-4 font-extralight'>
+        You are about to remove <span className='font-normal'>{featToBeRemoved.title}</span> from your features.
+      </h2>
+    )
+  }
+
+  useEffect(() => {
+    if (featToBeRemoved.id && features.indexOf(feat => feat._id === featToBeRemoved.id)) {
+      setIsDeleteModalExpanded(true)
+    }
+  }, [featToBeRemoved])
+
+  const collapseDeleteModal = () => {
+    setFeatToBeRemoved({})
+    setIsDeleteModalExpanded(false)
+  }
+
   const initialUserId = getInitialUserId()
   
   return (
@@ -72,6 +113,17 @@ const WebsiteShowcase = ({ features, setFeatures }) => {
             close: () => setIsModalVisible(false)
           }}
           {...formSettings}
+        />
+      }
+      { userId && 
+        isDeleteModalExpanded &&
+        <OnConfirmModal
+          modal={{
+            visibility: isDeleteModalExpanded,
+            close: collapseDeleteModal
+          }}
+          message={displayDeleteMessage}
+          action={removeAFeature}
         />
       }
       <motion.div
@@ -101,9 +153,14 @@ const WebsiteShowcase = ({ features, setFeatures }) => {
             loop
             grabCursor
           >
-            { features.map((demo, i) => (
+            { features.map((feat, i) => (
               <SwiperSlide key={i}>
-                <WebShowCaseCard { ...demo } />
+                <WebShowCaseCard
+                  currentUser={{ userId, userToken, authRequest }}
+                  setFeatToBeRemoved={setFeatToBeRemoved}
+                  currentUserId={userId}
+                  { ...feat }
+                />
               </SwiperSlide>
             ))}
           </Swiper>  
