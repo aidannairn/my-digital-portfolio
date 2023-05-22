@@ -1,4 +1,4 @@
-const aboutWebsiteRouter = require('./about-website')
+const aboutWebsiteRouter = require('./website-feature.routes')
 const homeRouter = require('./home.routes')
 const userRouter = require('./user.routes')
 const educationRouter = require('./education.routes')
