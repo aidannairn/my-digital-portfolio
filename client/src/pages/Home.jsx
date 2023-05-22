@@ -50,6 +50,7 @@ const Home = () => {
   const [experiences, setExperiences] = useState([])
   const [technologies, setTechnologies] = useState([])
   const [projects, setProjects] = useState([])
+  const [websiteFeatures, setWebsiteFeatures] = useState([])
   const [isLoading, setIsLoading] = useState(true)
 
   const { user: { userId } } = useContext(UserContext)
@@ -64,6 +65,9 @@ const Home = () => {
       const globalAssetsRes = await axios.get(`${baseURL}/home`)
       setProfileImageURL(globalAssetsRes.data.profileImageURL)
 
+      const websiteFeatureRes = await axios.get(`${baseURL}/website_features`)
+      setWebsiteFeatures(websiteFeatureRes.data.websiteFeatures)
+
       const userRes = await axios.get(`${baseURL}/user_content/${getInitialUserId()}`)
       setExperiences(userRes.data.experiences)
       setTechnologies(userRes.data.technologies)
@@ -77,15 +81,17 @@ const Home = () => {
     }
   }
 
-  // useEffect(() => { getUserContent() }, [])
+  useEffect(() => { getUserContent() }, [])
   
   return (
     <div className='bg-primary'>
       <Navbar isLoading={isLoading} />
-      <WebsiteShowcase />
       {/* <Hero isLoading={isLoading} /> */}
       { !isLoading && 
         <>
+          { (!!websiteFeatures.length || userId) &&
+            <WebsiteShowcase features={websiteFeatures} />
+          }
           {/* <About profileImageURL={profileImageURL} /> */}
           {/* { (!!experiences.length || userId) &&
             <Experience experiences={experiences} setExperiences={setExperiences} />

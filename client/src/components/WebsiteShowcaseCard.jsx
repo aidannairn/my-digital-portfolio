@@ -1,6 +1,6 @@
 import Image from './Image'
 
-const WebShowcaseCard = ({
+const WebsiteShowcaseCard = ({
   title,
   subtitle,
   demoURL,
@@ -24,4 +24,4 @@ const WebShowcaseCard = ({
     </div>
   )
 }
-export default WebShowcaseCard
+export default WebsiteShowcaseCard

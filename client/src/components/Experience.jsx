@@ -64,7 +64,11 @@ const Experience = ({ experiences, setExperiences }) => {
       }
     )
 
-    if (!experiences.length) setShouldFadeIn(false)
+    useEffect(() => {
+      if (!experiences.length) setShouldFadeIn(false)
+    }, [])
+    
+
     
     const { type, msg } = res.data.alert
     addAlert({ type, msg })
@@ -125,7 +129,6 @@ const Experience = ({ experiences, setExperiences }) => {
             ))}
           </VerticalTimeline>
         </motion.div>
-      
       }
     </>
   )
