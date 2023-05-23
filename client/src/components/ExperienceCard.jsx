@@ -130,7 +130,7 @@ const ExperienceCard = ({
       </ul>
       { certificateURL &&
         <img
-          className='mt-5 w-full sm:max-w-[200px] cursor-pointer'
+          className='mt-5 w-full sm:max-w-[200px] cursor-zoom-in'
           src={certificateURL}
           alt={`${qualification} certificate`}
           onClick={() => setIsImageExpanded(true)}

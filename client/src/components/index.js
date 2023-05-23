@@ -6,6 +6,7 @@ import Experience from './Experience';
 import Projects from './Projects';
 import Feedback from './Feedback';
 import Contact from './Contact';
+import WebsiteShowcase from './WebsiteShowcase'
 import ErrorBoundary from './ErrorBoundary';
 
 export {
@@ -17,5 +18,6 @@ export {
   Projects,
   Feedback,
   Contact,
+  WebsiteShowcase,
   ErrorBoundary
 }

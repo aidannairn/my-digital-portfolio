@@ -7,6 +7,8 @@ import { OnConfirmModal } from './modals'
 import { fadeIn } from '../utils/motion'
 import getBaseURL from '../utils/getBaseURL'
 import useWindowSize from '../utils/useWindowSize'
+import chainLink from '../assets/chain_link.svg'
+import Image from './Image'
 
 const ProjectCard = ({
   index,
@@ -66,7 +68,7 @@ const ProjectCard = ({
         />
       }
       <Tilt
-        className='sm:w-[360px] max-w-[90vw] justify-self-center'
+        className='w-full sm:w-[360px] justify-self-center'
         tiltEnable={windowWidth > 768}
       >
         <motion.div
@@ -86,9 +88,9 @@ const ProjectCard = ({
               ${isSrcListVisible ? 'green-blue-gradient' : ''}`}
             >
               <div className='bg-tertiary rounded-2xl h-[178px]'>
-                <img
+                <Image
                   src={imageURL}
-                  alt={name}
+                  alt={`A screenshot of the "${name}" project.`}
                   className={`w-full h-full object-cover rounded-2xl ${isSrcListVisible ? 'invisible' : 'visible'}`}
                 />
                 <div
@@ -114,7 +116,7 @@ const ProjectCard = ({
                         >
                           <img
                             className='invert'
-                            src={`${import.meta.env.VITE_MEDIA_BUCKET}/icons/chain_link.svg`} alt='Show links icon'
+                            src={chainLink} alt='Show links icon'
                           />
                         </button>
                       )}

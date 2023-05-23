@@ -2,11 +2,10 @@ import { useContext, useEffect, useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 
 import { TechCanvas } from './canvas'
-import { textVariant } from '../utils/motion'
+import { fadeIn, textVariant } from '../utils/motion'
 import { SectionWrapper } from '../hoc'
 import { AlertsContext } from '../contexts/AlertsContext'
 import { UserContext } from '../contexts/UserContext'
-import { fadeIn } from '../utils/motion'
 import { FormModal } from './modals'
 import formSettings from './form/data/technologies.form'
 import useWindowSize from '../utils/useWindowSize'
@@ -140,7 +139,7 @@ const Technologies = ({ technologies, setTechnologies }) => {
     )
     
     if (!technologies.length) setShouldFadeIn(false)
-
+    
     const { type, msg } = res.data.alert
     addAlert({ type, msg })
     setTechnologies(prevState => [...prevState, res.data.technology])

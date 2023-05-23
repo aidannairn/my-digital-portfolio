@@ -1,5 +1,5 @@
 const { Upload } = require('@aws-sdk/lib-storage')
-const { S3Client, DeleteObjectCommand, GetObjectCommand } = require('@aws-sdk/client-s3')
+const { S3Client, DeleteObjectCommand, GetObjectCommand, HeadObjectCommand } = require('@aws-sdk/client-s3')
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner')
 const fs = require('fs')
 
@@ -27,17 +27,37 @@ const s3DeleteFile = async key => {
   return client.send(new DeleteObjectCommand(params))
 }
 
-const s3GetSignedURL = async key => {
+const s3CheckFileExists = async key => {
   const params = {
     Bucket: bucketName,
     Key: key
   }
 
-  const command = new GetObjectCommand(params)
-  const seconds = 3600
-  const url = await getSignedUrl(client, command, { expiresIn: seconds })
+  try {
+    const command = new HeadObjectCommand(params)
+    await client.send(command)
+    return true
+  } catch (error) {
+    return false
+  }
+}
 
-  return url
+const s3GetSignedURL = async key => {
+  const fileExists = await s3CheckFileExists(key)
+
+  if (fileExists) {
+    const params = {
+      Bucket: bucketName,
+      Key: key
+    }
+
+    const command = new GetObjectCommand(params)
+    const seconds = 3600
+    const url = await getSignedUrl(client, command, { expiresIn: seconds })
+    return url
+  } else {
+    return null
+  }
 }
 
 const s3UploadFile = async (name, filePath, s3Path = '') => {

@@ -28,7 +28,7 @@ const SignIn = () => {
   }
 
   return (
-    <div className='bg-primary h-screen flex items-center justify-center'>
+    <div className='bg-primary h-screen h-[100dvh] flex items-center justify-center'>
       <div className='bg-[#00112e] w-[80%] sm:w-[30rem] p-8 rounded-2xl'>
         <p className={styles.sectionSubText}>Have an account?</p>
         <h3 className={styles.sectionHeadText}>Sign In.</h3>

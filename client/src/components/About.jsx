@@ -3,17 +3,18 @@ import { motion } from 'framer-motion'
 
 import { slideIn } from '../utils/motion'
 import { SectionWrapper } from '../hoc'
+import Image from './Image'
 import styles from '../styles'
 
-const ImageCard = () => {
+const ImageCard = ({ profileImageURL }) => {
   return (
     <motion.div 
       variants={slideIn('left', 'tween', 0.2, 1)} 
       className='w-full sm:w-[50%] flex items-center justify-center sm:justify-end py-5'
     >
-      <img
+      <Image
         title='Aidan Nairn'
-        src={`${import.meta.env.VITE_MEDIA_BUCKET}/users/aidan_nairn.png`}
+        src={profileImageURL}
         alt={'A profile shot of Aidan'}
         className='rounded-full max-h-[22.5rem]'
       /> 
@@ -21,7 +22,7 @@ const ImageCard = () => {
   )
 }
 
-const About = () => {
+const About = ({ profileImageURL }) => {
   return (
     <div className='flex flex-col sm:flex-row items-stretch overflow-hidden gap-10 items-stretch'>
       <div className='w-full sm:w-[50%]'>
@@ -41,7 +42,7 @@ const About = () => {
           </div>
         </motion.div>
       </div>
-      <ImageCard />
+      <ImageCard profileImageURL={profileImageURL} />
     </div>
   )
 }

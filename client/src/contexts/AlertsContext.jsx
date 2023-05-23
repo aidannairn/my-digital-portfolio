@@ -19,6 +19,7 @@ const AlertsProvider = ({ children }) => {
   const addAlert = alert => {
     const id = uuid()
     setAlerts(prevAlerts => [...prevAlerts, { id, ...alert }])
+    return id
   }
 
   const removeAlertById = id => {

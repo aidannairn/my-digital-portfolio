@@ -17,7 +17,9 @@ const getUserContent = async (req, res) => {
     const assets = await model.find({ userId }).select(excludedFields)
     for (let asset of assets) {
       for (let path of filePaths) {
-        asset[path] = await s3GetSignedURL(asset[path])
+        asset[path] = asset[path]
+          ? await s3GetSignedURL(asset[path])
+          : null
       }
     }
     return assets

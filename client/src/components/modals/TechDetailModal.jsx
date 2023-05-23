@@ -2,6 +2,8 @@ import { useRef, useEffect, useState } from 'react'
 
 import Modal from '../../hoc/Modal' 
 import useWindowSize from '../../utils/useWindowSize'
+import Image from '../Image'
+import chainLink from '../../assets/chain_link.svg'
 
 const TechDetailModal = ({
   modal,
@@ -39,10 +41,10 @@ const TechDetailModal = ({
   }
 
   return (
-    <div className={`${modal?.className || ''} w-[90vw] sm:w-fit max-h-[60vh] pt-5 pb-3 px-6`}>
-      <div className={`flex ${!docs && !userIsAuthor ? 'flex-col items-center' : 'flex-col sm:flex-row'}`}>
-        <img src={image} alt={`${name} logo`} 
-          className={`w-full sm:w-32 ${!docs && !userIsAuthor ? 'mb-6 mr-0' : 'mr-6 mb-6 sm:mb-0'}`}
+    <div className={`${modal?.className || ''} w-[90vw] sm:w-fit max-h-[60vh] py-5 px-6`}>
+      <div className={`flex items-center ${!docs && !userIsAuthor ? 'flex-col items-center' : 'flex-col sm:flex-row'}`}>
+        <Image src={image} alt={`${name} logo`} 
+          className={`w-fit sm:w-32 max-h-[18rem] sm-max-h-fit ${!docs && !userIsAuthor ? 'mb-6 mr-0' : 'mr-0 sm:mr-6 mb-6 sm:mb-0'}`}
           style={imageStyles}
         />
         <div className='flex flex-col justify-center'>
@@ -51,7 +53,7 @@ const TechDetailModal = ({
             <a href={docs} target='_blank' className='flex items-center w-fit hover:opacity-80'>
               <img
                 className='invert h-4 w-4 mr-2'
-                src={`${import.meta.env.VITE_MEDIA_BUCKET}/icons/chain_link.svg`} alt='Show links icon'
+                src={chainLink} alt='Show links icon'
               />
               <span>Read Documentation</span>
             </a>
