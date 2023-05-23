@@ -1,15 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
 
-import { slideIn } from '../utils/motion'
-import { styles } from '../styles'
-import { navLinks } from '../constants'
-import { logo, menu, close } from '../assets'
+import { UserContext } from '../contexts/UserContext'
+import logo from '../assets/logo.png'
+import useWindowSize from '../utils/useWindowSize'
+import styles from '../styles'
 
-const Navbar = () => {
-  const [active, setActive] = useState('')
-  const [toggle, setToggle] = useState(false)
+const Navbar = ({ isLoading }) => {
+  const { user: { userId }, userSignOut } = useContext(UserContext)
+  const isHamburgerMenu = useWindowSize('x') < 860 ? true : false
+  const [isHamburgerOpen, setIsHamburgerOpen] = useState(false)
+
+  const navLinks = [
+    { id: 'about', title: 'About' },
+    { id: 'projects', title: 'Projects' },
+    { id: 'contact', title: 'Contact' }
+  ]
 
   return (
     <>
@@ -20,66 +26,50 @@ const Navbar = () => {
           <Link
             to='/'
             className='flex items-center gap-2'
-            onClick={() => {
-              setActive('')
-              window.scrollTo(0, 0)
-            }}
+            onClick={() => { window.scrollTo(0, 0) }}
           >
             <img src={logo} alt='Logo' className='w-9 h-9 object-contain' />
-            <p className='text-white text=[18px] font-bold curson-pointer flex'>
-              Aidan Nairn&nbsp;
-              <span className='sm:block hidden'>| Full Stack Developer</span>
-            </p>
+            <div className={`flex whitespace-nowrap text-white ${isHamburgerMenu ? 'text-[2em] font-normal' : 'text-[1em]'} font-bold curson-pointer`}>
+              <p>Aidan Nairn</p>
+              { !isHamburgerMenu &&
+                <p className='hidden sm:block border-l-[2.5px] pl-2 ml-2'>Full Stack Developer</p>
+              }
+            </div>
           </Link>
-          <ul className='list-none hidden sm:flex flex-row gap-10'>
-            {navLinks.map(link => (
-              <li
-                key={link.id}
-                className={`
-                  ${active === link.title ? 'text-white' : 'text-secondary'}
-                  hover:text-white text-[18px] font-medium cursor-pointer
-                `}
-                onClick={() => setActive(link.title)}
+          { !isLoading && isHamburgerMenu &&
+            <div className='flex flex-1 justify-end items-center mb-2'>
+              <div className={`${isHamburgerOpen ? 'active' : ''} hamburger`}
+                onClick={() => setIsHamburgerOpen(!isHamburgerOpen)}
               >
-                <a href={`#${link.id}`}>{link.title}</a>
-              </li>
-            ))}
-          </ul>
-          <div className='sm:hidden flex flex-1 justify-end items-center'>
-            <img 
-              src={toggle ? close : menu}
-              alt='Menu'
-              className='w-[28px] h-[28px] object-contain cursor-pointer'
-              onClick={() => setToggle(!toggle)}
-            />
-            
+                <div className='top-bun'></div>
+                <div className='meat'></div>
+                <div className='bottom-bun'></div>
+              </div>
+            </div>
+          }
+          <div className={isHamburgerMenu ? `${isHamburgerOpen ? 'flex' : 'hidden'} p-6 bg-primary absolute top-20 right-0 w-full` : ''}>
+            <ul className={`list-none flex justify-center items-center text-secondary ${isHamburgerMenu ? 'flex-col gap-3 w-full text-[1.5em] font-extralight' : 'h-10 top-5 flex-row gap-10'}`}>
+              { !isLoading && navLinks.map(link => (
+                <li
+                  key={link.id}
+                  className='hover:text-white curson-pointer'
+                  onClick={() => { setIsHamburgerOpen(!isHamburgerOpen) }}
+                >
+                  <a href={`#${link.id}`}>{link.title}</a>
+                </li>
+              ))}
+              { userId &&
+                <li
+                  className='hover:text-white cursor-pointer'
+                  onClick={userSignOut}
+                >
+                  Logout
+                </li>
+              }
+            </ul>
           </div>
         </div>
       </nav>
-      <motion.div
-        className={`${!toggle ? 'hidden' : 'flex'} p-6 bg-primary absolute top-[75px] z-10 right-0 w-full z-10`}
-        initial='hidden'
-        whileInView='visible'
-        variants={slideIn('down', 'tween', 0, 0.25)}
-      >
-        <ul className='list-none flex justify-end items-start flex-col gap-4'>
-          {navLinks.map(link => (
-            <li
-              key={link.id}
-              className={`
-                ${active === link.title ? 'text-white' : 'text-secondary'}
-                font-poppins font-medium curson-pointer text-[16px]
-              `}
-              onClick={() => {
-                setToggle(!toggle)
-                // setActive(link.title)
-              }}
-            >
-              <a href={`#${link.id}`}>{link.title}</a>
-            </li>
-          ))}
-        </ul>
-      </motion.div>
     </>
   )
 }

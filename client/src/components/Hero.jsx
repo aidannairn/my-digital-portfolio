@@ -1,11 +1,11 @@
-import { useLayoutEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 
-import { styles } from '../styles'
 import { ComputerCanvas } from './canvas'
 import useWindowSize from '../utils/useWindowSize'
+import styles from '../styles'
 
-const Hero = () => {
+const Hero = ({ isLoading }) => {
   const heroMainRef = useRef(null)
   const heroTextRef = useRef(null)
   const scrollButtonRef = useRef(null)
@@ -26,7 +26,7 @@ const Hero = () => {
     }
   }
 
-  useLayoutEffect(() => setCanvasPlot(), [windowSize])
+  useEffect(() => setCanvasPlot(), [windowSize, isLoading])
   
   return (
     <section className='w-full h-screen mx-auto'>
@@ -36,10 +36,10 @@ const Hero = () => {
           <div className='w-5 h-5 rounded-full bg-quaternary' />
           <div className='w-1 sm:h-80 h-40 blue-gradient' />
         </div>
-        <div ref={heroTextRef}>
+        <div ref={heroTextRef} className='mt-2'>
           <h1 className={`${styles.heroHeadText} mt-10 text-white`}>Hi, I'm <span className='text-quaternary'>Aidan</span></h1>
-          <p className={`${styles.heroSubText} mt-2 text-white-100`}>
-            I develop scalable web applications <br className='sm:block hidden' /> that have low running costs.
+          <p className={`${styles.heroSubText} max-w-[32.5rem] mt-2 text-white-100`}>
+            I develop websites that are user-friendly, efficient and scalable.
           </p>
         </div>
       </div>
@@ -47,23 +47,25 @@ const Hero = () => {
         canvasHeight={canvasHeight} 
         marginTop={-canvasNegativeTopY}
       />
-      <div ref={scrollButtonRef} className='absolute w-full h-fit mb-10 bottom-0 z-20 flex justify-center'>
-        <a className='h-fit' href='#about'>
-          <div className='w-[35px] h-[64px] rounded-3xl border-4 border-secondary flex justify-center items-start p-2'>
-            <motion.div
-              animate={{
-                y: [0, 24, 0]
-              }}
-              transition={{
-                duration: 1.5,
-                repeat: Infinity,
-                repeatType: 'loop'
-              }}
-              className='w-3 h-3 rounded-full bg-secondary mb-1'
-            />
-          </div>
-        </a>
-      </div>
+      { !isLoading &&
+        <div ref={scrollButtonRef} className='absolute w-full h-fit mb-10 bottom-0 flex justify-center'>
+          <a className='h-fit' href='#about'>
+            <div className='w-[35px] h-[64px] rounded-3xl border-4 border-secondary flex justify-center items-start p-2'>
+              <motion.div
+                animate={{
+                  y: [0, 24, 0]
+                }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  repeatType: 'loop'
+                }}
+                className='w-3 h-3 rounded-full bg-secondary mb-1'
+              />
+            </div>
+          </a>
+        </div>
+      }
     </section>
   )
 }

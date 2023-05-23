@@ -9,20 +9,22 @@ module.exports = {
         secondary: '#a6b7c3',
         tertiary: '#00143a',
         quaternary: '#0088FF',
+        quinary: '#00112e',
         'black-100': '#0d1525',
         'black-200': '#030e25',
         'white-100': '#f3f3f3',
       },
       boxShadow: {
-        card: '0px 35px 120px -15px #211e35',
+        card: '0px 35px 120px -15px #1e2a35',
+        alert: '0 2px 5px 0 rgb(0 0 0 / 16%),0 2px 10px 0 rgb(0 0 0 / 12%)'
       },
       screens: {
         xs: '450px',
       },
       backgroundImage: {
-        'hero-pattern': 'url("/src/assets/herobg.png")',
+        'hero-pattern': 'url("/src/assets/hero_background.png")',
       },
     },
   },
   plugins: [],
-};
+}

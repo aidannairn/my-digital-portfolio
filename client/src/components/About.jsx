@@ -1,54 +1,49 @@
 import React from 'react'
-import Tilt from 'react-parallax-tilt'
 import { motion } from 'framer-motion'
 
-import { styles } from '../styles'
-import { services } from '../constants'
-import { fadeIn, textVariant } from '../utils/motion'
+import { slideIn } from '../utils/motion'
 import { SectionWrapper } from '../hoc'
+import Image from './Image'
+import styles from '../styles'
 
-const ServiceCard = ({ index, title, icon }) => {
+const ImageCard = ({ profileImageURL }) => {
   return (
-    <Tilt className='xs:w-[250px] w-full'>
-      <motion.div
-        variants={fadeIn("right", "spring", (index * 0.5) + 1, 0.75)}
-        className='w-full green-blue-gradient p-[1px] rounded-[20px] shadow-card'
-      >
-        <div
-          options={{
-            max: 45,
-            scale: 1,
-            speed: 450
-          }}
-          className='bg-tertiary rounded-[20px] py-5 px-12 min-h-[280px] flex justify-evenly items-center flex-col'
-        >
-          <img src={icon} alt={title} className='w-16 h-16 object-contain' />
-          <h3 className='text-white text-[20px] font-bold text-center'>{title}</h3>
-        </div>
-      </motion.div>
-    </Tilt>
+    <motion.div 
+      variants={slideIn('left', 'tween', 0.2, 1)} 
+      className='w-full sm:w-[50%] flex items-center justify-center sm:justify-end py-5'
+    >
+      <Image
+        title='Aidan Nairn'
+        src={profileImageURL}
+        alt={'A profile shot of Aidan'}
+        className='rounded-full max-h-[22.5rem]'
+      /> 
+    </motion.div>
   )
 }
 
-const About = () => {
+const About = ({ profileImageURL }) => {
   return (
-    <>
-      <motion.div variants={textVariant()}>
-        <p className={styles.sectionSubText}>Introduction</p>
-        <h2 className={styles.sectionHeadText}>Overview.</h2>
-      </motion.div>
-      <motion.p
-        variants={fadeIn('', '', 1, 1)}
-        className='mt-4 text-secondary text-[17px] max-w-3xl leading-[30px]'
-      >
-        I'm a skilled software developer that uses coding as my creative outlet. I mostly work with JavaScript, TypeScript, React and NodeJS. I'm a quick learner. I have a strong passion for helping others. I create applications that are user-friendly, scalable and efficient.
-      </motion.p>
-      <div className="mt-20 flex flex-wrap gap-10">
-        {services.map((service, i) => (
-          <ServiceCard key={service.title} index={i} {...service} />
-        ))}
+    <div className='flex flex-col sm:flex-row items-stretch overflow-hidden gap-10 items-stretch'>
+      <div className='w-full sm:w-[50%]'>
+        <motion.div
+          variants={slideIn('right', 'tween', 0.2, 1)}
+          className='mt-4 '
+        >
+          <p className={styles.sectionSubText}>Introduction</p>
+          <h2 className={styles.sectionHeadText}>Overview.</h2>
+          <div className='text-secondary text-[17px] leading-[30px] whitespace-pre-line'>
+            <p className='mb-6'>
+              I'm a skilled software developer that uses coding as my creative outlet. I mostly work with JavaScript, TypeScript, React and NodeJS. I create applications that are user-friendly, efficient and scalable.
+            </p>
+            <p>
+              I consider myself to be as much of a problem creator as I am a problem solver. When I have an idea I am able to think over the logistics, anticipate potential flaws and overcome them.
+            </p>
+          </div>
+        </motion.div>
       </div>
-    </>
+      <ImageCard profileImageURL={profileImageURL} />
+    </div>
   )
 }
 
