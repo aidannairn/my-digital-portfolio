@@ -86,26 +86,26 @@ const Home = () => {
   return (
     <div className='bg-primary'>
       <Navbar isLoading={isLoading} />
-      {/* <Hero isLoading={isLoading} /> */}
+      <Hero isLoading={isLoading} />
       { !isLoading && 
         <>
+          <About profileImageURL={profileImageURL} />
+          { (!!experiences.length || userId) &&
+            <Experience experiences={experiences} setExperiences={setExperiences} />
+          }
+          { (!!technologies.length || userId) &&
+            <Technologies technologies={technologies} setTechnologies={setTechnologies} />
+          }
+          { (!!projects.length || userId) &&
+            <Projects projects={projects} setProjects={setProjects} />
+          }
           { (!!websiteFeatures.length || userId) &&
             <WebsiteShowcase features={websiteFeatures} setFeatures={setWebsiteFeatures} />
           }
-          {/* <About profileImageURL={profileImageURL} /> */}
-          {/* { (!!experiences.length || userId) &&
-            <Experience experiences={experiences} setExperiences={setExperiences} />
-          } */}
-          {/* { (!!technologies.length || userId) &&
-            <Technologies technologies={technologies} setTechnologies={setTechnologies} />
-          } */}
-          {/* { (!!projects.length || userId) &&
-            <Projects projects={projects} setProjects={setProjects} />
-          } */}
-          {/* <div className='relative z-0'>
+          <div className='relative z-0'>
             <Contact />
             <StarsCanvas />
-          </div> */}
+          </div>
         </>
       }
     </div>

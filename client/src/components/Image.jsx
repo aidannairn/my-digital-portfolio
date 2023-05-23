@@ -5,7 +5,11 @@ const Image = props => {
   const replacementTitle = `Could not find source image of "${props.alt}"`
   return (
     <>
-      <img { ...props } src={source} title={props.title || !props.src ? replacementTitle : ''} />
+      <img
+        { ...props }
+        src={source}
+        title={props.title || !props.src ? replacementTitle : ''}
+      />
     </>
   )
 }

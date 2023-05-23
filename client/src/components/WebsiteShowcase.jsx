@@ -1,4 +1,5 @@
 import { useContext, useEffect, useRef, useState } from 'react'
+import { Pagination } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { motion } from 'framer-motion'
 
@@ -6,12 +7,13 @@ import { SectionWrapper } from '../hoc'
 import { fadeIn, textVariant } from '../utils/motion'
 import { AlertsContext } from '../contexts/AlertsContext'
 import { UserContext } from '../contexts/UserContext'
-import { FormModal, OnConfirmModal } from './modals'
+import { ExpandedImageModal, FormModal, OnConfirmModal } from './modals'
 import getBaseURL from '../utils/getBaseURL'
 import formSettings from './form/data/website-features.form'
 import WebShowCaseCard from './WebsiteShowcaseCard'
 import getInitialUserId from '../utils/getInitialUser'
 import styles from '../styles'
+import 'swiper/css/pagination'
 import 'swiper/css'
 
 
@@ -24,8 +26,9 @@ const WebsiteShowcase = ({ features, setFeatures }) => {
   const formRef = useRef(null)
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [shouldFadeIn, setShouldFadeIn] = useState(true)
+  const [isImageExpanded, setIsImageExpanded] = useState(false)
   const [isDeleteModalExpanded, setIsDeleteModalExpanded] = useState(false)
-  const [featToBeRemoved, setFeatToBeRemoved] = useState({})
+  const [activeFeature, setActiveFeature] = useState({})
 
   const handleSubmit = async () => {
     const form = formRef.current.getFormState()
@@ -65,7 +68,7 @@ const WebsiteShowcase = ({ features, setFeatures }) => {
   const removeAFeature = async () => {
     try {
       const res = await authRequest.delete(
-        `${getBaseURL()}/website_feature/${featToBeRemoved.id}`,
+        `${getBaseURL()}/website_feature/${activeFeature._id}`,
         { headers: { Authorization: `Bearer ${userToken}` } }
       )
 
@@ -85,21 +88,12 @@ const WebsiteShowcase = ({ features, setFeatures }) => {
   const displayDeleteMessage = () => {
     return (
       <h2 className='my-4 font-extralight'>
-        You are about to remove <span className='font-normal'>{featToBeRemoved.title}</span> from your features.
+        You are about to remove <span className='font-normal'>{activeFeature.title}</span> from your features.
       </h2>
     )
   }
 
-  useEffect(() => {
-    if (featToBeRemoved.id && features.indexOf(feat => feat._id === featToBeRemoved.id)) {
-      setIsDeleteModalExpanded(true)
-    }
-  }, [featToBeRemoved])
-
-  const collapseDeleteModal = () => {
-    setFeatToBeRemoved({})
-    setIsDeleteModalExpanded(false)
-  }
+  useEffect(() => { setActiveFeature(features[0]) }, [])
 
   const initialUserId = getInitialUserId()
   
@@ -120,17 +114,25 @@ const WebsiteShowcase = ({ features, setFeatures }) => {
         <OnConfirmModal
           modal={{
             visibility: isDeleteModalExpanded,
-            close: collapseDeleteModal
+            close: () => setIsDeleteModalExpanded(false)
           }}
           message={displayDeleteMessage}
           action={removeAFeature}
         />
       }
-      <motion.div
-        variants={textVariant()}
-        className='sm:px-16 px-6'
-      >
-        <p className={styles.sectionSubText}>Swipe to learn about some of the <span className='text-quaternary'>coolest features</span> I've included in this app</p>
+      { isImageExpanded && activeFeature.demoURL &&
+      <ExpandedImageModal
+        modal={{
+          visibility: isImageExpanded,
+          close: () => setIsImageExpanded(false)
+        }}
+        imageURL={activeFeature.demoURL}
+        imageAlt={`An example that demonstrates "${activeFeature.title}".`}
+        noScroll={true}
+      />
+    }
+      <motion.div variants={textVariant()}>
+        <p className={styles.sectionSubText}>Swipe to learn about some of the <span className='text-quaternary'>coolest features</span> I have implemented in this app</p>
         <h2 className={styles.sectionHeadText}>For The Nerds.</h2>
       </motion.div>
       { userId === initialUserId &&
@@ -150,14 +152,18 @@ const WebsiteShowcase = ({ features, setFeatures }) => {
           variants={shouldFadeIn ? fadeIn('', '', 1, 1) : null}
         >
           <Swiper
-            loop
+            modules={[ Pagination ]}
             grabCursor
+            navigation
+            pagination={{ clickable: true }}
+            onActiveIndexChange={swiper => setActiveFeature(features[swiper.activeIndex])}
           >
             { features.map((feat, i) => (
               <SwiperSlide key={i}>
                 <WebShowCaseCard
                   currentUser={{ userId, userToken, authRequest }}
-                  setFeatToBeRemoved={setFeatToBeRemoved}
+                  setIsDeleteModalExpanded={() => setIsDeleteModalExpanded(true)}
+                  setIsImageExpanded={() => setIsImageExpanded(true)}
                   currentUserId={userId}
                   { ...feat }
                 />

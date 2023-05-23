@@ -68,7 +68,7 @@ const ProjectCard = ({
         />
       }
       <Tilt
-        className='sm:w-[360px] max-w-[90vw] justify-self-center'
+        className='w-full sm:w-[360px] justify-self-center'
         tiltEnable={windowWidth > 768}
       >
         <motion.div
