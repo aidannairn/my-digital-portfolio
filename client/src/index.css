@@ -19,6 +19,10 @@
   overflow-y: auto;
 }
 
+.footer {
+  border-radius: 50% 50% 0 0;
+}
+
 #file-upload-button, ::-webkit-file-upload-button {
   cursor: pointer!important;
 }

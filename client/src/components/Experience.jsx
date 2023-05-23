@@ -93,7 +93,7 @@ const Experience = ({ experiences, setExperiences }) => {
         />
       }
       <motion.div variants={textVariant()}>
-        <p className={styles.sectionSubText}>What I have done so far</p>
+        <p className={styles.sectionSubText}>The qualifications that helped get me to where I am today</p>
         <h2 className={styles.sectionHeadText}>Experience.</h2>
       </motion.div>
       { userId === initialUserId &&

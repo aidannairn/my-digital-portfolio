@@ -172,7 +172,7 @@ const Technologies = ({ technologies, setTechnologies }) => {
           variants={textVariant()}
           className='sm:px-16 px-6'
         >
-          <p className={styles.sectionSubText}>Some of the languages, libraries, frameworks and packages I use</p>
+          <p className={styles.sectionSubText}>Some of the languages, libraries and frameworks I use</p>
           <h2 className={styles.sectionHeadText}>Technologies.</h2>
         </motion.div>
         { userId === initialUserId &&

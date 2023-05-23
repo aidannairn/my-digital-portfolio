@@ -36,7 +36,7 @@ const Hero = ({ isLoading }) => {
           <div className='w-5 h-5 rounded-full bg-quaternary' />
           <div className='w-1 sm:h-80 h-40 blue-gradient' />
         </div>
-        <div ref={heroTextRef}>
+        <div ref={heroTextRef} className='mt-2'>
           <h1 className={`${styles.heroHeadText} mt-10 text-white`}>Hi, I'm <span className='text-quaternary'>Aidan</span></h1>
           <p className={`${styles.heroSubText} max-w-[32.5rem] mt-2 text-white-100`}>
             I develop websites that are user-friendly, efficient and scalable.

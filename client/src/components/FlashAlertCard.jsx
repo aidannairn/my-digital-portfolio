@@ -25,7 +25,7 @@ const FlashAlertCard = ({ alert: { id, type, msg, component: Component }}) => {
         { Component && msg && <br/> }
         { msg && <p>{msg}</p> }
       </div>
-      <i className='fa fa-times-circle h-fit mt-1 cursor-pointer hover:opacity-75' aria-hidden='true' onClick={() => removeAlertById(id)}></i>
+      <i className='fa fa-times-circle h-fit mt-1 cursor-pointer hover:opacity-[85%]' aria-hidden='true' onClick={() => removeAlertById(id)}></i>
     </div>
   )
 }

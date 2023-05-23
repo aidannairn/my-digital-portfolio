@@ -16,7 +16,7 @@ const formSettings = {
           label: 'Email',
           name: 'email',
           type: 'email',
-          placeholder: 'What is your email address?',
+          placeholder: 'What is your email?',
           required: true
         }
       },

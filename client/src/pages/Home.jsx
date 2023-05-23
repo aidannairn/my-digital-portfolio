@@ -10,7 +10,8 @@ import {
   Navbar,
   Technologies,
   WebsiteShowcase,
-  Projects
+  Projects,
+  Footer
 } from '../components'
 import { StarsCanvas } from '../components/canvas'
 import { UserContext } from '../contexts/UserContext'
@@ -37,7 +38,7 @@ const NoContentLoaded = () => {
       <button
         type='button'
         onClick={() => navigate(0)}
-        className='rounded bg-[#f5c6cb] hover:bg-[#721c24] text-[#721c24] hover:text-[#f5c6cb] border-[#721c24] border w-fit px-2 pb-[0.15rem]'
+        className='rounded bg-[#f5c6cb] hover:brightness-95 text-[#721c24] border-[#721c24] border w-fit px-2 pb-[0.15rem]'
       >
         Try again
       </button>
@@ -106,6 +107,7 @@ const Home = () => {
             <Contact />
             <StarsCanvas />
           </div>
+          <Footer />
         </>
       }
     </div>
