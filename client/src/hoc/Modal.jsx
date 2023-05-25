@@ -10,7 +10,7 @@ const Modal = (Component) => forwardRef(
     }
 
     const defaultClasses = `
-      max-h-[70vh] sm:max-h-[80vh] max-w-[90vw] sm:max-w-[80vw] border-[#00112e] bg-[#00112e] rounded-2xl
+      max-h-[70vh] sm:max-h-[80vh] max-w-[90vw] sm:max-w-[80vw] border-quinary bg-quinary rounded-2xl
       ${props.noScroll ? '' : 'scrollbar overflow-y-auto border-y-[5px]'}
     `
     

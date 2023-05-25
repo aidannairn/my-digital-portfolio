@@ -96,10 +96,10 @@ const ExperienceCard = ({
       </div>
     }
     <VerticalTimelineElement
-      contentStyle={{ background: '#00143a', color: '#FFF' }}
+      contentStyle={{ background: '#00172f', color: '#FFF' }}
       contentArrowStyle={{ borderRight: '7px solid #232631' }}
       date={dateTo ? `${dateFrom} - ${dateTo || 'present'}` : null}
-      iconStyle={{ background: logoBgHex || 'rgb(0, 20, 58)' }}
+      iconStyle={{ background: logoBgHex || '#001a35' }}
       icon={
         <div className='flex justify-center items-center w-full h-full'>
           { logoURL

@@ -72,7 +72,7 @@ const ProjectCard = ({
         tiltEnable={windowWidth > 768}
       >
         <motion.div
-          className='bg-tertiary h-full p-5 rounded-2xl'
+          className='bg-quinary h-full p-5 rounded-2xl'
           variants={recentlyAdded ? null : fadeIn('up', 'spring', (index * 0.5) + 1, 0.75)}
         >
           <div 
@@ -90,6 +90,7 @@ const ProjectCard = ({
               <div className='bg-tertiary rounded-2xl h-[178px]'>
                 <Image
                   src={imageURL}
+                  loading='lazy'
                   alt={`A screenshot of the "${name}" project.`}
                   className={`w-full h-full object-cover rounded-2xl ${isSrcListVisible ? 'invisible' : 'visible'}`}
                 />

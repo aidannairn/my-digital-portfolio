@@ -44,7 +44,7 @@ const TechDetailModal = ({
     <div className={`${modal?.className || ''} w-[90vw] sm:w-fit max-h-[60vh] py-5 px-6`}>
       <div className={`flex items-center ${!docs && !userIsAuthor ? 'flex-col items-center' : 'flex-col sm:flex-row'}`}>
         <Image src={image} alt={`${name} logo`} 
-          className={`w-fit sm:w-32 max-h-[40vh] sm-max-h-fit ${!docs && !userIsAuthor ? 'mb-6 mr-0' : 'mr-0 sm:mr-6 mb-6 sm:mb-0'}`}
+          className={`w-auto sm:w-32 max-h-[40vh] sm:h-auto ${!docs && !userIsAuthor ? 'mb-6 mr-0' : 'mr-0 sm:mr-6 mb-6 sm:mb-0'}`}
           style={imageStyles}
         />
         <div className='flex flex-col justify-center'>

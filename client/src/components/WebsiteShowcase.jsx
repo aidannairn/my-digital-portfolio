@@ -3,7 +3,6 @@ import { Pagination } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { motion } from 'framer-motion'
 
-import { SectionWrapper } from '../hoc'
 import { fadeIn, textVariant } from '../utils/motion'
 import { AlertsContext } from '../contexts/AlertsContext'
 import { UserContext } from '../contexts/UserContext'
@@ -121,34 +120,42 @@ const WebsiteShowcase = ({ features, setFeatures }) => {
         />
       }
       { isImageExpanded && activeFeature.demoURL &&
-      <ExpandedImageModal
-        modal={{
-          visibility: isImageExpanded,
-          close: () => setIsImageExpanded(false)
-        }}
-        imageURL={activeFeature.demoURL}
-        imageAlt={`An example that demonstrates "${activeFeature.title}".`}
-        noScroll={true}
-      />
-    }
-      <motion.div variants={textVariant()}>
-        <p className={styles.sectionSubText}>Swipe to learn about some of the <span className='text-quaternary'>coolest features</span> I have implemented in this app</p>
-        <h2 className={styles.sectionHeadText}>For The Nerds.</h2>
-      </motion.div>
-      { userId === initialUserId &&
-        <motion.div
-          variants={fadeIn('', '', 1, 1)}
-          className='flex gap-5 mt-5'
-        >
-          <div className='green-blue-gradient hover:green-blue-gradient--hover rounded-lg p-px'>
-            <button className='bg-primary hover:bg-tertiary rounded-lg p-2' onClick={() => setIsModalVisible(true)}>
-              Add A Feature
-            </button>
-          </div>
-        </motion.div>
+        <ExpandedImageModal
+          modal={{
+            visibility: isImageExpanded,
+            close: () => setIsImageExpanded(false)
+          }}
+          imageURL={activeFeature.demoURL}
+          imageAlt={`An example that demonstrates "${activeFeature.title}".`}
+          noScroll={true}
+        />
       }
+      <div className={`${styles.paddingX} pt-6 sm:pt-16 sm:py-5 max-w-7xl mx-auto relative`}>
+        <motion.div variants={textVariant()}>
+          <p className={styles.sectionSubText}>Swipe to learn about some of the <span className='text-quaternary'>coolest features</span> I have implemented in this app</p>
+          <h2 className={styles.sectionHeadText}>For The Nerds.</h2>
+        </motion.div>
+        <motion.p
+          variants={fadeIn('', '', 1, 1)}
+          className='mt-4 text-secondary text-[17px] max-w-3xl leading-[30px]'
+        >
+          Checkout the source code for this application <a href={import.meta.env.VITE_GITHUB_SRC} target='_blank' className='text-quaternary'>here.</a>
+        </motion.p>
+        { userId === initialUserId &&
+          <motion.div
+            variants={fadeIn('', '', 1, 1)}
+            className='flex gap-5 mt-5'
+          >
+            <div className='green-blue-gradient hover:green-blue-gradient--hover rounded-lg p-px'>
+              <button className='bg-primary hover:bg-tertiary rounded-lg p-2' onClick={() => setIsModalVisible(true)}>
+                Add A Feature
+              </button>
+            </div>
+          </motion.div>
+        }
+      </div>
       { !!features.length &&
-        <motion.div 
+        <motion.div
           variants={shouldFadeIn ? fadeIn('', '', 1, 1) : null}
         >
           <Swiper
@@ -160,13 +167,18 @@ const WebsiteShowcase = ({ features, setFeatures }) => {
           >
             { features.map((feat, i) => (
               <SwiperSlide key={i}>
-                <WebShowCaseCard
-                  currentUser={{ userId, userToken, authRequest }}
-                  setIsDeleteModalExpanded={() => setIsDeleteModalExpanded(true)}
-                  setIsImageExpanded={() => setIsImageExpanded(true)}
-                  currentUserId={userId}
-                  { ...feat }
-                />
+                {({ isActive }) => (
+                  <div style={{ transform: 'translateZ(100px)' }}>
+                    <WebShowCaseCard
+                      isActive={isActive}
+                      currentUser={{ userId, userToken, authRequest }}
+                      setIsDeleteModalExpanded={() => setIsDeleteModalExpanded(true)}
+                      setIsImageExpanded={() => setIsImageExpanded(true)}
+                      currentUserId={userId}
+                      { ...feat }
+                    />
+                  </div>
+                )}
               </SwiperSlide>
             ))}
           </Swiper>  
@@ -176,4 +188,4 @@ const WebsiteShowcase = ({ features, setFeatures }) => {
   )
 }
 
-export default SectionWrapper(WebsiteShowcase)
+export default WebsiteShowcase

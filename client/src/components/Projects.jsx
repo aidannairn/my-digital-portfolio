@@ -103,7 +103,10 @@ const Projects = ({ projects, setProjects }) => {
         { !!projects.length &&
           <div
             className='mt-20 grid gap-7 w-full justify-center'
-            style={{ gridTemplateColumns: 'repeat(auto-fill, 360px)' }}
+            style={{
+              gridTemplateColumns: 'repeat(auto-fill, 360px)',
+              transform: 'translateZ(100px)'
+            }}
           >
             { projects.map((project, i) => (
               <ProjectCard
