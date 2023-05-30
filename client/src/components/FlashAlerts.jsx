@@ -7,7 +7,7 @@ import useWindowSize from '../utils/useWindowSize'
 const FlashAlerts = forwardRef(( { alerts: alertList }, ref ) => {
   const { removeOldestAlert } = useContext(AlertsContext)
   const flashRef = useRef(null)
-  const windowWidth = useWindowSize('x')
+  const windowWidth = useWindowSize().width
   const [paddingRight, setPaddingRight] = useState(0)
   const [flashStyles, setFlashStyles] = useState({})
   const [alignment, setAlignment] = useState('flex-end')

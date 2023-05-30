@@ -4,9 +4,11 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { motion } from 'framer-motion'
 
 import { fadeIn, textVariant } from '../utils/motion'
+import { staggerContainer } from '../utils/motion'
 import { AlertsContext } from '../contexts/AlertsContext'
 import { UserContext } from '../contexts/UserContext'
 import { ExpandedImageModal, FormModal, OnConfirmModal } from './modals'
+import useWindowSize from '../utils/useWindowSize'
 import getBaseURL from '../utils/getBaseURL'
 import formSettings from './form/data/website-features.form'
 import WebShowCaseCard from './WebsiteShowcaseCard'
@@ -22,7 +24,9 @@ const WebsiteShowcase = ({ features, setFeatures }) => {
     user: { userId, userToken },
     authRequest
   } = useContext(UserContext)
+  const windowWidth = useWindowSize().width
   const formRef = useRef(null)
+  const swiperRef = useRef(null)
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [shouldFadeIn, setShouldFadeIn] = useState(true)
   const [isImageExpanded, setIsImageExpanded] = useState(false)
@@ -95,9 +99,20 @@ const WebsiteShowcase = ({ features, setFeatures }) => {
   useEffect(() => { setActiveFeature(features[0]) }, [])
 
   const initialUserId = getInitialUserId()
+
+  const handleSwiperIndexChange = index => {
+    setActiveFeature(features[index])
+    if (windowWidth < 768)
+      swiperRef?.current.scrollIntoView({ behavior: 'smooth' })
+  }
   
   return (
-    <>
+    <motion.section
+      variants={staggerContainer()}
+      initial='hidden'
+      whileInView='visible'
+      viewport={{ once: true, amount: 'some' }}
+    >
       { userId === initialUserId &&
         <FormModal
           ref={formRef}
@@ -159,16 +174,17 @@ const WebsiteShowcase = ({ features, setFeatures }) => {
           variants={shouldFadeIn ? fadeIn('', '', 1, 1) : null}
         >
           <Swiper
+            ref={swiperRef}
             modules={[ Pagination ]}
             grabCursor
             navigation
             pagination={{ clickable: true }}
-            onActiveIndexChange={swiper => setActiveFeature(features[swiper.activeIndex])}
+            onActiveIndexChange={swiper => handleSwiperIndexChange(swiper.activeIndex)}
           >
             { features.map((feat, i) => (
               <SwiperSlide key={i}>
                 {({ isActive }) => (
-                  <div style={{ transform: 'translateZ(100px)' }}>
+                  <div style={{ transform: 'translateZ(0)' }}>
                     <WebShowCaseCard
                       isActive={isActive}
                       currentUser={{ userId, userToken, authRequest }}
@@ -184,7 +200,7 @@ const WebsiteShowcase = ({ features, setFeatures }) => {
           </Swiper>  
         </motion.div>
       }
-    </>
+    </motion.section>
   )
 }
 

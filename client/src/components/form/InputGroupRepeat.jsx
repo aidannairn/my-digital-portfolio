@@ -63,7 +63,7 @@ const InputGroupRepeat = ({ form, group }) => {
       { !isMaxInputLimit &&
         <div className='flex gap-4 items-center mb-4'>
           <div className='green-blue-gradient w-fit hover:green-blue-gradient--hover rounded-lg p-px'>
-            <button type='button' className={`bg-primary hover:bg-tertiary rounded-lg p-2 ${isAddingDisabled ? 'cursor-not-allowed' : ''}`} onClick={handleCollection} disabled={isAddingDisabled}>Add</button>
+            <button type='button' className={`bg-quinary hover:bg-tertiary rounded-lg p-2 ${isAddingDisabled ? 'cursor-not-allowed' : ''}`} onClick={handleCollection} disabled={isAddingDisabled}>Add</button>
           </div>
           { group.settings.array?.max &&
             <i>{form.state[collectionName]?.length || 0}/{group.settings.array?.max}</i>

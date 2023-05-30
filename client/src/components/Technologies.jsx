@@ -14,7 +14,7 @@ import getBaseURL from '../utils/getBaseURL'
 import getInitialUserId from '../utils/getInitialUser'
 
 const Technologies = ({ technologies, setTechnologies }) => {
-  const windowWidth = useWindowSize('x')
+  const windowWidth = useWindowSize().width
   const techContainerRef = useRef(null)
   const { addAlert } = useContext(AlertsContext)
   const [canvasPixelDimensions, setCanvasPixelDimensions] = useState({ x: 0, y: 0 })

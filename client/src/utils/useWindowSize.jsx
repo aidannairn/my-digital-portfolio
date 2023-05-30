@@ -1,12 +1,6 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from 'react'
 
 const useWindowSize = a => {
-  let axis
-  if (a === 'x') axis = 'width'
-  else if (a === 'y') axis = 'height'
-  else if (['width', 'height'].includes(a)) axis = a
-  else axis = null
-
   const [windowSize, setWindowSize] = useState({
     width: 0,
     height: 0,
@@ -22,16 +16,15 @@ const useWindowSize = a => {
     }
     
     // Call handleResize when window is resized.
-    window.addEventListener("resize", handleResize)
+    window.addEventListener('resize', handleResize)
 
     // Call handleResize on mount so windowWidth gets updated to initial window size.
     handleResize()
 
     // Remove event listener on cleanup
-    return () => window.removeEventListener("resize", handleResize)
+    return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  if (axis) return windowSize[axis]
   return windowSize
 }
 

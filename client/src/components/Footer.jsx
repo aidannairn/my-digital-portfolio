@@ -1,5 +1,8 @@
 const Link = ({ url, name, icon }) => (
-  <a href={url} target='_blank' className='flex items-center py-5 hover:text-secondary'><i className={`mr-2 ${icon}`} aria-hidden='true'></i><span>{name}</span></a>
+  <a href={url} target='_blank' className='flex items-center justify-center py-5 gap-0 hover:text-secondary'>
+    <i className={`mr-2 ${icon}`} aria-hidden='true' />
+    <span>{name}</span>
+  </a>
 )
 
 const Footer = () => {

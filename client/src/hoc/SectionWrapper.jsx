@@ -13,7 +13,7 @@ const SectionWrapper = (Component, idName) =>
         viewport={{ once: true, amount: 'some' }}
         className={`${styles.padding} max-w-7xl mx-auto relative`}
       >
-        <span id={idName} className="hash-span">&nbsp;</span>
+        <span id={idName} className='hash-span'>&nbsp;</span>
         <Component {...props} />
       </motion.section>
     )
