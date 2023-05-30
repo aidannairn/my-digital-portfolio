@@ -1,5 +1,4 @@
 import { useContext, useEffect, useRef, useState } from 'react'
-import { VerticalTimeline } from 'react-vertical-timeline-component'
 import { motion } from 'framer-motion'
 
 import { sort } from '../utils/sort'
@@ -13,8 +12,6 @@ import formSettings from './form/data/experiences.form'
 import styles from '../styles'
 import getBaseURL from '../utils/getBaseURL'
 import getInitialUserId from '../utils/getInitialUser'
-import useWindowSize from '../utils/useWindowSize'
-import 'react-vertical-timeline-component/style.min.css'
 
 const Experience = ({ experiences, setExperiences }) => {
   const { addAlert } = useContext(AlertsContext)
@@ -23,7 +20,6 @@ const Experience = ({ experiences, setExperiences }) => {
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [sortedExperiences, setSortedExperiences] = useState([])
   const [shouldFadeIn, setShouldFadeIn] = useState(true)
-  const windowWidth = useWindowSize('x')
 
   useEffect(() => {
     const incompleteExperiences = []
@@ -67,7 +63,7 @@ const Experience = ({ experiences, setExperiences }) => {
     
     const { type, msg } = res.data.alert
     addAlert({ type, msg })
-    setExperiences(prevState => [...prevState, res.data.experience])
+    setExperiences(prevState => [...prevState, { ...res.data.experience, recentlyAdded: true }])
   }  
 
   formSettings.submit = {
@@ -113,16 +109,18 @@ const Experience = ({ experiences, setExperiences }) => {
           variants={shouldFadeIn ? fadeIn('', '', 1, 1) : null}
           className='mt-20 flex flex-col'
         >
-          <VerticalTimeline animate={windowWidth > 768}>
+          <div>
             {sortedExperiences.map((experience, i) => (
               <ExperienceCard
-              key={i}
-              currentUser={{ userId, userToken, authRequest }}
-              setExperiences={setExperiences}
-              { ...experience }
-            />
+                key={i}
+                index={i}
+                currentUser={{ userId, userToken, authRequest }}
+                setExperiences={setExperiences}
+                { ...experience }
+                isLastOfType={sortedExperiences.length - 1 === i}
+              />
             ))}
-          </VerticalTimeline>
+          </div>
         </motion.div>
       }
     </>

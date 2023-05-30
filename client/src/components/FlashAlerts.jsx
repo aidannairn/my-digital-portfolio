@@ -7,7 +7,7 @@ import useWindowSize from '../utils/useWindowSize'
 const FlashAlerts = forwardRef(( { alerts: alertList }, ref ) => {
   const { removeOldestAlert } = useContext(AlertsContext)
   const flashRef = useRef(null)
-  const windowWidth = useWindowSize('x')
+  const windowWidth = useWindowSize().width
   const [paddingRight, setPaddingRight] = useState(0)
   const [flashStyles, setFlashStyles] = useState({})
   const [alignment, setAlignment] = useState('flex-end')
@@ -70,7 +70,7 @@ const FlashAlerts = forwardRef(( { alerts: alertList }, ref ) => {
   
   return (
     <div ref={flashRef} className='fixed w-full top-16 z-50'>
-      <div className='w-full invisible max-w-7xl relative left-[50%] translate-x-[-50%] flex flex-col' style={flashStyles}>
+      <div className='flash-alerts w-full delay-1000 invisible max-w-7xl relative left-[50%] translate-x-[-50%] flex flex-col' style={flashStyles}>
         { alerts.map((alert, i) => {
           return (
             <FlashAlertCard key={i} alert={alert} />

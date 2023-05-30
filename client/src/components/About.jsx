@@ -34,7 +34,7 @@ const About = ({ profileImageURL }) => {
           <h2 className={styles.sectionHeadText}>Overview.</h2>
           <div className='text-secondary text-[17px] leading-[30px] whitespace-pre-line'>
             <p className='mb-6'>
-              I'm a skilled software developer that uses coding as my creative outlet. I mostly work with JavaScript, TypeScript, React and NodeJS. I create applications that are user-friendly, efficient and scalable.
+              I'm a skilled software developer that writes code as my creative outlet. I mostly work with JavaScript, TypeScript, React and NodeJS. I create applications that are user-friendly, efficient and scalable.
             </p>
             <p>
               I consider myself to be as much of a problem creator as I am a problem solver. When I have an idea I am able to think over the logistics, anticipate potential flaws and overcome them.
@@ -42,7 +42,9 @@ const About = ({ profileImageURL }) => {
           </div>
         </motion.div>
       </div>
-      <ImageCard profileImageURL={profileImageURL} />
+      { profileImageURL &&
+        <ImageCard profileImageURL={profileImageURL} />
+      }
     </div>
   )
 }

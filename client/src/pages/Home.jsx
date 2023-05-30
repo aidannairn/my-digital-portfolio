@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
 import {
@@ -31,13 +30,12 @@ const LoadingContent = () => {
 }
 
 const NoContentLoaded = () => {
-  const navigate = useNavigate()
   return (
     <div className='flex flex-col'>
       <p>Some of the page content could not be loaded.</p>
       <button
         type='button'
-        onClick={() => navigate(0)}
+        onClick={() => location.reload()}
         className='rounded bg-[#f5c6cb] hover:brightness-95 text-[#721c24] border-[#721c24] border w-fit px-2 pb-[0.15rem]'
       >
         Try again
@@ -86,11 +84,11 @@ const Home = () => {
   
   return (
     <div className='bg-primary'>
-      <Navbar isLoading={isLoading} />
+      <Navbar isLoading={isLoading} includesProjects={!!projects.length} />
       <Hero isLoading={isLoading} />
       { !isLoading && 
         <>
-          <About profileImageURL={profileImageURL} />
+          {<About profileImageURL={profileImageURL} />}
           { (!!experiences.length || userId) &&
             <Experience experiences={experiences} setExperiences={setExperiences} />
           }

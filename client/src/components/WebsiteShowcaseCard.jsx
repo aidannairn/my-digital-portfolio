@@ -1,4 +1,8 @@
+import Tilt from 'react-parallax-tilt'
+
+import useWindowSize from '../utils/useWindowSize'
 import Image from './Image'
+import styles from '../styles'
 
 const WebsiteShowcaseCard = ({
   title,
@@ -8,38 +12,49 @@ const WebsiteShowcaseCard = ({
   userId: authorId,
   currentUserId,
   setIsDeleteModalExpanded,
-  setIsImageExpanded
+  setIsImageExpanded,
+  isActive
 }) => {
-  return (
-    <div className='sm:p-5'>
-      { authorId === currentUserId &&
-        <div className='grid z-50'>
-          <div className='p-px justify-self-end'>
+  const windowWidth = useWindowSize().width
+
+  return isActive ? (
+    <div
+      className={`${styles.padding} max-w-7xl mx-auto relative`}
+    >
+      <Tilt tiltEnable={windowWidth >= 768} className='green-blue-gradient hover:green-blue-gradient--hover rounded-lg p-px'>
+        <div className={`bg-primary rounded-lg ${authorId === currentUserId ? 'md:h-[25rem] pt-3' : 'md:h-[21.5rem]'} p-2`}>
+          { authorId === currentUserId &&
             <button
-              className='border-white hover:border-[#8c0505] rounded hover:text-[#8c0505]'
+              className='absolute right-4 w-10 h-10 p-2 flex items-center justify-center rounded-full  bg-quinary text-[#DDE1E0] hover:text-[#8c0505]'
               onClick={setIsDeleteModalExpanded}
             >
-              <span className='font-light border-inherit border-r-[1.5px] pr-2 mr-2'>Remove</span>
-              <i className='fa fa-trash-o text-lg' aria-hidden='true'></i>
+              <i className='fa fa-trash-o text-2xl' aria-hidden='true'></i>
             </button>
+          }
+          <div className='grid md:grid-cols-2 h-full mr-2 gap-4'>
+            <div className='w-full overflow-y-auto scrollbar' style={{ direction: 'rtl' }}>
+              <div className='pl-2' style={{direction: 'ltr' }}>
+                <h3 className={`text-2xl md:text-4xl font-bold mb-2 ${authorId === currentUserId ? 'pr-14' : ''}`}>{title}</h3>
+                <h4 className='text-secondary'>{subtitle}</h4>
+                <ul className='mt-4'>
+                  { bullets?.map((bullet, i) => (
+                    <li key={i} className='mb-4'><i className='fa fa-star mr-2' aria-hidden='true'></i>{bullet}</li>
+                  ))}
+                </ul>
+
+              </div>
+            </div>
+            <div className={`website-showcase-card w-full flex items-center justify-center h-full ${currentUserId === authorId ? 'md:py-8' : ''}`}>
+              <Image
+                className='cursor-zoom-in w-auto max-h-[20rem]'
+                src={demoURL} alt={`An example that demonstrates "${title}".`}
+                onClick={setIsImageExpanded}
+              />
+            </div>
           </div>
         </div>
-      }
-      <div className={`flex flex-col sm:flex-row sm:justify-between mt-4 ${!currentUserId ? 'pt-16' : ''}`}>
-        <div className='w-full sm:w-[50%] mb-4 sm:mb-0'>
-          <h3 className='text-2xl sm:text-4xl font-bold mb-2'>{title}</h3>
-          <h4 className='text-secondary'>{subtitle}</h4>
-          <ul className='mt-4'>
-            { bullets?.map((bullet, i) => (
-              <li key={i} className='mb-2'>{bullet}</li>
-            ))}
-          </ul>
-        </div>
-        <div className='w-full sm:w-[50%] flex justify-center sm:justify-end items-center'>
-          <Image className='cursor-zoom-in max-w-[90%]' src={demoURL} alt={`An example that demonstrates "${title}".`} onClick={setIsImageExpanded} />
-        </div>
-      </div>
+      </Tilt>
     </div>
-  )
+  ) : <></>
 }
 export default WebsiteShowcaseCard

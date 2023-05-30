@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import { UserContext } from '../contexts/UserContext'
@@ -6,17 +6,27 @@ import logo from '../assets/logo.png'
 import useWindowSize from '../utils/useWindowSize'
 import styles from '../styles'
 
-const Navbar = ({ isLoading }) => {
+const Navbar = ({ isLoading, includesProjects }) => {
   const { user: { userId }, userSignOut } = useContext(UserContext)
-  const isHamburgerMenu = useWindowSize('x') < 860 ? true : false
+  const isSmallScreen = useWindowSize().width < 860 ? true : false
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false)
+  const [navLinks, setNavLinks] = useState([])
 
-  const navLinks = [
-    { id: 'about', title: 'About' },
-    { id: 'projects', title: 'Projects' },
-    { id: 'contact', title: 'Contact' }
-  ]
+  useEffect(() => {
+    const links = [
+      { id: 'about', title: 'About' },
+      { id: 'contact', title: 'Contact' }
+    ]
 
+    const projectLink = { id: 'projects', title: 'Projects' }
+    
+    if (includesProjects || userId)
+      setNavLinks([...links.slice(0, 1), projectLink, ...links.slice(1)])
+    else
+      setNavLinks(links)
+      
+  }, [includesProjects])
+  
   return (
     <>
       <nav
@@ -29,14 +39,14 @@ const Navbar = ({ isLoading }) => {
             onClick={() => { window.scrollTo(0, 0) }}
           >
             <img src={logo} alt='Logo' className='w-9 h-9 object-contain' />
-            <div className={`flex whitespace-nowrap text-white ${isHamburgerMenu ? 'text-[2em] font-normal' : 'text-[1em]'} font-bold curson-pointer`}>
-              <p>Aidan Nairn</p>
-              { !isHamburgerMenu &&
-                <p className='hidden sm:block border-l-[2.5px] pl-2 ml-2'>Full Stack Developer</p>
+            <div className={`flex whitespace-nowrap text-white ${isSmallScreen ? 'font-normal' : ''} font-bold curson-pointer`}>
+              <p>Full Stack Developer</p>
+              { !isSmallScreen &&
+                <p className='hidden sm:block border-l-[2.5px] pl-2 ml-2'>Aidan Nairn</p>
               }
             </div>
           </Link>
-          { !isLoading && isHamburgerMenu &&
+          { !isLoading && isSmallScreen &&
             <div className='flex flex-1 justify-end items-center mb-2'>
               <div className={`${isHamburgerOpen ? 'active' : ''} hamburger`}
                 onClick={() => setIsHamburgerOpen(!isHamburgerOpen)}
@@ -47,8 +57,8 @@ const Navbar = ({ isLoading }) => {
               </div>
             </div>
           }
-          <div className={isHamburgerMenu ? `${isHamburgerOpen ? 'flex' : 'hidden'} p-6 bg-primary absolute top-20 right-0 w-full` : ''}>
-            <ul className={`list-none flex justify-center items-center text-secondary ${isHamburgerMenu ? 'flex-col gap-3 w-full text-[1.5em] font-extralight' : 'h-10 top-5 flex-row gap-10'}`}>
+          <div className={isSmallScreen ? `${isHamburgerOpen ? 'flex' : 'hidden'} p-6 bg-primary absolute top-20 right-0 w-full` : ''}>
+            <ul className={`list-none flex justify-center items-center text-secondary ${isSmallScreen ? 'flex-col gap-3 w-full text-[1.5em] font-extralight' : 'h-10 top-5 flex-row gap-10'}`}>
               { !isLoading && navLinks.map(link => (
                 <li
                   key={link.id}

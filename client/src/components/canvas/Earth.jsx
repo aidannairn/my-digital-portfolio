@@ -1,6 +1,6 @@
-import { useState, Suspense } from "react"
+import { useState, Suspense } from 'react'
 import { Canvas } from '@react-three/fiber'
-import { OrbitControls, Preload, useGLTF, PerformanceMonitor } from "@react-three/drei"
+import { OrbitControls, Preload, useGLTF, PerformanceMonitor } from '@react-three/drei'
 
 import CanvasLoader from '../Loader'
 
@@ -10,7 +10,7 @@ const Earth = () => {
   return (
     <primitive
       object={earth.scene}
-      scale={2.5}
+      scale={3}
       position-y={0}
       rotation-y={0}
     />
@@ -41,6 +41,8 @@ const EarthCanvas = () => {
         <Suspense fallback={<CanvasLoader />}>
           <OrbitControls
             autoRotate
+            enablePan={false}
+            enableRotate={false}
             enableZoom={false}
             minPolarAngle={Math.PI / 2}
             maxPolarAngle={Math.PI / 2}

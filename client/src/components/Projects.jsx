@@ -1,7 +1,8 @@
-import { useState, useRef, useContext } from 'react'
+import { useEffect, useState, useRef, useContext } from 'react'
 import { motion } from 'framer-motion'
 
 import { SectionWrapper } from '../hoc'
+import { OnConfirmModal } from './modals'
 import { fadeIn, textVariant } from '../utils/motion'
 import { AlertsContext } from '../contexts/AlertsContext'
 import { UserContext } from '../contexts/UserContext'
@@ -20,6 +21,13 @@ const Projects = ({ projects, setProjects }) => {
   } = useContext(UserContext)
   const formRef = useRef(null)
   const [isModalVisible, setIsModalVisible] = useState(false)
+  const [isDeleteModalExpanded, setIsDeleteModalExpanded] = useState(false)
+  const [indexToBeRemoved, setIndexToBeRemoved] = useState(null)
+
+  useEffect(() => {
+    if (projects[indexToBeRemoved]) setIsDeleteModalExpanded(true)
+    else setIsDeleteModalExpanded(false)
+  }, [indexToBeRemoved])
 
   const handleSubmit = async () => {
     const form = formRef.current.getFormState()
@@ -65,6 +73,32 @@ const Projects = ({ projects, setProjects }) => {
 
   const initialUserId = getInitialUserId()
 
+  const removeAProject = async () => {
+    try {
+      const res = await authRequest.delete(
+        `${getBaseURL()}/project/${projects[indexToBeRemoved]._id}`, 
+        { headers: { Authorization: `Bearer ${userToken}` } }
+      )
+      
+      const { alert: { type, msg }, projectId } = await res.data
+      addAlert({ type, msg })
+
+      setProjects(prevState =>
+        prevState.filter(project =>
+          project._id !== projectId
+        )  
+      )
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const displayDeleteMessage = () => (
+    <h2 className='my-4 font-extralight'>
+      You are about to remove <span className='font-normal'>{projects[indexToBeRemoved].name}</span> from your projects.
+    </h2>
+  )
+
   return (
     <>
       { userId === initialUserId &&
@@ -75,6 +109,17 @@ const Projects = ({ projects, setProjects }) => {
             close: () => setIsModalVisible(false)
           }}
           {...formSettings}
+        />
+      }
+      { userId === projects[indexToBeRemoved]?.userId && 
+        isDeleteModalExpanded &&
+        <OnConfirmModal
+          modal={{
+            visibility: isDeleteModalExpanded,
+            close: () => setIndexToBeRemoved(null)
+          }}
+          message={displayDeleteMessage}
+          action={removeAProject}
         />
       }
       <div className='flex flex-col'>
@@ -102,15 +147,15 @@ const Projects = ({ projects, setProjects }) => {
         }
         { !!projects.length &&
           <div
-            className='mt-20 grid gap-7 w-full justify-center'
-            style={{ gridTemplateColumns: 'repeat(auto-fill, 360px)' }}
+            className='mt-20 grid grid-cols-1 sm:grid-cols-[repeat(auto-fill,_360px)] gap-7 w-full justify-center'
+            style={{ transform: 'translateZ(0)' }}
           >
             { projects.map((project, i) => (
               <ProjectCard
                 key={`project-${i}`}
                 index={i}
-                currentUser={{ userId, userToken, authRequest }}
-                setProjects={setProjects}
+                currentUser={{ userId }}
+                setIndexToBeRemoved={setIndexToBeRemoved}
                 {...project}
               />
             ))}
